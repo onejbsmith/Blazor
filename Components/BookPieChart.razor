@@ -1,0 +1,59 @@
+﻿@*<h3>BookPieChart</h3>*@
+@using BlazorTrader.Data;
+<BSBadge IsPill="true" class="alert-dark article"><RadzenLabel Text='@bids' Style="padding-top:7px" /></BSBadge>
+
+<RadzenChart Style="width:200px; height:150px;">
+    <RadzenPieSeries Data="@bookData" CategoryProperty="Price" Radius="55"
+                     Title="@(seconds.ToString())"
+                     Fills="@(new List<string>() {  "tomato","lightgreen" })"
+                     ValueProperty="Size" />
+    <RadzenTooltipOptions Visible="false" />
+    <RadzenLegend Visible="false" />
+</RadzenChart>
+@*<RadzenLabel Text="@(bookData[0].Size.ToString())"></RadzenLabel>
+    <RadzenLabel Text="@(bookData[1].Size.ToString())"></RadzenLabel>*@
+<style>
+
+    .article {
+        flex: 1 0 auto;
+        border: solid 1px green;
+        max-height:40px;
+    }
+</style>
+
+@code {
+
+    string bids;
+    string asks;
+
+    [Parameter]
+    public string symbol { get; set; }
+
+    [Parameter]
+    public int seconds { get; set; }
+
+    [Parameter]
+    public bool isPrintsSize { get; set; }
+
+
+    BookDataItem[] bookData = new BookDataItem[0];
+    //   {
+    //new BookDataItem { Price = 350.11m, Size = 1000 },
+    //new BookDataItem { Price = 351m, Size = 501 } };
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        TDAStreamerData.OnStatusesChanged += getBookData;
+        StateHasChanged();
+        await Task.CompletedTask;
+    }
+
+    public void getBookData()
+    {
+        TDAStreamerData.getBookPieData(ref bookData, seconds, isPrintsSize, symbol);
+        bids = (100*(bookData[1].Size/bookData[0].Size-1)).ToString("n0");
+        StateHasChanged();
+    }
+
+}

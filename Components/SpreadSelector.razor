@@ -1,0 +1,88 @@
+﻿@*<h3>SpreadSelector</h3>*@
+
+@using BlazorTrader.Data
+
+
+@inject DialogService dialogService
+
+<div style="position:relative;top:10px;display:inline" class="teal">
+    <RadzenButton Text="Buy" Style="vertical-align:bottom;width:40px;padding:0" Click="@ShowSimpleDialog" />
+    <RadzenNumeric TValue="int" Name="numContracts" Min="0" Max="1000" Step="10" @bind-Value="TDAParameters.optionNumContracts" Style="width:60px" Change="@(args => ChangeContracts(args))" />
+    <label for="numSpreadStrikes">Spread</label>
+    <RadzenNumeric Name="numSpreadStrikes" Min="1" Max="20" @bind-Value="TDAParameters.optionNumSpreadStrikes" Style="width:60px" />
+    <label for="numDepthStrikes">Depth</label>
+    <RadzenNumeric Name="numDepthStrikes" Min="1" Max="5" @bind-Value="TDAParameters.optionNumDepthStrikes" Style="width:60px" />
+    <label for="numSkipStrikes">Skip</label>
+    <RadzenNumeric Name="numSkipStrikes" Min="0" Max="10" @bind-Value="TDAParameters.optionNumSkipStrikes" Style="width:60px" />
+
+    <RadzenSplitButton Click="@((args) => TDASpreadManager.clickAllocate(args))" Text="@TDAParameters.allocation" Style="color:black">
+        <ChildContent>
+            <RadzenSplitButtonItem Text="Average" Value="0" />
+            <RadzenSplitButtonItem Text="Progressive" Value="1" />
+            <RadzenSplitButtonItem Text="Equal Credit" Value="2" />
+            <RadzenSplitButtonItem Text="Equal Contracts" Value="3" />
+            <RadzenSplitButtonItem Text="Geometric" Value="4" />
+        </ChildContent>
+    </RadzenSplitButton>
+</div>
+
+@code {
+
+
+    private TDAOptionQuote[][] _lstOptions;
+    [Parameter]
+    public TDAOptionQuote[][] lstOptions
+    {
+        get { return _lstOptions; }
+        set { _lstOptions = value; }
+    }
+
+    void ChangeContracts(dynamic value)
+    {
+        var mgr = new TDASpreadManager(lstOptions);
+        mgr.ChangeContracts(lstOptions);
+        StateHasChanged();
+    }
+
+
+    Dictionary<DateTime, string> events = new Dictionary<DateTime, string>();
+
+    protected override void OnInitialized()
+    {
+        dialogService.OnOpen += Open;
+        dialogService.OnClose += Close;
+    }
+
+    void Open(string title, Type type, Dictionary<string, object> parameters, DialogOptions options)
+    {
+        events.Add(DateTime.Now, "Dialog opened");
+        StateHasChanged();
+    }
+
+    void Close(dynamic result)
+    {
+        events.Add(DateTime.Now, "Dialog closed. Result: " + result);
+        StateHasChanged();
+    }
+
+    async Task ShowSimpleDialog() => await dialogService.OpenAsync("Simple Dialog", ds =>
+    @<RadzenCard Style="padding: 20px;">
+        <p Style="margin-bottom: 10px;">Confirm?</p>
+        <div class="row">
+            <div class="col-md-12">
+                <RadzenButton Text="Ok" Click="()=> ds.Close(true)" Style="margin-bottom: 10px; width: 150px" />
+                <RadzenButton Text="Cancel" Click="()=> ds.Close(false)" ButtonStyle="ButtonStyle.Secondary" Style="margin-bottom: 10px; width: 150px" />
+            </div>
+        </div>
+    </RadzenCard>);
+}
+
+<style>
+    .ui-button-text-icon-left.ui-button.ui-state-default {
+        background: transparent;
+    }
+
+    ui-button-text.ui-clickable {
+        font-size: smaller;
+    }
+</style>

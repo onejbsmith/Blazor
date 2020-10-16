@@ -1,0 +1,30 @@
+﻿<!-- Tab Component -->
+    <div style="border:5px solid green;padding:10px;border-radius:10px;margin:10px;">
+        <h2>TabComponent</h2>
+        <h3><b>This</b> property in the child will be updated any time it is updated in the parent</h3>
+        <p hidden>The meaning of life is @Notified.</p>
+        <p>The meaning of life is <b>@myVar</b>.</p>
+    </div>
+@code {
+
+    /// <summary>
+    /// This property will be updated any time it is updated by the parent
+    /// </summary>
+    /// <remarks>
+    /// So we will wrap all components that need updates in <CascadingParameter></CascadingParameter>
+    /// and add
+    /// </remarks>
+    private int myVar;
+    [CascadingParameter]
+    public int Notified
+    {
+        get { return myVar; }
+        set
+        {
+            myVar = value;
+
+            /// Call any needed methods here after parent!
+        }
+    }
+
+}

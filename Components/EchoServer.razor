@@ -1,0 +1,103 @@
+﻿@using BlazorTrader.Data
+@using BlazorTrader.Components
+
+<h3>EchoServer</h3>
+@*Here, I will have a test bed for WebsocketClient Code using the echo service
+    The client will connect and send a message and receive echo results and display them
+    We will have a connect button, a send button, a ping button, a disconnect button
+    A Send text box, a Received Text Area, a status label show connected/disconnected
+*@
+<RadzenSplitButton Text="@TDAParameters.webSocketName" Click="@((args) => socketServerChanged(args))" Style="zoom:80%">
+    <ChildContent>
+        <RadzenSplitButtonItem Text="Echo Server" Value="@TDAmertradeApiEndpoints.EchoWebsocketUrl" />
+        <RadzenSplitButtonItem Text="TDA Streaming Server" Value="@TDAmertradeApiEndpoints.streamerSocketUrl" />
+    </ChildContent>
+</RadzenSplitButton>
+<RadzenButton Text="Connect" ButtonStyle="ButtonStyle.Primary" Disabled="false" Click="Connect" Size="Radzen.ButtonSize.Small" />
+<RadzenButton Text="Send" ButtonStyle="ButtonStyle.Success" Disabled="false" Click="Send" Size="Radzen.ButtonSize.Small" />
+<RadzenButton Text="Ping" ButtonStyle="ButtonStyle.Info" Disabled="false" Click="Ping" Size="Radzen.ButtonSize.Small" />
+<RadzenButton Text="Disconnect" ButtonStyle="ButtonStyle.Warning" Disabled="false" Click="Disconnect" Size="Radzen.ButtonSize.Small" />
+<BSBadge IsPill="true"><RadzenLabel Text="Status:" /><RadzenLabel Text='@(wsClient.socket.State.ToString())' /></BSBadge>
+<br />
+<br />
+<table width="100%" cellpadding="10" border="1">
+    <thead>
+        <tr>
+            <th valign="bottom" width="150px">Text to Send</th>
+            <th width="50%">
+                <RadzenTextArea @bind-Value="dataToSend" Style="width:100%" Change="@((text)=>logSentText(text))" />
+
+            </th>
+            <th rowspan="2" width="50%" valign="top">
+                <div><RadzenLabel Text="Error Message" Visible="@(errorMessage.Length>0)" class="badge-danger badge-pill" /></div><br />
+                <div><RadzenLabel Text="@errorMessage" /></div>
+            </th>
+        </tr>
+        <tr>
+            <th valign="baseline"> Text Received </th>
+            <th>
+                <RadzenTextArea @bind-Value="dataReceived" Style="width:100%" />
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th valign="top">
+                <RadzenLabel Text="Log" />
+            </th>
+            <td colspan="2">
+                <RadzenTextArea Style="width:100%;height:200px" @bind-Value="socketLog" />
+            </td>
+        </tr>
+    </tbody>
+</table>
+@code {
+    /// Page Local Variablee
+    string dataToSend, socketLog, errorMessage = "", dataReceived;
+    WebsocketService wsClient = new WebsocketService(TDAParameters.webSocketUrl);
+
+    #region Page Event Handlers
+    protected async void Connect()
+    {
+        wsClient = new WebsocketService(TDAParameters.webSocketUrl);
+        await wsClient.Connecting();
+
+        errorMessage = "";
+        StateHasChanged();
+    }
+    protected async Task Send()
+    {
+        await wsClient.Sending(dataToSend);
+        dataToSend = "";
+        //SendCompleted();
+    }
+    protected void Ping()
+    {
+        StateHasChanged();
+    }
+    protected async Task Disconnect()
+    {
+        await wsClient.Stopping();
+        StateHasChanged();
+    }
+
+    protected void socketServerChanged(RadzenSplitButtonItem item)
+    {
+        TDAParameters.webSocketUrl = item.Value;
+        TDAParameters.webSocketName = item.Text;
+    }
+    #endregion
+
+    #region Utilities
+    void logSentText(string text)
+    {
+        socketLog += "Sent:" + text + "\t";
+        StateHasChanged();
+    }
+    public void logReceivedText(string text)
+    {
+        socketLog += "Received:" + text + "\n";
+        StateHasChanged();
+    }
+    #endregion 
+}

@@ -1,0 +1,20 @@
+﻿
+    <div style="border:5px solid purple;padding:10px">
+        <h1>TabContainer</h1>
+        <p>Current count: @TheAnswer</p>
+
+        <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+
+        <!-- Tab Container -->
+        <CascadingValue Value="@TheAnswer">
+            <TabComponent></TabComponent>
+        </CascadingValue>
+    </div>
+@code {
+    int TheAnswer = 42;
+
+    private void IncrementCount()
+    {
+        TheAnswer++;
+    }}

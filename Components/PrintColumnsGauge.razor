@@ -1,0 +1,59 @@
+﻿@*<h3>PrintColumnsGauge</h3>*@
+@using BlazorTrader.Data;
+
+    <div style="width:150px; height:96px;overflow:hidden;margin-bottom:10px">
+        <RadzenChart Style="width:150px; height:120px;position:relative;left:0px;bottom:30px;zoom:1.4;" ColorScheme="ColorScheme.Divergent">
+            <RadzenColumnSeries Data="@printsData" CategoryProperty="Quarter"
+                                ValueProperty="Revenue" />
+            <RadzenLegend Visible="false" />
+            <RadzenCategoryAxis Visible="false" />
+            <RadzenValueAxis Visible="false" />
+        </RadzenChart>
+    </div>
+
+@if (!isPrintsSize)
+{
+<div style="white-space: nowrap;">
+    <BSBadge class="alert-dark"><RadzenLabel Text='@(printsData[0].Revenue.ToString("n0"))' title="Under Bid" /></BSBadge>
+    <BSBadge class="alert-dark"><RadzenLabel Text='@(printsData[1].Revenue.ToString("n0"))' title="At Bid" /></BSBadge>
+    <BSBadge class="alert-dark"><RadzenLabel Text='@(printsData[2].Revenue.ToString("n0"))' title="Between Bid and Ask" /></BSBadge>
+    <BSBadge class="alert-dark"><RadzenLabel Text='@(printsData[3].Revenue.ToString("n0"))' title="At Ask" /></BSBadge>
+    <BSBadge class="alert-dark"><RadzenLabel Text='@(printsData[4].Revenue.ToString("n0"))' title="Over Ask" /></BSBadge>
+</div>
+}
+
+
+@code {
+
+    [Parameter]
+    public string symbol { get; set; }
+
+    [Parameter]
+    public int seconds { get; set; }
+
+    [Parameter]
+    public bool isPrintsSize { get; set; }
+
+
+    DataItem[] printsData = new DataItem[] {
+         new DataItem { Quarter = "Sell < Bid", Revenue = 1 },
+         new DataItem { Quarter = "Sell = Bid", Revenue = 2 },
+         new DataItem { Quarter = "Between Bid & Ask", Revenue = 3 },
+         new DataItem { Quarter = "Buy = Ask", Revenue = 4 },
+         new DataItem { Quarter = "Buy > Ask", Revenue = 5 } };
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        TDAStreamerData.OnStatusesChanged += getPrintsData;
+        StateHasChanged();
+        await Task.CompletedTask;
+    }
+
+    public void getPrintsData()    {
+        TDAStreamerData.getPrintsData(ref printsData, seconds, isPrintsSize, symbol);
+        StateHasChanged();
+ //       await Task.CompletedTask;
+    }
+
+}

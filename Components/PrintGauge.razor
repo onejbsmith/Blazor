@@ -1,0 +1,23 @@
+﻿<h3>@*PrintGauge*@</h3>
+@using BlazorTrader.Data
+
+<PrintPieGauge symbol="@symbol" isPrintsSize="@isPrintsSize" seconds="@seconds" />
+<PrintColumnsGauge symbol="@symbol" isPrintsSize="@isPrintsSize" seconds="@seconds" />
+
+@code {
+    [Parameter]
+    public string symbol { get; set; }
+
+    [Parameter]
+    public int seconds { get; set; }
+
+    [Parameter]
+    public bool isPrintsSize { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        TDAStreamerData.OnStatusesChanged += StateHasChanged;
+        await Task.CompletedTask;
+    }
+
+}

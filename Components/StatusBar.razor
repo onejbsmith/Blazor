@@ -1,0 +1,15 @@
+﻿@*<h3>StatusBar</h3>*@
+@using BlazorTrader.Data
+
+<StatusLamp label="TDA OPTIONS STATUS" status="@TDANotifications.optionStatus" success="@TDAConstants.Notify_Option_Success" original="@TDAConstants.Notify_Option_Original" />
+<StatusLamp label="TDA QUOTES STATUS" status="@TDANotifications.quoteStatus" success="@TDAConstants.Notify_Quote_Success" original="@TDAConstants.Notify_Quote_Original" />
+<StatusLamp label="TDA AUTH STATUS" status="@TDANotifications.TDAAuthStatus" success="@TDAConstants.Notify_Auth_Success" original="@TDAConstants.Notify_Auth_Original" />
+<BSBadge IsPill="true">@TDANotifications.TDAAuthStatus</BSBadge>
+<StatusLamp label="TDA ERROR_MESSAGE" status="@TDANotifications.errorMessage" success="@TDAConstants.Notify_Auth_Success" original="@TDAConstants.Notify_Auth_Original" />
+<BSBadge IsPill="true">@TDANotifications.errorMessage</BSBadge>
+@code
+{
+    [Parameter]
+    public TDASingleOptionQuotes optionQuotes { get; set; }
+
+}

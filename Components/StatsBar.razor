@@ -1,0 +1,49 @@
+﻿@*<h3>StatsBar</h3>*@
+@using BlazorTrader.Data
+
+    <div style="white-space: nowrap;">
+        <BSBadge class="alert-dark"><RadzenLabel Text='@(TDAStreamerData.printCount(symbol).ToString("n0"))' title="Time and Sales Prints" /></BSBadge>
+        <BSBadge class="alert-light"><RadzenLabel Text='@(TDAStreamerData.printLevelCount(symbol,1).ToString("n0"))' title="Under Bid" /></BSBadge>
+        <BSBadge class="alert-light"><RadzenLabel Text='@(TDAStreamerData.printLevelCount(symbol,2).ToString("n0"))' title="At Bid" /></BSBadge>
+        <BSBadge class="alert-light"><RadzenLabel Text='@(TDAStreamerData.printLevelCount(symbol,3).ToString("n0"))' title="Between Bid and Ask" /></BSBadge>
+        <BSBadge class="alert-light"><RadzenLabel Text='@(TDAStreamerData.printLevelCount(symbol,4).ToString("n0"))' title="At Ask" /></BSBadge>
+        <BSBadge class="alert-light"><RadzenLabel Text='@(TDAStreamerData.printLevelCount(symbol,5).ToString("n0"))' title="Over Ask" /></BSBadge>
+        <BSBadge class="alert-dark"><RadzenLabel Text='@(TDAStreamerData.printSum(symbol).ToString("n0"))' title="Time and Sales Prints" /></BSBadge>
+        <BSBadge class="alert-light"><RadzenLabel Text='@(TDAStreamerData.printLevelSum(symbol,1).ToString("n0"))' title="Under Bid" /></BSBadge>
+        <BSBadge class="alert-light"><RadzenLabel Text='@(TDAStreamerData.printLevelSum(symbol,2).ToString("n0"))' title="At Bid" /></BSBadge>
+        <BSBadge class="alert-light"><RadzenLabel Text='@(TDAStreamerData.printLevelSum(symbol,3).ToString("n0"))' title="Between Bid and Ask" /></BSBadge>
+        <BSBadge class="alert-light"><RadzenLabel Text='@(TDAStreamerData.printLevelSum(symbol,4).ToString("n0"))' title="At Ask" /></BSBadge>
+        <BSBadge class="alert-light"><RadzenLabel Text='@(TDAStreamerData.printLevelSum(symbol,5).ToString("n0"))' title="Over Ask" /></BSBadge>
+        <BSBadge class="alert-dark"><RadzenLabel Text='@(TDAStreamerData.printCount(symbol,10).ToString("n0"))' title="Time and Sales Prints" /></BSBadge>
+        <BSBadge class="alert-light"><RadzenLabel Text='@(TDAStreamerData.printLevelCount(symbol,1,10).ToString("n0"))' title="Under Bid" /></BSBadge>
+        <BSBadge class="alert-light"><RadzenLabel Text='@(TDAStreamerData.printLevelCount(symbol,2,10).ToString("n0"))' title="At Bid" /></BSBadge>
+        <BSBadge class="alert-light"><RadzenLabel Text='@(TDAStreamerData.printLevelCount(symbol,3,10).ToString("n0"))' title="Between Bid and Ask" /></BSBadge>
+        <BSBadge class="alert-light"><RadzenLabel Text='@(TDAStreamerData.printLevelCount(symbol,4,10).ToString("n0"))' title="At Ask" /></BSBadge>
+        <BSBadge class="alert-light"><RadzenLabel Text='@(TDAStreamerData.printLevelCount(symbol,5,10).ToString("n0"))' title="Over Ask" /></BSBadge>
+        <BSBadge class="alert-dark"><RadzenLabel Text='@(TDAStreamerData.printSum(symbol,10).ToString("n0"))' title="Time and Sales Prints" /></BSBadge>
+        <BSBadge class="alert-light"><RadzenLabel Text='@(TDAStreamerData.printLevelSum(symbol,1,10).ToString("n0"))' title="Under Bid" /></BSBadge>
+        <BSBadge class="alert-light"><RadzenLabel Text='@(TDAStreamerData.printLevelSum(symbol,2,10).ToString("n0"))' title="At Bid" /></BSBadge>
+        <BSBadge class="alert-light"><RadzenLabel Text='@(TDAStreamerData.printLevelSum(symbol,3,10).ToString("n0"))' title="Between Bid and Ask" /></BSBadge>
+        <BSBadge class="alert-light"><RadzenLabel Text='@(TDAStreamerData.printLevelSum(symbol,4,10).ToString("n0"))' title="At Ask" /></BSBadge>
+        <BSBadge class="alert-light"><RadzenLabel Text='@(TDAStreamerData.printLevelSum(symbol,5,10).ToString("n0"))' title="Over Ask" /></BSBadge>
+    </div>
+
+@code {
+    [Parameter]
+    public string symbol { get; set; }
+
+    [Parameter]
+    public int seconds { get; set; }
+
+    [Parameter]
+    public bool isPrintsSize { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        TDAStreamerData.OnStatusesChanged += StateHasChanged;
+        await Task.CompletedTask;
+    }
+
+
+}

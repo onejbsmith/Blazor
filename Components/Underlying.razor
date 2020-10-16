@@ -1,0 +1,100 @@
+﻿@*<h3>Underlying</h3>*@
+<style>
+    .red {
+        color: darkred;
+    }
+    .yellow {
+        color: yellow;
+    }
+    .green {
+        color: green;
+    }
+    .bold  
+    {font-weight:bold;}
+
+    th:last-child, td:last-child {
+        padding-right: 30px;
+    }
+</style>
+@using BlazorTrader.Data
+<table id="underlying" class="table bold">
+    <thead>
+        <tr>
+            <th>Symbol</th>
+            <th>Bid</th>
+            <th>Ask</th>
+            <th>Last</th>
+            <th>Volume</th>
+            <th>52-week Low</th>
+            <th>High</th>
+            <th>Open Price</th>
+            <th>% Change</th>
+            <th style="">Time</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><b>@optionQuotes.symbol </b></td>
+            <td class='@classChanged("bid")'>@optionQuotes.underlying.bid.ToString("n2")</td>
+            <td class='@classChanged("ask")'>@optionQuotes.underlying.ask.ToString("n2")</td>
+            <td class='@classChanged("close")'>@optionQuotes.underlying.close.ToString("n2")</td>
+            <td class='@classChanged("totalVolume")'>@optionQuotes.underlying.totalVolume.ToString("n0")</td>
+            <td>@optionQuotes.underlying.fiftyTwoWeekLow.ToString("n2")</td>
+            <td>@optionQuotes.underlying.fiftyTwoWeekHigh.ToString("n2")</td>
+            <td>@optionQuotes.underlying.openPrice.ToString("n2")</td>
+            <td class='@classChanged("percentChange")'>@optionQuotes.underlying.percentChange.ToString("n2")%</td>
+            <td class="@testTime()">@quoteTime()</td>
+        </tr>
+    </tbody>
+</table>
+@code {
+    [Parameter]
+    public TDASingleOptionQuotes optionQuotes { get; set; }
+
+    [Parameter]
+    public TDASingleOptionQuotes prevOptionQuotes { get; set; }
+
+    public DateTime quoteTime()
+    {
+        return TimeZoneInfo.ConvertTime(DateTimeOffset.FromUnixTimeMilliseconds(optionQuotes.underlying.quoteTime).ToLocalTime().DateTime, TDANotifications.est);
+    }
+
+    public string testTime()
+    {
+        if (quoteTime() < TimeZoneInfo.ConvertTime(DateTime.Now.AddSeconds(-10), TDANotifications.est))
+            return "red";
+        else
+            return "";
+    }
+
+    public string classChanged(string fieldName)
+    {
+        if (prevOptionQuotes != null)
+        {
+            var prevAmt = prevOptionQuotes.underlying[fieldName];
+            var currAmt = optionQuotes.underlying[fieldName];
+            return classColor<dynamic>(ref prevAmt,ref currAmt);
+        }
+        else
+            return "";
+    }
+
+    public string classColor<T>(ref T prevAmt, ref T currAmt)
+    {
+        string className = "";
+        var comp = Comparer<T>.Default.Compare(prevAmt, currAmt);
+
+        if (prevAmt != null && comp < 0)
+            className =  "green";
+        else if (prevAmt != null && comp > 0)
+            className = "red";
+
+        return className;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.CompletedTask;
+    }
+
+}

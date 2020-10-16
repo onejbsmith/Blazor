@@ -1,0 +1,297 @@
+﻿@*<h3>PrintLinesGauge</h3>*@
+
+@using BlazorTrader.Data;
+
+@using BlazorTrader.Components;
+@using BlazorTrader.Data;
+@using Blazorise.Charts;
+
+
+@*<ExampleRadzenBarChart />*@
+
+@*<ParentCompnent />*@
+
+@*<CustomTextboxParentComponent />*@
+
+@*<TabContainer  />*@
+
+<style>
+    .chart {
+        width: 60px;
+        display: block;
+        height: 60px;
+        zoom: 0.3;
+        margin-bottom:50px;
+    }
+   .enlarge
+   {
+       zoom:2;
+       height:150px;
+       position:relative;
+       bottom:200px;
+
+   }
+</style>
+
+<table class="chart">
+    <tr>
+        <td>
+            <LineChart @ref="lineChart" TItem="double" />
+        </td>
+    </tr>
+    @*<tr>
+        <td class="enlarge" style="color:indianred">
+            @(string.Join(" ", sellsData))
+        </td>
+    </tr>
+    <tr>
+        <td class="enlarge" style="color:green">
+            @(string.Join(" ", buysData))
+        </td>
+    </tr>*@
+</table>
+
+@code{
+
+    [Parameter]
+                public string symbol { get; set; }
+
+                [Parameter]
+                public int seconds { get; set; }
+
+                [Parameter]
+                public bool isPrintsSize { get; set; }
+
+                [Parameter]
+                public bool isMovement { get; set; } = false;
+
+                LineChart<double> lineChart;
+
+                LineChartDataset<double> buysChartDatasetData = new LineChartDataset<double>();
+                LineChartDataset<double> sellsChartDatasetData = new LineChartDataset<double>();
+
+                List<double> sellsData = new List<double>();
+                List<double> buysData = new List<double>();
+
+                static LineChartOptions xxxx = new LineChartOptions()
+                {
+                    Tooltips = new Tooltips() { Enabled = false },
+                    Legend = new Legend() { Display = false },
+                    Scales = new Scales()
+                    {
+                        YAxes = new List<Axe>()
+            {
+                    new Axe(){Display = false}
+                },
+                        XAxes = new List<Axe>()
+            {
+                    new Axe(){Display = false}
+                }
+                    }
+                };
+
+                protected string chartOptions = System.Text.Json.JsonSerializer.Serialize<LineChartOptions>(xxxx,
+
+                                    new System.Text.Json.JsonSerializerOptions() { WriteIndented = true });
+
+                protected override async Task OnInitializedAsync()
+                {
+                    TDAStreamerData.OnStatusesChanged += getPrintsData;
+                    StateHasChanged();
+                    buysChartDatasetData = GetBuyLineChartDataset(buysData);
+                    sellsChartDatasetData = GetSellLineChartDataset(sellsData);
+                    await Task.CompletedTask;
+                }
+
+                public void getPrintsData()
+                {
+                    if (isMovement)
+                        TDAStreamerData.getPrintsMovementBuysSellsData(ref sellsData, ref buysData, seconds, symbol);
+
+                    else
+                        TDAStreamerData.getPrintsBuysSellsData(ref sellsData, ref buysData, seconds, isPrintsSize, symbol);
+
+                    HandleRedraw();
+                    StateHasChanged();
+                }
+
+                protected override async Task OnAfterRenderAsync(bool firstRender)
+                {
+                    if (firstRender)
+                    {
+                        HandleRedraw();
+                    }
+                }
+
+                void HandleRedraw()
+                {
+                    buysChartDatasetData = GetBuyLineChartDataset(buysData);
+                    sellsChartDatasetData = GetSellLineChartDataset(sellsData);
+                    lineChart.Clear();
+
+
+                    // lineChart.AddLabel(Labels);
+
+                    lineChart.AddDataSet(buysChartDatasetData);
+                    lineChart.AddDataSet(sellsChartDatasetData);
+                    // lineChart.AddDataSet(GetTweenLineChartDataset(RandomizeData()));
+
+                    //lineChart.Options = new LineChartOptions() { Scales= new Scales() {  YAxes = new List<Axe>() {  } } };
+
+                    lineChart.Update();
+                }
+
+                LineChartDataset<double> GetBuyLineChartDataset(List<double> data)
+                {
+                    return new LineChartDataset<double>
+                    {
+                        Data =data,
+                        BackgroundColor = buyBackgroundColors,
+                        BorderColor = buyBorderColors,
+                        Fill = true,
+                        PointRadius = 2,
+                        BorderDash = new List<int> { }
+                    };
+                }
+
+                LineChartDataset<double> GetSellLineChartDataset(List<double> data)
+                {
+                    return new LineChartDataset<double>
+                    {
+                        Data = data,
+                        BackgroundColor = sellBackgroundColors,
+                        BorderColor = sellBorderColors,
+                        Fill = true,
+                        PointRadius = 2,
+                        BorderDash = new List<int> { }
+                    };
+                }
+
+                LineChartDataset<double> GetTweenLineChartDataset(List<double> data)
+                {
+                    return new LineChartDataset<double>
+                    {
+                        Data = data,
+                        BackgroundColor = tweenBackgroundColors,
+                        BorderColor = tweenBorderColors,
+                        Fill = true,
+                        PointRadius = 2,
+                        BorderDash = new List<int> { }
+                    };
+                }
+
+                string[] Labels = { "Red", "Blue", "Yellow", "Green", "Purple", "Orange" };
+                List<string> sellBackgroundColors = new List<string> { ChartColor.FromRgba(255, 99, 132, 0.0f), ChartColor.FromRgba(54, 162, 235, 0.2f), ChartColor.FromRgba(255, 206, 86, 0.2f), ChartColor.FromRgba(75, 192, 192, 0.2f), ChartColor.FromRgba(153, 102, 255, 0.2f), ChartColor.FromRgba(255, 159, 64, 0.2f) };
+                List<string> sellBorderColors = new List<string> { ChartColor.FromRgba(255, 99, 132, 1f), ChartColor.FromRgba(54, 162, 235, 1f), ChartColor.FromRgba(255, 206, 86, 1f), ChartColor.FromRgba(75, 192, 192, 1f), ChartColor.FromRgba(153, 102, 255, 1f), ChartColor.FromRgba(255, 159, 64, 1f) };
+
+                List<string> buyBackgroundColors = new List<string> { ChartColor.FromRgba(99, 255, 132, 0.0f), ChartColor.FromRgba(54, 162, 235, 0.2f), ChartColor.FromRgba(255, 206, 86, 0.2f), ChartColor.FromRgba(75, 192, 192, 0.2f), ChartColor.FromRgba(153, 102, 255, 0.2f), ChartColor.FromRgba(255, 159, 64, 0.2f) };
+                List<string> buyBorderColors = new List<string> { ChartColor.FromRgba(99, 255, 132, 1f), ChartColor.FromRgba(54, 162, 235, 1f), ChartColor.FromRgba(255, 206, 86, 1f), ChartColor.FromRgba(75, 192, 192, 1f), ChartColor.FromRgba(153, 102, 255, 1f), ChartColor.FromRgba(255, 159, 64, 1f) };
+
+                List<string> tweenBackgroundColors = new List<string> { ChartColor.FromRgba(99, 132, 255, 0.0f), ChartColor.FromRgba(54, 162, 235, 0.2f), ChartColor.FromRgba(255, 206, 86, 0.2f), ChartColor.FromRgba(75, 192, 192, 0.2f), ChartColor.FromRgba(153, 102, 255, 0.2f), ChartColor.FromRgba(255, 159, 64, 0.2f) };
+                List<string> tweenBorderColors = new List<string> { ChartColor.FromRgba(99, 132, 255, 1f), ChartColor.FromRgba(54, 162, 235, 1f), ChartColor.FromRgba(255, 206, 86, 1f), ChartColor.FromRgba(75, 192, 192, 1f), ChartColor.FromRgba(153, 102, 255, 1f), ChartColor.FromRgba(255, 159, 64, 1f) };
+
+                List<double> RandomizeData()
+                {
+                    var r = new Random(DateTime.Now.Millisecond);
+
+                    return new List<double> { r.Next(3, 50) * r.NextDouble(), r.Next(3, 50) * r.NextDouble(), r.Next(3, 50) * r.NextDouble(), r.Next(3, 50) * r.NextDouble(), r.Next(3, 50) * r.NextDouble(), r.Next(3, 50) * r.NextDouble() };
+                }
+            }
+
+@*<div style="width:50px; height:70px;overflow:visible;transform:scaleX(5) scaleY(2);">
+        <RadzenChart Style="width:50px; height:70px;position:relative;left:20px;top:0px;padding:0;" ColorScheme="ColorScheme.Divergent">
+            <RadzenLineSeries Data="sellsData" CategoryProperty="Quarter"
+                              ValueProperty="Revenue" Stroke="Green"  StrokeWidth="1"/>
+            <RadzenLineSeries Data="buysData" CategoryProperty="Quarter" Smooth="true"
+                              ValueProperty="Revenue" Stroke="Darkred" />
+
+            <RadzenLegend Visible="false" />
+            <RadzenCategoryAxis Visible="false" />
+            <RadzenValueAxis Visible="false" Min="-1"   />
+        </RadzenChart>
+    </div>*@
+
+@*@code {
+
+        [Parameter]
+        public string symbol { get; set; }
+
+        [Parameter]
+        public int seconds { get; set; }
+
+        [Parameter]
+        public bool isPrintsSize { get; set; }
+
+        [Parameter]
+        public bool isMovement { get; set; } = false;
+
+        public int buySellMax = 0;
+
+        List<DataItem> sellsData = new List<DataItem>() {
+             new DataItem { Quarter = "1", Revenue = 1 },
+             new DataItem { Quarter = "2", Revenue = 2 },
+             new DataItem { Quarter = "3", Revenue = 3 },
+             new DataItem { Quarter = "4", Revenue = 4 },         new DataItem { Quarter = "2", Revenue = 2 },
+             new DataItem { Quarter = "5", Revenue = 3 },
+
+            new DataItem { Quarter = "6", Revenue = 4 },         new DataItem { Quarter = "2", Revenue = 2 },
+             new DataItem { Quarter = "7", Revenue = 300 },
+             new DataItem { Quarter = "8", Revenue = 4 },         new DataItem { Quarter = "2", Revenue = 2 },
+             new DataItem { Quarter = "9", Revenue = 3 },
+             new DataItem { Quarter = "10", Revenue = 4 },         new DataItem { Quarter = "2", Revenue = 2 },
+
+
+            new DataItem { Quarter = "11", Revenue = 3 },
+            new DataItem { Quarter = "12", Revenue = 4 },
+             new DataItem { Quarter = "13", Revenue = 1 },
+             new DataItem { Quarter = "14", Revenue = 200 },
+             new DataItem { Quarter = "15", Revenue = 3 },
+
+            new DataItem { Quarter = "16", Revenue = 4 },         new DataItem { Quarter = "2", Revenue = 2 },
+             new DataItem { Quarter = "17", Revenue = 3 },
+             new DataItem { Quarter = "18", Revenue = 4 },         new DataItem { Quarter = "2", Revenue = 2 },
+             new DataItem { Quarter = "19", Revenue = 3 },
+             new DataItem { Quarter = "20", Revenue = 4 },         new DataItem { Quarter = "2", Revenue = 2 },
+
+            new DataItem { Quarter = "21", Revenue = 3 },
+             new DataItem { Quarter = "22", Revenue = 4 },         new DataItem { Quarter = "2", Revenue = 2 },
+             new DataItem { Quarter = "23", Revenue = 3 },
+             new DataItem { Quarter = "24", Revenue = 400 },         new DataItem { Quarter = "Buy > Ask", Revenue = 5 } };
+
+        List<DataItem> buysData = new List<DataItem>() {
+             new DataItem { Quarter = "1", Revenue = 200 },
+             new DataItem { Quarter = "2", Revenue = 3 },
+             new DataItem { Quarter = "3", Revenue = 4 },         new DataItem { Quarter = "2", Revenue = 2 },
+             new DataItem { Quarter = "4", Revenue = 3 },
+             new DataItem { Quarter = "5", Revenue = 4 },         new DataItem { Quarter = "2", Revenue = 2 },
+             new DataItem { Quarter = "6", Revenue = 300 },
+             new DataItem { Quarter = "7", Revenue = 4 },         new DataItem { Quarter = "2", Revenue = 2 },
+             new DataItem { Quarter = "8", Revenue = 3 },
+             new DataItem { Quarter = "9", Revenue = 4 },         new DataItem { Quarter = "2", Revenue = 2 },
+             new DataItem { Quarter = "10", Revenue = 300 },
+             new DataItem { Quarter = "11", Revenue = 4 },
+             new DataItem { Quarter = "12", Revenue = 500 } };
+
+        protected override async Task OnInitializedAsync()
+        {
+            TDAStreamerData.OnStatusesChanged += getPrintsData;
+            StateHasChanged();
+            await Task.CompletedTask;
+        }
+
+        public void getPrintsData()
+        {
+            if (isMovement)
+                TDAStreamerData.getPrintsMovementBuysSellsData(ref sellsData, ref buysData, seconds, symbol);
+            else
+                TDAStreamerData.getPrintsBuysSellsData(ref sellsData, ref buysData, seconds, isPrintsSize, symbol);
+
+            //var buyMax = buysData.Max(t => t.Revenue);
+            //var sellMax = sellsData.Max(t => t.Revenue);
+            //buySellMax = (int)Math.Max(buyMax, sellMax);
+            StateHasChanged();
+        }
+
+    }*@
+
+

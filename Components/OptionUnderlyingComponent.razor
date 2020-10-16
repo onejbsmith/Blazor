@@ -1,0 +1,36 @@
+﻿@using BlazorTrader.Data
+    <table id="underlying" class="table">
+        <thead>
+            <tr>
+                <th>Symbol</th>
+                <th>Time</th>
+                <th>Bid</th>
+                <th>Ask</th>
+                <th>Last</th>
+                <th>Volume</th>
+                <th>52-week Low</th>
+                <th>High</th>
+                <th>Open Price</th>
+                <th>% Change</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@optionQuotes.symbol</td>
+                <td>@DateTimeOffset.FromUnixTimeMilliseconds(optionQuotes.underlying.quoteTime).ToLocalTime().DateTime</td>
+                <td>@optionQuotes.underlying.bid.ToString("n2")</td>
+                <td>@optionQuotes.underlying.ask.ToString("n2")</td>
+                <td>@optionQuotes.underlying.close.ToString("n2")</td>
+                <td>@optionQuotes.underlying.totalVolume.ToString("n0")</td>
+                <td>@optionQuotes.underlying.fiftyTwoWeekLow.ToString("n2")</td>
+                <td>@optionQuotes.underlying.fiftyTwoWeekHigh.ToString("n2")</td>
+                <td>@optionQuotes.underlying.openPrice.ToString("n2")</td>
+                <td>@optionQuotes.underlying.percentChange.ToString("n2")</td>
+            </tr>
+        </tbody>
+    </table>
+@code {
+    [Parameter]
+    public TDASingleOptionQuotes optionQuotes { get; set; }
+
+}

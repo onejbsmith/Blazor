@@ -1,0 +1,15 @@
+﻿@*<h3>CustomTextboxParentComponent</h3>*@
+
+<CustomTextbox @bind-Value="name" FieldName="Name" MaxLength="20" />
+<CustomTextbox @bind-Value="address" FieldName="Address" />
+
+@code {
+    /// <summary>
+    /// Values passed to the child on Init
+    /// </summary>
+    /// <remarks>
+    /// How do we raise an event in all children when something has changed in the parent
+    /// </remarks>
+    string name = "Sarath Lal";
+    string address = "Kakkanad";
+}

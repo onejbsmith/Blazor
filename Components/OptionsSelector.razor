@@ -1,0 +1,75 @@
+﻿@*<h3>OptionsSelector</h3>*@
+@using BlazorTrader.Data
+<style>
+    input {
+        font-weight: bold;
+        color: teal;
+    }
+</style>
+<div style="display:inline;position:relative;top:10px;">
+    <RadzenButton Icon='@(TDAParameters.showUnderlying ? "expand_less":"expand_more")'  Click="@((args) => showUnderlying(args))" Style="padding:0; width: 27px; background-color:transparent" />
+    <label for="txtSymbol">Symbol</label>
+    <RadzenTextBox Name="txtSymbol" Style="color: teal;margin-bottom: 20px;width:80px" @bind-Value="TDAParameters.optionSymbol" Change="@((args) => SymbolChange(args))" />
+    <label for="dtpOptionExpDate">Expires</label>
+    <RadzenDatePicker Name="dtpOptionExpDate" Style="width:120px" DateFormat="yyyy-MM-dd" @bind-Value="TDAParameters.optionExpDate" Change="@((args) => ExpDateChange(args))" />
+    <label for="numOptionStrikes">Strikes</label>
+    <RadzenNumeric Name="numOptionStrikes" Step="1" Min="2" Max="100" @bind-Value="TDAParameters.optionNumStrikes" Style="width:60px" />
+    @*<label for="numSkipStrikes">Skips</label>
+        <RadzenNumeric Name="numSkipStrikes" Min="0" Max="10" @bind-Value="TDAParameters.optionNumSkipStrikes" Style="width:60px" />*@
+    <RadzenRadioButtonList Name="optionsITM" TValue="bool" @bind-Value="TDAParameters.inTheMoney" Change="@((args) => RBChange(args))"
+                           Style="display:inline-block;margin-left:20px;font-weight:bold">
+        <Items>
+            <RadzenRadioButtonListItem Text="OTM" Value="false" Style="@radioOTMColor" />
+            <RadzenRadioButtonListItem Text="ITM" Value="true" Style="@radioITMColor" />
+        </Items>
+    </RadzenRadioButtonList>
+    @*<BSButton Id="popover2" onclick="onclick2">Bottom</BSButton>
+        <BSPopover Target="popover2"  Placement="Placement.Bottom">
+            <BSPopoverHeader>Bottom Popover</BSPopoverHeader>
+            <BSPopoverBody>Sed posuere consectetur est at lobortis. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum.</BSPopoverBody>
+        </BSPopover>*@
+</div>
+
+@code {
+    string radioOTMColor = "color:teal";
+    string radioITMColor = "background-color:silver; color:teal;";
+
+    void SymbolChange(string symbol)
+    {
+        TDAParameters.optionSymbol = symbol.ToUpper();
+
+        StateHasChanged();
+    }
+
+    void ExpDateChange(DateTime? optionExp)
+    {
+        TDAParameters.optionExpDate = optionExp;
+
+        StateHasChanged();
+    }
+
+    void RBChange(bool value)
+    {
+        TDAParameters.inTheMoney = value;
+        //if (TDAParameters.inTheMoney)
+        //{
+        //    radioOTMColor = "";
+        //    radioITMColor = "; color:teal";
+        //}
+        //else
+        //{
+        //    radioOTMColor = "color:teal";
+        //    radioITMColor = "background-color:silver;";
+        //}
+        //StateHasChanged();
+    }
+
+    void showUnderlying(dynamic arg)
+    {
+        TDAParameters.showUnderlying = !TDAParameters.showUnderlying;
+
+        StateHasChanged();
+    }
+}
+
+

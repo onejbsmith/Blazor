@@ -1,0 +1,76 @@
+﻿@*<h3>CheckboxOverlay</h3>*@
+
+@using BlazorTrader.Data
+
+
+@if (isChecked)
+{
+    <RadzenCheckBox TValue="bool" @bind-Value="isChecked" Change="@(args => unCheckShortOption(args, lstOptions))" />
+}
+else
+{
+    <RadzenCheckBox TValue="int" Name="shortOptionSelection" @bind-Value="i" Change="@(args => shortOptionChecked(args))" />
+}
+
+@code {
+
+    [Parameter]
+    public int i { get; set; }
+
+    [Parameter]
+    public bool isChecked { get; set; }
+
+    [Parameter]
+    public TDAOptionsTableManager mgr { get; set; }
+
+    private TDAOptionQuote[][] _lstOptions;
+    [Parameter]
+    public TDAOptionQuote[][] lstOptions
+    {
+        get { return _lstOptions; }
+        set { _lstOptions = value; }
+    }
+
+    void shortOptionChecked(int i)
+    {
+        try
+        {
+            TDAParameters.sellOptionIndex = i;
+            TDAParameters.dictOptionCheckbox = new Dictionary<string, bool>
+    ();
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Console.Write(ex.Message);
+        }
+    (new TDASpreadManager(lstOptions)).contractsAllocate();
+    }
+
+    void unCheckShortOption(bool arg, dynamic lstOptions)
+    {
+        try
+        {
+            var optionsList = lstOptions[i];
+            TDAOptionQuote option = optionsList[0];
+
+            TDAParameters.setOptionCheckbox(option.description, false);
+            //if (TDAParameters.sellOptionIndex == option.index) // This is the 'anchor' strike
+            //{
+            //    // Only reset if this is the anchor strike and it's cleared
+            //    if (arg == null) option.isChecked = false;// x instead of check // Just remove the strike from the calcs
+            //    if (arg != null && arg == false) TDAParameters.sellOptionIndex = -1;// cleared
+            //}
+            //else // just an ordinary row, not an anchor
+            //{
+            //    if (arg == null || arg == false) option.isChecked = false;// Just remove the strike from the calcs
+            //}
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Console.Write(ex.Message);
+        }
+    }
+
+}

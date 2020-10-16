@@ -1,0 +1,97 @@
+﻿<h3>TDAStreamer</h3>
+
+@using BlazorTrader.Data;
+@using System.Diagnostics;
+@using System.Text;
+
+@inject IJSRuntime TDAStreamerJs;
+@*Here, I will have a test bed for TDA API Streaming
+                            Perhaps have a UI that lets you select Request and Columns by Name
+                            that translates into numbers for the request parameters
+                            What else?
+    <RadzenLink Text="TDA Streaming Data API" Path="https://developer.tdameritrade.com/content/streaming-data" target="_blank" />
+                            It would return stream to what? Memory as a List of Requests
+                            Could use selected column names to create table headers (or should go with Radzen?)
+                            with newest data at the top,*@
+
+<RadzenButton Text="Log In" ButtonStyle="ButtonStyle.Primary" Disabled="false" Click="Connect" Size="Radzen.ButtonSize.Small" />
+<RadzenSplitButton Text="serviceSelection" Click="@((args) => serviceRequestChanged(args))" Style="zoom:80%">
+    <ChildContent>
+        <RadzenSplitButtonItem Text="TIMESALE_EQUITY" Value="" />
+    </ChildContent>
+</RadzenSplitButton>
+<RadzenButton Text="Send" ButtonStyle="ButtonStyle.Success" Disabled="false" Click="Send" Size="Radzen.ButtonSize.Small" />
+<RadzenButton Text="Ping" ButtonStyle="ButtonStyle.Info" Disabled="false" Click="Ping" Size="Radzen.ButtonSize.Small" />
+<RadzenButton Text="Log Out" ButtonStyle="ButtonStyle.Warning" Disabled="false" Click="Disconnect" Size="Radzen.ButtonSize.Small" />
+<BSBadge IsPill="true"><RadzenLabel Text="Status:" /><RadzenLabel Text='@status' /></BSBadge>
+<RadzenTextArea Style="width:100%;height:200px" Value="@logText" />
+
+
+
+@code {
+
+    string serviceRequestText = "";
+    string serviceSelection = "Service";
+    string logText = "";
+
+    string status = "None";
+
+    StringBuilder logTextsb = new StringBuilder();  /// Called from Javascript
+    [JSInvokable("TDAStreamerStatus")]
+    public void TDAStreamerStatus(string it)
+    {
+        switch (it)
+        {
+            case "0": status = "CONNECTING"; break;
+            case "1": status = "OPEN"; break;
+            case "2": status = "CLOSING"; break;
+            case "3": status = "CLOSED"; break;
+        }
+    }
+
+    [JSInvokable("TDAStreamerOnMessage")]
+    public void TDAStreamerOnMessage(string jsonResponse)
+    {
+        logTextsb.AppendLine(jsonResponse);
+        logText = logTextsb.ToString();
+        StateHasChanged();
+
+        Debug.Print(jsonResponse);
+    }
+
+    // Page Event Handlers
+    protected async void Connect()
+    {
+        //var name = await TDAStreamerJs.InvokeAsync<string>( "exampleJsFunctions.showPrompt", "What's your name?");
+
+        string request = TDAStreamerData.getServiceRequest("LOGIN");
+
+        var dotNetReference = DotNetObjectReference.Create(this);
+
+        var dud = await TDAStreamerJs.InvokeAsync<string>("tdaSendRequest", request, dotNetReference);
+
+        StateHasChanged();
+    }
+    protected async Task Send()
+    {
+        var dotNetReference = DotNetObjectReference.Create(this);
+        var dud = await TDAStreamerJs.InvokeAsync<string>("tdaSendRequest", serviceRequestText, dotNetReference);
+    }
+    protected void Ping()
+    {
+        StateHasChanged();
+    }
+    protected async Task Disconnect()
+    {
+        StateHasChanged();
+    }
+
+    protected void serviceRequestChanged(RadzenSplitButtonItem item)
+    {
+        serviceSelection = item.Text;
+        serviceRequestText = TDAStreamerData.getServiceRequest(serviceSelection);
+    }
+
+}
+
+

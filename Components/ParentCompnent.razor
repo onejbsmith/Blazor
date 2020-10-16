@@ -1,0 +1,33 @@
+﻿@*<h3>ParentCompnent</h3>*@
+@using BlazorTrader.Components;
+@using BlazorTrader.Data;
+
+<ChildComponent Customer="Customer" ComponentDataUpdated="ComponentUpdated" />
+<br />
+<br />
+Name: @Customer.Name
+<br />
+Email: @Customer.Email
+<br />
+
+
+@code {
+
+    CustomerClass Customer = new CustomerClass();
+
+    protected override void OnInitialized()
+    {
+        Customer = new CustomerClass
+        {
+            Name = "Ben Goofin",
+            Email = "ben@bengoofin.com"
+        };
+    }
+
+
+    void ComponentUpdated(string args)
+    {
+        StateHasChanged();
+    }
+
+}

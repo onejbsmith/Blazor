@@ -1,0 +1,31 @@
+﻿@*<h3>ChildComponent</h3>*@
+@using BlazorTrader.Data;
+
+<div style="background-color:lightgray;">
+    <div style="padding:1vw;">
+        Name: <br />
+        <input @bind="@Customer.Name" @bind:event="oninput" @onkeyup="KeyPressed" />
+        <br /><br />
+        Email: <br />
+        <input @bind="@Customer.Email" @bind:event="oninput" @onkeyup="KeyPressed" />
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public CustomerClass Customer { get; set; }
+
+    [Parameter]
+    public EventCallback<string> ComponentDataUpdated { get; set; }
+
+    /// <summary>
+    /// This invokes a parent-supplied event to update a parent value.
+    /// </summary>
+    /// <param name="args"></param>
+    /// <returns></returns>
+    async Task KeyPressed(KeyboardEventArgs args) {
+        await ComponentDataUpdated.InvokeAsync("");
+    }
+
+}

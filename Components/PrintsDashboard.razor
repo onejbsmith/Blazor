@@ -1,0 +1,201 @@
+﻿@*<h3>PrintsDashboard</h3>*@
+
+
+@using BlazorTrader.Data;
+
+
+
+
+<style>
+    th {
+        text-align: center;
+        padding: 5px;
+    }
+
+    td {
+        width: 40px;
+        height: 50px;
+    }
+
+    .line {
+        /*transform: scaley(4);*/
+        height: 120px;
+    }
+</style>
+
+Bid: @TDAStreamerData.bidPrice Ask: @TDAStreamerData.askPrice Lag: @TDAStreamerData.quoteLatency
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>
+                <RadzenCheckBox TValue="bool" @bind-Value="showCounts" />
+                <RadzenCheckBox TValue="bool" @bind-Value="showLines" />
+            </th>
+            <th>5 secs</th>
+            <th>15 secs</th>
+            <th>45 secs</th>
+            <th>2.25 mins</th>
+            <th>6.75 mins</th>
+            <th>20.25 mins</th>
+            <th>1.75 hr mins</th>
+            <th>Today</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th>Prints</th>
+            <td><PrintPieGauge isPrintsSize="false" seconds="5" symbol="@symbol" /></td>
+            <td><PrintPieGauge isPrintsSize="false" seconds="15" symbol="@symbol" /></td>
+            <td><PrintPieGauge isPrintsSize="false" seconds="45" symbol="@symbol" /></td>
+            <td><PrintPieGauge isPrintsSize="false" seconds="135" symbol="@symbol" /></td>
+            <td><PrintPieGauge isPrintsSize="false" seconds="405" symbol="@symbol" /></td>
+            <td><PrintPieGauge isPrintsSize="false" seconds="1215" symbol="@symbol" /></td>
+            <td><PrintPieGauge isPrintsSize="false" seconds="3645" symbol="@symbol" /></td>
+            <td><PrintPieGauge isPrintsSize="false" seconds="0" symbol="@symbol" /></td>
+        </tr>
+        @if (showCounts)
+        {
+            <tr>
+                <td></td>
+                <td><PrintCountsBar isPrintsSize="false" seconds="5" symbol="@symbol" /></td>
+                <td>
+                    <CascadingValue Value="@notificationCount">
+                        <PrintCountsBar isPrintsSize="false" seconds="15" symbol="@symbol" />
+                    </CascadingValue>
+                </td>
+                <td><PrintCountsBar isPrintsSize="false" seconds="45" symbol="@symbol" /></td>
+                <td><PrintCountsBar isPrintsSize="false" seconds="135" symbol="@symbol" /></td>
+                <td><PrintCountsBar isPrintsSize="false" seconds="405" symbol="@symbol" /></td>
+                <td><PrintCountsBar isPrintsSize="false" seconds="1215" symbol="@symbol" /></td>
+                <td><PrintCountsBar isPrintsSize="false" seconds="3645" symbol="@symbol" /></td>
+                <td><PrintCountsBar isPrintsSize="false" seconds="0" symbol="@symbol" /></td>
+            </tr>
+        }
+        @if (showLines)
+        {
+            <tr>
+                <th>Speed</th>
+                <td class="line"><PrintLinesGauge isPrintsSize="false" seconds="5" symbol="@symbol" /></td>
+                <td class="line"><PrintLinesGauge isPrintsSize="false" seconds="15" symbol="@symbol" /></td>
+                <td class="line"><PrintLinesGauge isPrintsSize="false" seconds="45" symbol="@symbol" /></td>
+                <td class="line"><PrintLinesGauge isPrintsSize="false" seconds="135" symbol="@symbol" /></td>
+                <td class="line"><PrintLinesGauge isPrintsSize="false" seconds="405" symbol="@symbol" /></td>
+                <td class="line"><PrintLinesGauge isPrintsSize="false" seconds="1215" symbol="@symbol" /></td>
+                <td class="line"><PrintLinesGauge isPrintsSize="false" seconds="3645" symbol="@symbol" /></td>
+                <td class="line"><PrintLinesGauge isPrintsSize="false" seconds="0" symbol="@symbol" /></td>
+            </tr>
+        }
+        <tr>
+            <th>Volume</th>
+            <td><PrintPieGauge isPrintsSize="true" seconds="5" symbol="@symbol" /></td>
+            <td><PrintPieGauge isPrintsSize="true" seconds="15" symbol="@symbol" /></td>
+            <td><PrintPieGauge isPrintsSize="true" seconds="45" symbol="@symbol" /></td>
+            <td><PrintPieGauge isPrintsSize="true" seconds="135" symbol="@symbol" /></td>
+            <td><PrintPieGauge isPrintsSize="true" seconds="405" symbol="@symbol" /></td>
+            <td><PrintPieGauge isPrintsSize="true" seconds="1215" symbol="@symbol" /></td>
+            <td><PrintPieGauge isPrintsSize="true" seconds="3645" symbol="@symbol" /></td>
+            <td><PrintPieGauge isPrintsSize="true" seconds="0" symbol="@symbol" /></td>
+        </tr>
+        @if (showCounts)
+        {
+            <tr>
+                <td></td>
+                <td><PrintSumsBar isPrintsSize="false" seconds="5" symbol="@symbol" /></td>
+                <td><PrintSumsBar isPrintsSize="false" seconds="15" symbol="@symbol" /></td>
+                <td><PrintSumsBar isPrintsSize="false" seconds="45" symbol="@symbol" /></td>
+                <td><PrintSumsBar isPrintsSize="false" seconds="135" symbol="@symbol" /></td>
+                <td><PrintSumsBar isPrintsSize="false" seconds="405" symbol="@symbol" /></td>
+                <td><PrintSumsBar isPrintsSize="false" seconds="1215" symbol="@symbol" /></td>
+                <td><PrintSumsBar isPrintsSize="false" seconds="3645" symbol="@symbol" /></td>
+                <td><PrintSumsBar isPrintsSize="false" seconds="0" symbol="@symbol" /></td>
+            </tr>
+        }
+        @if (showLines)
+        {
+            <tr>
+                <th>Speed</th>
+                <td class="line"><PrintLinesGauge isPrintsSize="true" seconds="5" symbol="@symbol" /></td>
+                <td class="line"><PrintLinesGauge isPrintsSize="true" seconds="15" symbol="@symbol" /></td>
+                <td class="line"><PrintLinesGauge isPrintsSize="true" seconds="45" symbol="@symbol" /></td>
+                <td class="line"><PrintLinesGauge isPrintsSize="true" seconds="135" symbol="@symbol" /></td>
+                <td class="line"><PrintLinesGauge isPrintsSize="true" seconds="405" symbol="@symbol" /></td>
+                <td class="line"><PrintLinesGauge isPrintsSize="true" seconds="1215" symbol="@symbol" /></td>
+                <td class="line"><PrintLinesGauge isPrintsSize="true" seconds="3645" symbol="@symbol" /></td>
+                <td class="line"><PrintLinesGauge isPrintsSize="true" seconds="0" symbol="@symbol" /></td>
+            </tr>
+        }
+
+        <tr>
+            <th>Movement</th>
+            <td class="line"><PrintLinesGauge isMovement="true" seconds="5" symbol="@symbol" /></td>
+            <td class="line"><PrintLinesGauge isMovement="true" seconds="15" symbol="@symbol" /></td>
+            <td class="line"><PrintLinesGauge isMovement="true" seconds="45" symbol="@symbol" /></td>
+            <td class="line"><PrintLinesGauge isMovement="true" seconds="135" symbol="@symbol" /></td>
+            <td class="line"><PrintLinesGauge isMovement="true" seconds="405" symbol="@symbol" /></td>
+            <td class="line"><PrintLinesGauge isMovement="true" seconds="1215" symbol="@symbol" /></td>
+            <td class="line"><PrintLinesGauge isMovement="true" seconds="3645" symbol="@symbol" /></td>
+            <td class="line"><PrintLinesGauge isMovement="true" seconds="0" symbol="@symbol" /></td>
+        </tr>
+        <tr>
+            <th valign="top"></th>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
+
+@code {
+
+    //public ObservableCollection<SparkData> DataSource { get; set; }
+
+
+    // Page Event Handlers
+    [Parameter]
+    public string symbol { get; set; }
+
+    public bool showLines { get; set; } = true;
+    public bool showCounts { get; set; } = true;
+
+    public int notificationCount { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        TDAStreamerData.OnStatusesChanged += StateHasChanged;
+        TDAStreamerData.Dashboard = this;
+
+        await Task.CompletedTask;
+    }
+
+    public void Update()
+    {
+        StateHasChanged();
+    }
+}
+<style>
+    .red {
+        color: red;
+    }
+
+    .darkred {
+        color: darkred;
+    }
+
+    .blue {
+        color: blue;
+    }
+
+    .green {
+        color: green;
+    }
+
+    .lime {
+        color: lime;
+    }
+</style>

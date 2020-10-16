@@ -1,0 +1,44 @@
+﻿@*<h3>PrintPieGauge</h3>*@
+@using BlazorTrader.Data;
+
+<RadzenChart Style="width:100px; height:70px;position:relative;left:20px;">
+    <RadzenPieSeries Data="@printsData" CategoryProperty="Quarter" Radius="30"
+                     Fills="@(new List<string>() { "red", "darkred" , "blue" , "green" , "lime" })"
+                     ValueProperty="Revenue" />
+    <RadzenTooltipOptions Visible="false" />
+    <RadzenLegend Visible="false" />
+</RadzenChart>
+@code {
+
+    [Parameter]
+    public string symbol { get; set; }
+
+    [Parameter]
+    public int seconds { get; set; }
+
+    [Parameter]
+    public bool isPrintsSize { get; set; }
+
+
+    DataItem[] printsData = new DataItem[] {
+         new DataItem { Quarter = "Sell < Bid", Revenue = 100 },
+         new DataItem { Quarter = "Sell = Bid", Revenue = 200 },
+         new DataItem { Quarter = "Between Bid & Ask", Revenue = 300 },
+         new DataItem { Quarter = "Buy = Ask", Revenue = 400 },
+         new DataItem { Quarter = "Buy > Ask", Revenue = 501 } };
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        TDAStreamerData.OnStatusesChanged += getPrintsData;
+        StateHasChanged();
+        await Task.CompletedTask;
+    }
+
+    public void getPrintsData()
+    {
+        TDAStreamerData.getPrintsData(ref printsData, seconds, isPrintsSize, symbol);
+        StateHasChanged();
+   }
+
+}

@@ -1,0 +1,20 @@
+﻿@*<h3>StatusLamp</h3>*@
+<span title="@label: @status">
+    @if (status == success)
+    {<img src="\images\green.gif" /> }
+    else if (status == original)
+    { <img src="\images\red.gif" />}
+    else
+    { <img src="\images\yellow.gif" />}
+</span>
+
+@code {
+    [Parameter]
+    public string label { get; set; } = "";
+    [Parameter]
+    public string status { get; set; } = "";
+    [Parameter]
+    public string success { get; set; } = "";
+    [Parameter]
+    public string original { get; set; } = "";
+}

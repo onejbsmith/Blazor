@@ -1,0 +1,43 @@
+﻿@*<h3>PrintCountsBar</h3>*@
+@using BlazorTrader.Data
+
+<div style="white-space: normal;">
+    <BSBadge class="alert-dark"><RadzenLabel Text='@(TDAStreamerData.printCount(symbol,seconds).ToString("n0"))' title="Time and Sales Prints" /></BSBadge>
+    <BSBadge class="alert-light red"><RadzenLabel Text='@(TDAStreamerData.printLevelCount(symbol,1,seconds).ToString("n0"))' title="Under Bid" /></BSBadge>
+    <BSBadge class="alert-light darkred"><RadzenLabel Text='@(TDAStreamerData.printLevelCount(symbol,2,seconds).ToString("n0"))' title="At Bid" /></BSBadge>
+    <BSBadge class="alert-light blue"><RadzenLabel Text='@(TDAStreamerData.printLevelCount(symbol,3,seconds).ToString("n0"))' title="Between Bid and Ask" /></BSBadge>
+    <BSBadge class="alert-light green"><RadzenLabel Text='@(TDAStreamerData.printLevelCount(symbol,4,seconds).ToString("n0"))' title="At Ask" /></BSBadge>
+    <BSBadge class="alert-light lime"><RadzenLabel Text='@(TDAStreamerData.printLevelCount(symbol,5,seconds).ToString("n0"))' title="Over Ask" /></BSBadge>
+</div>
+
+@code {
+    [Parameter]
+    public string symbol { get; set; }
+
+    [Parameter]
+    public int seconds { get; set; }
+
+    [Parameter]
+    public bool isPrintsSize { get; set; }
+
+    private int myVar;
+    [CascadingParameter]
+    public int Notified
+    {
+        get { return myVar; }
+        set
+        {
+            myVar = value;
+
+            /// Call any needed methods here after parent!
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        TDAStreamerData.OnStatusesChanged += StateHasChanged;
+        await Task.CompletedTask;
+    }
+
+}
+

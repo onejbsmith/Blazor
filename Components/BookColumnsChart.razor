@@ -1,0 +1,76 @@
+﻿@*<h3>BookColumnsChart</h3>*@
+@using BlazorTrader.Data;
+
+<div style="margin-bottom:10px">
+    <span>@timeOfDay</span>
+    <RadzenChart @ref="myChart">
+        <RadzenColumnSeries Title="Bids" Data="@bidData" CategoryProperty="Price"
+                            ValueProperty="Size" />
+        <RadzenColumnSeries Title="Asks" Data="@askData" CategoryProperty="Price"
+                            ValueProperty="Size" />
+        <RadzenCategoryAxis FormatString="{0:n2}" />
+        @*<RadzenLegend Visible="false" />
+
+        <RadzenValueAxis  FormatString="{0:C} />*@
+    </RadzenChart>
+</div>
+
+@*@if (!isPrintsSize)
+    {
+    <div style="white-space: nowrap;">
+        <BSBadge class="alert-dark"><RadzenLabel Text='@(printsData[0].Revenue.ToString("n0"))' title="Under Bid" /></BSBadge>
+        <BSBadge class="alert-dark"><RadzenLabel Text='@(printsData[1].Revenue.ToString("n0"))' title="At Bid" /></BSBadge>
+        <BSBadge class="alert-dark"><RadzenLabel Text='@(printsData[2].Revenue.ToString("n0"))' title="Between Bid and Ask" /></BSBadge>
+        <BSBadge class="alert-dark"><RadzenLabel Text='@(printsData[3].Revenue.ToString("n0"))' title="At Ask" /></BSBadge>
+        <BSBadge class="alert-dark"><RadzenLabel Text='@(printsData[4].Revenue.ToString("n0"))' title="Over Ask" /></BSBadge>
+    </div>
+    }*@
+
+
+@code {
+    RadzenChart myChart;
+
+    public DateTime timeOfDay = DateTime.Now;
+
+    [Parameter]
+    public string symbol { get; set; }
+
+    [Parameter]
+    public int seconds { get; set; }
+
+    [Parameter]
+    public bool isPrintsSize { get; set; }
+
+    BookDataItem[] bidData = new BookDataItem[0]
+    //{
+    //     new BookDataItem { Price = 350.11m, Size = 1000 },
+    //     new BookDataItem { Price = 350.12m, Size = 2000 },
+    //     new BookDataItem { Price = 350.15m, Size = 3000 }}
+    ;
+
+    BookDataItem[] askData = new BookDataItem[0]
+        //{
+        // new BookDataItem { Price = 350.20m, Size = 400 },
+        // new BookDataItem { Price = 350.20m, Size = 400 },
+        // new BookDataItem { Price = 351m, Size = 501 } } 
+        ;
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        TDAStreamerData.OnStatusesChanged += getBookData;
+        StateHasChanged();
+        await Task.CompletedTask;
+    }
+
+    public void getBookData()
+    {
+        TDAStreamerData.getBookData(ref askData, ref bidData, seconds, isPrintsSize, symbol);
+        //myChart.Reload();
+        timeOfDay = DateTime.Now;
+        StateHasChanged();
+        //       await Task.CompletedTask;
+    }
+
+}
