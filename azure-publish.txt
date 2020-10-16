@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <WebPublishMethod>MSDeploy</WebPublishMethod>
+    <ResourceId>/subscriptions/35f96f26-041d-442b-a811-deb02946d1c8/resourcegroups/BlazorTraderResourceGroup/providers/Microsoft.Web/sites/BlazorTrader</ResourceId>
+    <ResourceGroup>BlazorTraderResourceGroup</ResourceGroup>
+    <PublishProvider>AzureWebSite</PublishProvider>
+    <LastUsedBuildConfiguration>Release</LastUsedBuildConfiguration>
+    <LastUsedPlatform>Any CPU</LastUsedPlatform>
+    <SiteUrlToLaunchAfterPublish>https://blazortrader.azurewebsites.net</SiteUrlToLaunchAfterPublish>
+    <LaunchSiteAfterPublish>True</LaunchSiteAfterPublish>
+    <ExcludeApp_Data>False</ExcludeApp_Data>
+    <ProjectGuid>caaea8ca-95b9-486c-a08c-a0b4f0bf7c3e</ProjectGuid>
+    <MSDeployServiceURL>blazortrader.scm.azurewebsites.net:443</MSDeployServiceURL>
+    <DeployIisAppPath>BlazorTrader</DeployIisAppPath>
+    <RemoteSitePhysicalPath />
+    <SkipExtraFilesOnServer>True</SkipExtraFilesOnServer>
+    <MSDeployPublishMethod>WMSVC</MSDeployPublishMethod>
+    <EnableMSDeployBackup>True</EnableMSDeployBackup>
+    <UserName>$BlazorTrader</UserName>
+    <_SavePWD>True</_SavePWD>
+    <_DestinationType>AzureWebSite</_DestinationType>
+    <InstallAspNetCoreSiteExtension>False</InstallAspNetCoreSiteExtension>
+    <WebConfigEnvironmentVariables>ASPNETCORE_HOSTINGSTARTUPASSEMBLIES=Microsoft.Azure.SignalR</WebConfigEnvironmentVariables>
+  </PropertyGroup>
+</Project>

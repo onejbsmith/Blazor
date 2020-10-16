@@ -1,0 +1,59 @@
+{
+  "authToken": "EHbf7TsukO3aW7oEeQ4PpnnD8y6HRhENjyCT8Ykhn6J89yRbFlXBQ70ZaaqKttjItDYt/ieg4y+Gme7VjuELU1qQZSrrPwwVtxZaNGzSHUbWH7sFHmshFEK0+Smic2dvnebsf/XcEm+NvDiMuRYRC0TlrXMoeC/HvSGg/PGO+rJzpe3GQoD2a0aXFmzIAjzmvSaSaNpjX5qa4csgK0OxmI5F1nSHQnEEvFF5agjFOb0R3OeAYs3HVT40efN9p10AVRJ49gobEG8/wbM2Qzdl9N25Q9MFQ2zWmHvoo1njnLy6OhtePoyQmshbu1x2nqFOIdJ0mMrj9mAHctFtViGkamViH6cPul9wN1DIJE8se6y3/zU5XkW2RceCX0EueOPlaVr3SFpC+P+ygTXPo66iQcjH61Lse5NNor/NFj7gUf09Yk9nAH9upiKF+55NW6kFPTRVHPmNHeMDJDo8UoLb8cXYdUplqYda/ETA+rEFP0KWydNvQJAPbfzjtbmv14W6fesDtQnoksHijWiMFt3xDOcIxiC5q/MHt2RsT6Zyr3tyTM4Fq100MQuG4LYrgoVi/JHHvl034Ekp1bAriszLHoq8OCBWQUvUja1p5vxXqAym042eVw+X9CViRxrOYFK2dOwIKFe4k31jEPY5AWNJ+DQzD3EXxpmS3wLvgbR3KWFFhsgd9h4I+FWVjhHLEm1A1RRnbHi7Md7mbRQcZQTOUyKkTura96AkF5wm0JnPoCO5iRH/kSmusYdXgBL9eeOFwE9EuboSgf6gXY/ag4g3v5gO7rCgpTd60Z5ffNr6mf6dl2mZD8QPBU4lX5XuctyHYCvtZ1i4nOfwhRfMZicFotiM0sxT/8c1SQoNFsKUHAwnFe07nCD97ppX2pWh8VLa5UrpUhQLQSn19Hwu8QwGs8KUteyKHNlKY/8GOuLYPVAZjHoejSd+fEcXOcd2W6bO9gm1lg0fS69SmbaxnwPELnYYKLVvIHgjW3VdHwEATQwLVVk9YnpRrSNVuzSgCCURdLzlyQdTVJahG/H7Nc4z7Ce309MlrP5yoHzdq4tq1LmTOkGnFySbAGn3/jdqSubYEBtOMNZZum24wXtaJD/9YtCU6bimtAwoy5nvLYMMyChhbAIUwdFrTQ==212FD3x19z9sWBHDJACbC00B75E",
+  "userId": "smith4035",
+  "userCdDomainId": "A000000007860194",
+  "primaryAccountId": "870018425",
+  "lastLoginTime": "2020-10-15T15:20:59+0000",
+  "tokenExpirationTime": "2020-10-15T15:50:59+0000",
+  "loginTime": "2020-10-15T15:20:59+0000",
+  "accessLevel": "CUS",
+  "stalePassword": false,
+  "streamerInfo": {
+    "streamerBinaryUrl": "streamer-bin.tdameritrade.com",
+    "streamerSocketUrl": "streamer-ws.tdameritrade.com",
+    "token": "56f7def6f7d0efa0b20486e6ce054c1815afe3a1",
+    "tokenTimestamp": "2020-10-15T15:21:02+0000",
+    "userGroup": "ACCT",
+    "accessLevel": "ACCT",
+    "acl": "AQBHBPC1DRDTESF7FUFXG1G3G5G7GKGLGRH1H3H5IPM1MAOSPNQSRFSDSVTBTETFTOTTUAWSXBXNXOD2D4D6D8E2E4E6E8F2F4F6H7I1",
+    "appId": "DP"
+  },
+  "professionalStatus": "NON_PROFESSIONAL",
+  "quotes": {
+    "isNyseDelayed": false,
+    "isNasdaqDelayed": false,
+    "isOpraDelayed": false,
+    "isAmexDelayed": false,
+    "isCmeDelayed": true,
+    "isIceDelayed": true,
+    "isForexDelayed": true
+  },
+  "streamerSubscriptionKeys": {
+    "keys": [
+      {
+        "key": "ad0428435b26e536fc7ae5846b23a92cff9a6a7c1d7eded8faacb4df03ebdc518"
+      }
+    ]
+  },
+  "accounts": [
+    {
+      "accountId": "870018425",
+      "displayName": "smith4035",
+      "accountCdDomainId": "A000000008841148",
+      "company": "AMER",
+      "segment": "AMER",
+      "acl": "AQBHBPC1DRDTESF7FUFXG1G3G5G7GKGLGRH1H3H5IPM1MAOSPNQSRFSDSVTBTETFTOTTUAWSXBXNXO",
+      "authorizations": {
+        "apex": false,
+        "levelTwoQuotes": false,
+        "stockTrading": true,
+        "marginTrading": true,
+        "streamingNews": false,
+        "optionTradingLevel": "SPREAD",
+        "streamerAccess": true,
+        "advancedMargin": true,
+        "scottradeAccount": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+﻿
+@page "/settings"
+@using BlazorTrader.Data
+@using BlazorTrader.Components
+
+
+@*@inject TDAOptionsTableManager mgr*@
+
+<RadzenTabs>
+    <Tabs>
+
+        @*<RadzenTabsItem Text="Dashboard">
+            <PrintsDashboard symbol="SPY" />
+        </RadzenTabsItem>*@
+        <RadzenTabsItem Text="Streaming">
+            <TDAStreamer symbol="SPY" />
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Signals">
+            <TDASignals />
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Options">
+            Keep up with current P&ugrave;t and C&Aacute;ll option price
+            Add strategy choices
+            Add Trades grid
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Echo">
+            <EchoServer />
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Settings" Icon="settings_applications">
+            This will hold stuff like the settings and speed settings and TDA Streaming QOS info on tabs?
+            <Button Clicked="@(()=>OnThemeColorChanged("#d16f9e"))">Change theme</Button>
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Data" Icon="perm_data_setting">
+            <RadzenTabs>
+                <Tabs>
+                    <RadzenTabsItem Text="Calls" Icon="format_quote">
+
+                        <RadzenGrid Data="@lstCallOptions" TItem="TDAOptionQuote" AllowPaging="true" PageSize="10">
+                            <Columns>
+                                <RadzenGridColumn TItem="TDAOptionQuote" Width="20%" Property="description" Title="description" />
+                                <RadzenGridColumn TItem="TDAOptionQuote" Property="index" Title="index" />
+                                <RadzenGridColumn TItem="TDAOptionQuote" Property="strikePrice" Title="strike Price" />
+                                <RadzenGridColumn TItem="TDAOptionQuote" Property="prem" Title="prem" />
+                                <RadzenGridColumn TItem="TDAOptionQuote" Property="prem2" Title="prem2" />
+                                <RadzenGridColumn TItem="TDAOptionQuote" Property="credit" Title="credit" />
+                                <RadzenGridColumn TItem="TDAOptionQuote" Property="collateral" Title="collateral" />
+                                <RadzenGridColumn TItem="TDAOptionQuote" Property="totalVolume" Title="total Volume" />
+                                <RadzenGridColumn TItem="TDAOptionQuote" Property="bid" Title="bid" />
+                                <RadzenGridColumn TItem="TDAOptionQuote" Property="bidSize" Title="bid Size" />
+                                <RadzenGridColumn TItem="TDAOptionQuote" Property="askSize" Title="ask Size" />
+                                <RadzenGridColumn TItem="TDAOptionQuote" Property="ask" Title="ask" />
+                                <RadzenGridColumn TItem="TDAOptionQuote" Property="delta" Title="delta" />
+                            </Columns>
+                        </RadzenGrid>
+                    </RadzenTabsItem>
+                </Tabs>
+            </RadzenTabs>
+        </RadzenTabsItem>
+
+    </Tabs>
+</RadzenTabs>
+
+<style>
+    th {
+        text-align: center;
+        padding: 5px;
+    }
+
+    .flex-container {
+        display: flex; /* or inline-flex */
+    }
+
+    article {
+        flex: 1 0 auto;
+        margin-top: 50px;
+        border: solid 1px green;
+    }
+</style>
+
+@code {
+
+}

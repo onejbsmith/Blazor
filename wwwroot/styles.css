@@ -1,0 +1,60 @@
+﻿
+@font-face {
+    font-family: Sparklines;
+    src: url("Sparklines.ttf") format("truetype");
+}
+
+.Sparklines {
+    font-weight: 800;
+    font-style: normal;
+    line-height: normal;
+    font-family: 'Sparklines', "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    animation: pulse;
+    animation-duration: 0.01s;
+    animation-iteration-count: 1;
+}
+
+    .Sparklines .segment {
+        color: #000000
+    }
+
+    .Sparklines .sparkline-start {
+        font-weight: normal;
+        color: #ce4b99
+    }
+
+    .Sparklines .sparkline-stop {
+        color: #27A844
+    }
+
+    .Sparklines .text-start {
+        font-weight: normal;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 16px;
+        color: #000000;
+    }
+
+    .Sparklines .text-stop {
+        font-weight: normal;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 16px;
+        color: #000000
+    }
+
+    .Sparklines .text-min-max {
+        font-weight: normal;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 16px;
+        color: #000000
+    }
+
+@keyframes pulse {
+    0% {
+        font-size: 0px;
+    }
+
+    100% {
+        font-size: 16px;
+    }
+}

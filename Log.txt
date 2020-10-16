@@ -1,0 +1,94 @@
+﻿Making sure Loading since time is EST
+Making sure red quote time behind is all EST so works...
+Show thw contents of the TDAAuth.json file by pulling values in init of TDA Auth page
+Changed "TDA Auth" to "Authorizations", more elegant and consistent, and will add RH Auth stuff later
+Contracts increments from 1 to 10 and from 10 to 1 instead of 1 to 11 and 10 to 0
+Correct Breakeven is between the strikes
+Can move business calcs like BE to TDABus class?
+Save the long strike of the spread as part of the TDAOptionQuote object
+Save the checkstate of the spread row
+
+Switch to Radzen Grid so can do paging or scrolling
+Move code to calc prems etc to ?function OR ? Data Service and get with i
+get from List for Grid
+
+Added Skips so 
+----------
+Adding Depth which is number of spreads to allocate Contracts over, starting from a checked Strike
+The checked strike is least risky strike and get's most contracts, strikes closer to ITM get progessively fewer contracts
+------------------------
+Iron Condor should be a range so if higher on call side, should be hogher on put side as well, could use ATR 
+
+the Skips sb per tab, may want diff Skip on put and call
+need 
+
+So you will be able to trade Depth if Buy and Sell "To Open" is a parameter and multiple places are allowed.
+Or you don't overlap
+
+So I have Sold 304 Bot 303
+Cant Sell 303 Buy 302
+			   302 Bot 301 
+
+			   You gibe it Cash itives you shares? g
+
+
+ITM longStrikes are wrong
+
+Adding spreads causes overlaps
+
+Add > button to left of each row to show detail, by inserting a templated row, like
+.Greeks and 
+.chart of optionprices or any other stat
+.order details if in an order? full order or just thia strinke?
+
+AmMZN collateral looks crazy high
+
+The Ask on OptionTable is not being updated, so get grazy premiums since it's the Buy
+
+v Add one more strike to each side then hide using last-child?
+
+Premiums not reflecting the spread
+
+There is no overlap if Spread > 1 !
+
+Overap is more complicated - just can't sell in one trade and buy in another
+
+Collateral is not using the spread?
+
+Create a sep app to do streaming with a UI that shows streams coming in & use it to capture option candles to database (or files?)
+DB best so can replay days to see what max profit could have been.
+
+Can use MS Charts with Blazor?
+
+Use the sparkline to show profit profile for individual vertical with one for whole vertical at the top
+Click on vertical spark to get popup of detailed profile
+
+Make indi check boxes apply to row and top to clear all, un check removes, disable enabling conflicts? or ntify of conflicts before buy or on selection
+
+Dashboard for home screen that summarizes all positions and active balances across all accounts all connections health, data throughput, etc
+Consider WEBASSEMBLYMAN or roll your own WASM has not dynamic but when adapts to environment, i.e. 
+
+
+Save and restore user parameter setting to file so can restore next time opens?
+
+Need to use description or instead of index so don't get same pick on call and put side
+
+Need to have sep parms for call & put so can do iron condors which will show on 
+or show local total on bottom and IC on top 
+
+Losing contracts
+First ITM options not using right long price
+
+So the Log 
+
+
+So, reason so many outside trades is quotes not being updated if T&S being received. 
+ANswer is to use sep sockets. Can that be done? Nope! So just poll for quotes or use another account (means tons of setup and 2 auth setups)
+RECEIVED: {"notify":[{"service":"Invalid Service","timestamp":1589987086433,"content":{"code":12,"msg":
+"This Streamer was disconnected because of another connection for this username and password. 
+Each user may only have one Streamer open at a time."}}]}
+
+So can a sep thread just keep quote updated in background?
+Or after each t&s receipt, update quote for next receipt
+
+Answer was order of requests, t&s had been first which swamped quotes. Made quotes first and all is working!

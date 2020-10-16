@@ -1,0 +1,157 @@
+﻿@page "/tdaAuth"
+@using BlazorTrader.Data
+@inject TDAApiService OptionsService
+@inject IJSRuntime TDAStreamerJs;
+<h3>TDA API Authorization </h3>
+
+<RadzenTabs>
+    <Tabs>
+        <RadzenTabsItem Text="TDA Authorization">
+            <RadzenSteps>
+                <Steps>
+                    <RadzenStepsItem Text="Authorization Token">
+                        <h3>Get Auth token  when Refresh Token expires (every 90 days) from the <RadzenLink Text="TDA API" Path="https://developer.tdameritrade.com/apis" />     </h3>
+                        <ol>
+                            <li>Press this <RadzenLink Text="link" Path="@TDAConstants._TDAAuthorizationUrl" target="_blank"></RadzenLink> to open the TDA Auth page.</li>
+                            <li>Then press the 'Login' and 'Allow' buttons.</li>
+                            <li>Finally, paste contents of the address bar after 'code=' into the textbox below.</li>
+                            <li>Go to Next screen</li>
+                        </ol>
+                        <hr />
+                        <h3>Url-Encoded Authorization Token</h3>
+                        <RadzenTextArea Name="txtTDARawAuthToken" Placeholder="Paste string after 'code=' here" Change="decodeAuthToken"
+                                        Style="width:100%;height:250px" @bind-Value="_TDAUrlEncodedAuthToken" />
+                    </RadzenStepsItem>
+                    <RadzenStepsItem Text="Authorization Token" Disabled="@(_TDAUrlEncodedAuthToken.Length == 0)">
+                        <h3>Decoded Authorization Token</h3>
+                        <br />
+                        <RadzenButton Name="btnGetAccessToken" Click="getAccessToken" Text="Get Access Token" />
+                        @if (TDANotifications.TDAAuthStatus == "OK")
+                        {<BSBadge Color="BlazorStrap.Color.Success">@TDANotifications.TDAAuthStatus</BSBadge> }
+                    else
+                    { <BSBadge Color="BlazorStrap.Color.Warning">@TDANotifications.TDAAuthStatus</BSBadge>}
+                        <br /><br />
+                        <RadzenTextArea Name="txtTDAAuthToken" Placeholder="" Style="width:100%;height:250px" @bind-Value="_TDAAuthToken" />
+                    </RadzenStepsItem>
+                    <RadzenStepsItem Text="Access & Refresh Tokens" Disabled="@(auth.access_token == null)">
+                        <h3>Access Token</h3>
+                        <RadzenTextArea Placeholder="" Style="width:100%;height:250px" @bind-Value="auth.access_token" />
+                        <h3>Refresh Token</h3>
+                        <RadzenTextArea Placeholder="" Style="width:100%;height:250px" @bind-Value="auth.refresh_token" />
+                    </RadzenStepsItem>
+                </Steps>
+
+            </RadzenSteps>
+
+        </RadzenTabsItem>
+        @*<RadzenTabsItem Text="TDAAuth.json file contents">
+                <h3>Access Token</h3>
+                <RadzenTextArea Placeholder="" Style="width:100%;height:250px" @bind-Value="auth.access_token" />
+                <h3>Refresh Token</h3>
+                <RadzenTextArea Placeholder="" Style="width:100%;height:250px" @bind-Value="auth.refresh_token" />
+            </RadzenTabsItem>*@
+        <RadzenTabsItem Text="User Principal">
+            <RadzenSteps>
+                <Steps>
+                    <RadzenStepsItem Text="User Principal Auth Token">
+                        <h3><span>Get User Principal Auth token when Refresh Token expires (every 30 days) from the TDA API </span><RadzenLink Text="Get User Principals" Path="https://developer.tdameritrade.com/user-principal/apis" target="_blank" /></h3>
+                        <ol>
+                            <li>Copy this string "streamerSubscriptionKeys,streamerConnectionInfo" (without the quotes)</li>
+                            <li>
+                                Press this <RadzenLink Text="link" Path="@TDAmertradeApiEndpoints.UserPrincipalsAuthorizationUrl" target="_blank" />
+                                &nbsp;to open the TDA User Principals Auth page.
+                            </li>
+                            <li>Paste the string into the 'fields' text box.</li>
+                            <li>Then press the 'OAuth 2.0' button and log in.</li>
+                            <li>Press the 'Send' button.</li>
+                            <li><i>You should see a 200 return code.</i></li>
+                            <li>Go to the 'Response' tab and copy the contents between the first '{' and the last '}' (include the brackets)</li>
+                            <li>Finally, paste copied contents into the textbox below.</li>
+                            <li>Go to Next screen</li>
+                        </ol>
+                        <hr />
+                        <h3>User Principal JSON</h3>
+                        <RadzenTextArea Name="txtTDARawAuthToken" Placeholder="Paste copied contents with here" Change="OptionsService.captureUserPrincipalInfo"
+                                        Style="width:100%;height:250px" @bind-Value="_TDAUserPrincipalJson" />
+                    </RadzenStepsItem>
+                    <RadzenStepsItem Text="User Principal Info" Disabled="@(_TDAUserPrincipalJson.Length == 0)">
+                        <h3>User Principal Info Useful for Streaming</h3>
+                        <br />
+                        <RadzenButton Name="btnGetAccessToken" Click="deserializeUserPrincipalInfo" Text="Get User Principal Info" />
+                        <br /> <br />
+                        <table width="100%">
+                            <thead>
+                                <tr>
+                                    <th><h4>Credentials</h4></th>
+                                    <th><h4>Login Request</h4></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><RadzenTextArea Name="txtCredentials" Placeholder="" Style="width:100%;height:250px" @bind-Value="_credentials" /></td>
+                                    <td>
+                                        <RadzenTextArea Name="txtLoginRequest" Placeholder="" Style="width:100%;height:250px" @bind-Value="_loginRequest" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </RadzenStepsItem>
+
+                </Steps>
+            </RadzenSteps>
+        </RadzenTabsItem>
+    </Tabs>
+</RadzenTabs>
+
+@code {
+
+    string _TDAUrlEncodedAuthToken = "";
+    string _TDAAuthToken = "";
+    string _TDAUserPrincipalJson = "";
+    string _credentials = "";
+    string _loginRequest = "";
+    TDAAuthentication auth = new TDAAuthentication();
+
+
+    void decodeAuthToken()
+    {
+        _TDAAuthToken = System.Web.HttpUtility.UrlDecode(_TDAUrlEncodedAuthToken);
+    }
+
+
+    async Task getAccessToken()
+    {
+        auth = await TDAApiService.GetAuthentication(_TDAAuthToken);
+    }
+
+
+    /// <summary>
+    /// get auth from file on init to populate .json tab
+    /// </summary>
+    /// <returns></returns>
+    protected override async Task OnInitializedAsync()
+    {
+        auth = await TDAApiService.GetAuthenticationAsync();
+        try
+        {
+            if (System.IO.File.Exists("TDAUserPrincipalAuth.json"))
+                deserializeUserPrincipalInfo();
+
+            if (System.IO.File.Exists("TDAAuth.json"))
+                _TDAUrlEncodedAuthToken = System.IO.File.ReadAllText("TDAAuth.json");
+
+        }
+        catch { }
+    }
+
+
+    void deserializeUserPrincipalInfo()
+    {
+        string _ts = "";
+        TDAStreamerData.deserializeUserPrincipalInfo(ref _TDAUserPrincipalJson, ref _credentials);
+        StateHasChanged();
+    }
+
+}
+

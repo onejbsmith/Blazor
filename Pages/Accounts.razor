@@ -1,0 +1,49 @@
+﻿@page "/accounts"
+
+@using BlazorTrader.Data
+@inject WeatherForecastService ForecastService
+
+<h3>Accounts</h3>
+
+<p>This component with manage multiple RH accounts' login data encrypted, with trade limits, on/off switch, total profit.</p>
+<p>Master list of accounts with drill into individual acct transactions</p>
+<p>Orders component will manage multiple RH accounts' orders pending and completed master list of orders.</p>
+<p>Can link to accounts orders detail component from account.</p>
+
+@if (forecasts == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Temp. (C)</th>
+                <th>Temp. (F)</th>
+                <th>Summary</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var forecast in forecasts)
+            {
+                <tr>
+                    <td>@forecast.Date.ToShortDateString()</td>
+                    <td>@forecast.TemperatureC</td>
+                    <td>@forecast.TemperatureF</td>
+                    <td>@forecast.Summary</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private WeatherForecast[] forecasts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
+    }
+}

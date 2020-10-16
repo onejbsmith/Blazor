@@ -1,0 +1,61 @@
+﻿@page "/fetchdata"
+
+@using BlazorTrader.Data
+
+
+<h3>Technical Analysis</h3>
+<p>Here we will pull historical quotes and calculate technicals, like ATR </p>
+<p>We can display multiple candle charts for symbol, for year, quarter, month, week, day hr, 15, 5, 1 min</p>
+<p> a flex facility for pulling / displaying historicals</p>
+<p>if we capture options data to files, We can display multiple candle charts for symbol, for year, quarter, month, week, day hr, 15, 5, 1 min</p>
+<p>
+    can we get bollinger bands on premiums so a high band on long and a low band on short -- study in tda!
+    Click on [C290] from 285 strike shows C285 sold and C290 bought charts - we want high on C285 bid and low on C290 ask to maximize premium credit
+</p>
+Support and Resistance
+General Principles
+For the sake of simplifying our problem, I shall
+here roughly define the three main types of volume-activity:—
+
+First: Increasing volume during an advance,
+with the intervening pauses or setbacks occurring on light volume. This
+is indicative of the underlying demand's
+being greater than the supply, and favors
+a resumption of the advance.
+
+Second: Increased volume at the top of a rally,
+or of an advance, lasting for some time,
+with no appreciable gain in prices — an
+active churning of stock transactions
+without progress. This is indicative of
+a turning-point.
+
+Third: A " tired," or struggling, advance, when
+stocks creep upward on light volume
+and " die " at the top. This indicates
+a lack of demand (few buying-orders);
+and, whereas selling-orders likewise are
+light, this action frequently marks a
+" rounding-over " turn, which may be
+followed by increased volume on the
+down side (when the sellers see that
+they cannot hope for much higher
+prices at that time). These struggling
+trends are subject to sudden reversals,
+particularly when they have endured
+for several days.
+
+—43—
+TAPE READING
+@code {
+
+    /*
+     * await Task.CompletedTask;. Second method should be return await Task.FromResult(true)
+     *
+     *
+    */
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.CompletedTask;
+    }
+}

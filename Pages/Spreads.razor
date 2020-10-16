@@ -1,0 +1,68 @@
+﻿@page "/spreads"
+
+@using BlazorTrader.Data
+@inject TDAApiService OptionsService
+
+<h1>Spreads</h1>
+
+@if (spreads == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    @foreach (var strat in spreads.monthlyStrategyList)
+    {
+        <h2>@(strat.optionStrategyList.First().strategyStrike) </h2>
+        <table class="table">
+
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Strike</th>
+                    <th>Bid</th>
+                    <th>Ask</th>
+                    <th>Volume</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var lst in strat.optionStrategyList)
+                {
+
+                <tr>
+                    <td>@lst.primaryLeg.description</td>
+                    <td>@lst.primaryLeg.strikePrice</td>
+                    <td>@lst.primaryLeg.bid.ToString("n2")</td>
+                    <td>@lst.primaryLeg.ask.ToString("n2")</td>
+                    <td>@lst.primaryLeg.totalVolume</td>
+                </tr>
+                    <tr>
+                        <td>@lst.secondaryLeg.description</td>
+                        <td>@lst.secondaryLeg.strikePrice</td>
+                        <td>@lst.secondaryLeg.bid.ToString("n2")</td>
+                        <td>@lst.secondaryLeg.ask.ToString("n2")</td>
+                        <td>@lst.secondaryLeg.totalVolume</td>
+                    </tr>
+                    <tr style="background-color:dimgray">
+                        <td></td>
+                        <td>Premium:</td>
+                        <td>@((lst.primaryLeg.bid - lst.secondaryLeg.bid).ToString("n2"))</td>
+                        <td>@((lst.primaryLeg.ask - lst.secondaryLeg.ask).ToString("n2"))</td>
+                        <td>@( ((lst.primaryLeg.bid - lst.secondaryLeg.ask)).ToString("n2"))</td>                       
+                    </tr>
+}
+            </tbody>
+        </table>
+    }
+}
+
+@code {
+    private ComplexOptionChain spreads;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var svc = new TDAApiService(new HttpClient());
+
+        spreads = await svc.GetSpreadsAsync();
+    }
+}

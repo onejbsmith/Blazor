@@ -1,0 +1,76 @@
+﻿<div class="top-row pl-4 navbar navbar-dark">
+    <a class="navbar-brand" href=""><i style="color:#009bec">tape</i>Stream</a>
+    <img src="favicon.ico" style="width:16px;" />
+    <button class="navbar-toggler" @onclick="ToggleNavMenu">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</div>
+
+<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+    <ul class="nav flex-column">
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="oi" aria-hidden="true"><RadzenIcon Icon="home" /></span> &nbsp;The&nbsp; <i style="color:#009bec">tape</i>
+            </NavLink>
+        </li>
+
+
+        @*<li class="nav-item px-3">
+            <NavLink class="nav-link" href="spreads">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Spreads
+            </NavLink>
+        </li>*@
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="optionQuotes">
+                <span class="oi" aria-hidden="true"><RadzenIcon Icon="fingerprint" /></span> &nbsp;Spreads
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="fetchdata">
+                <span class="oi" aria-hidden="true"><RadzenIcon Icon="waves" /></span> &nbsp;Analysis
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="accounts">
+                <span class="oi" aria-hidden="true"><RadzenIcon Icon="supervisor_account" /></span> &nbsp;Accounts
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="orders">
+                <span class="oi" aria-hidden="true"><RadzenIcon Icon="shopping_cart" /></span> &nbsp;Orders
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="tdaAuth">
+                <span class="oi" aria-hidden="true"><RadzenIcon Icon="security" /></span> &nbsp;Authorization
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="settings">
+                <span class="oi" aria-hidden="true"><RadzenIcon Icon="settings" /></span> &nbsp;Settings
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="counter">
+                <span class="oi oi-plus" aria-hidden="true"></span> Experimental
+            </NavLink>
+        </li>
+    </ul>
+</div>
+
+@code {
+    private bool collapseNavMenu = true;
+
+    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+}
+<style>
+    html, body, body *
+    {
+        background-color:transparent;
+    }
+</style>
