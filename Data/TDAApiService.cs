@@ -284,7 +284,7 @@ namespace BlazorTrader.Data
                 await GetAuthentication(TDATokens._TDARefreshToken, true);
 
                 // reset the Auth Status lamp by testing the quote service
-                var response = await GetQuoteResponseAsync("SPY");
+                var response = await GetQuoteResponseAsync("QQQ");
                 TDANotifications.TDAAuthStatus = response.StatusCode.ToString();
 
                 return authObject;

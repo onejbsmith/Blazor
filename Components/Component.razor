@@ -64,7 +64,7 @@
     {
         //var name = await TDAStreamerJs.InvokeAsync<string>( "exampleJsFunctions.showPrompt", "What's your name?");
 
-        string request = TDAStreamerData.getServiceRequest("LOGIN");
+        string request = TDAStreamerData.getServiceRequestOld("LOGIN");
 
         var dotNetReference = DotNetObjectReference.Create(this);
 
@@ -89,7 +89,7 @@
     protected void serviceRequestChanged(RadzenSplitButtonItem item)
     {
         serviceSelection = item.Text;
-        serviceRequestText = TDAStreamerData.getServiceRequest(serviceSelection);
+        serviceRequestText = TDAStreamerData.getServiceRequestOld(serviceSelection);
     }
 
 }

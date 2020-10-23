@@ -11,10 +11,10 @@
 @using System.Diagnostics;
 @using System.Text;
 @using Newtonsoft.Json.Linq;
-@using Syncfusion.Blazor.Charts;
+@using Syncfusion.Blazor.Charts;FF
 @using System.Globalization;
 
-@inject IJSRuntime TDAStreamerJs;
+@*@inject IJSRuntime TDAStreamerJs;*@
 @*@inject TDAApiService OptionsService*@
 @*Here, I will have a test bed for TDA API Streaming
                             Perhaps have a UI that lets you select Request and Columns by Name
@@ -24,28 +24,48 @@
                             It would return stream to what? Memory as a List of Requests
                             Could use selected column names to create table headers (or should go with Radzen?)
                             with newest data at the top,*@
-<br />
-<RadzenSplitButton Text="@serviceSelection" Click="@((args) => serviceRequestChanged(args))" Style="zoom:80%">
-    <ChildContent>
-        <RadzenSplitButtonItem Text="All" Value="ALL" />
-        <RadzenSplitButtonItem Text="Listed Book" Value="LISTED_BOOK" />
-        <RadzenSplitButtonItem Text="Time & Sales" Value="TIMESALE_EQUITY" />
-        <RadzenSplitButtonItem Text="Chart" Value="CHART_EQUITY" />
-        <RadzenSplitButtonItem Text="Quotes" Value="QUOTE" />
-    </ChildContent>
-</RadzenSplitButton>
+
+    <RadzenCheckBoxList @bind-Value="values" TValue="int" Change="@((args) => Change(args, "CheckBoxList with horizontal orientation"))">
+        <Items>
+            <RadzenCheckBoxListItem Text="Listed Book" Value="1" />
+            <RadzenCheckBoxListItem Text="Time & Sales" Value="2" />
+            <RadzenCheckBoxListItem Text="Chart" Value="3" />
+            <RadzenCheckBoxListItem Text="Options" Value="4" />
+            <RadzenCheckBoxListItem Text="Quotes" Value="5" />
+            <RadzenCheckBoxListItem Text="Actives" Value="6" />
+        </Items>
+    </RadzenCheckBoxList>
+
+
+
+@*<RadzenSplitButton Text="@serviceSelection" Click="@((args) => serviceRequestChanged(args))" Style="zoom:80%">
+        <ChildContent>
+            <RadzenSplitButtonItem Text="All" Value="ALL" />
+            <RadzenSplitButtonItem Text="Listed Book" Value="NASDAQ_BOOK" />
+            <RadzenSplitButtonItem Text="Time & Sales" Value="TIMESALE_EQUITY" />
+            <RadzenSplitButtonItem Text="Chart" Value="CHART_EQUITY" />
+            <RadzenSplitButtonItem Text="Options" Value="OPTION" />
+            <RadzenSplitButtonItem Text="Quotes" Value="QUOTE" />
+        </ChildContent>
+    </RadzenSplitButton>*@
+
+
+
 <RadzenButton Text="Log In" ButtonStyle="ButtonStyle.Primary" Disabled="false" Click="Login" Size="Radzen.ButtonSize.Small" />
 <RadzenButton Text="Send" ButtonStyle="ButtonStyle.Success" Disabled="false" Click="Send" Size="Radzen.ButtonSize.Small" />
 <RadzenButton Text="Log Out" ButtonStyle="ButtonStyle.Warning" Disabled="false" Click="Logout" Size="Radzen.ButtonSize.Small" />
 <RadzenButton Text="Start Feed" ButtonStyle="ButtonStyle.Info" Disabled="false" Click="startFeed" Size="Radzen.ButtonSize.Small" />
 <RadzenButton Text="Stop Feed" ButtonStyle="ButtonStyle.Secondary" Disabled="false" Click="Ping" Size="Radzen.ButtonSize.Small" />
-
+<br />
 <BSBadge IsPill="true" class="@statusClass"><RadzenLabel Text="Status:" /><RadzenLabel Text='@status' /></BSBadge>
 <BSBadge IsPill="true" class="alert-dark"><RadzenLabel Text='@clock' /></BSBadge>
 
 <BSBadge class="alert-dark"><RadzenLabel Text='@TDAStreamerData.quotes[symbol].Count().ToString("n0")' title="Quotes" /></BSBadge>
 <BSBadge class="alert-dark"><RadzenLabel Text='@TDAStreamerData.chart[symbol].Count().ToString("n0")' title="Chart 1-minute Candles" /></BSBadge>
 
+<RadzenLabel Text="Strike:" /><RadzenLabel Text="@strike.ToString()" />
+<RadzenLabel Text="Option Expiry:" />
+<RadzenDatePicker Name="dtpExpiryDate" DateFormat="dddd MMM d, yyyy" Value="@optionExpDate" TValue="DateTime" />
 @*<StatsBar symbol="@symbol" />*@
 
 
@@ -74,208 +94,34 @@
 
 @code {
 
-    [Parameter]
-    public string symbol { get; set; }
 
-    //public ObservableCollection<SparkData> DataSource { get; set; }
+}
 
-    string clock = DateTime.Now.ToString("HH:mm:ss.fff");
-    string serviceRequestText = "";
-    string serviceSelection = "Service Request";
-    string logText = "";
+@*@code {
 
-    static string status = "None";
-    string statusClass = "badge-primary";
-
-    StringBuilder logTextsb = new StringBuilder();  /// Called from Javascript
-    string feedFile, chartFile, quoteFile = "";
+        //public ObservableCollection<SparkData> DataSource { get; set; }
 
 
-    // Page Event Handlers
-    protected override async Task OnInitializedAsync()
-    {
-
-        /// Connect to the web socket, passing it a ref to this page, so it can call methods from javascript
-        var dotNetReference = DotNetObjectReference.Create(this);
-        var dud = await TDAStreamerJs.InvokeAsync<string>("Initialize", dotNetReference);
-        var dud2 = await TDAStreamerJs.InvokeAsync<string>("Connect");
-        feedFile = FilesManager.GetFileNameForToday("FEED");
-        quoteFile = FilesManager.GetFileNameForToday(@$"{symbol} QUOTES");
-        chartFile = FilesManager.GetFileNameForToday(@$"{symbol} CANDLES");
-        await TDAApiService.GetAuthenticationAsync();
-
-
-        await Task.CompletedTask;
-    }
-
-    protected async void Login()
-    {
-        string request = TDAStreamerData.getServiceRequest("LOGIN");
-
-        var dud = await TDAStreamerJs.InvokeAsync<string>("tdaSendRequest", request);
-
-        StateHasChanged();
-    }
-
-    protected async Task Send()
-    {
-        await TDAStreamerJs.InvokeAsync<string>("tdaSendRequest", serviceRequestText);
-    }
-
-    protected void Ping()
-    {
-        StateHasChanged();
-    }
-
-    protected async Task Logout()
-    {
-        StateHasChanged();
-    }
-
-    protected void serviceRequestChanged(RadzenSplitButtonItem item)
-    {
-        if (item == null) return;
-
-        serviceSelection = item.Value;
-        serviceRequestText = TDAStreamerData.getServiceRequest(serviceSelection);
-        //LogText(serviceRequestText);
-    }
-
-    protected async Task startFeed()
-    { /// get json from the FEED file and call the same procs as if from javascript
-
-      /// loop thru the file and pause one sec between reads, unless it's not data
-        int counter = 0;
-        string line;
-        TDAStreamerData.isRealTime = false;
-        // Read the file and display it line by line.
-        System.IO.StreamReader file =
-            new System.IO.StreamReader(feedFile.Replace(".json", "copy.json"));
-        while ((line = file.ReadLine()) != null)
-        {
-            if (line.Contains("data"))
-            {
-                /// Send the line to js and have it send it back to TDAStreamerOnMessage(line);
-                var dud = await TDAStreamerJs.InvokeAsync<string>("Echo", line);
-
-                System.Threading.Thread.Sleep(750);
-            }
-            counter++;
-        }
-
-
-    }
-    /// Utility
-    void LogText(string text)
-    {
-        logTextsb.Insert(0, "\n" + text);
-        logText = string.Join('\n', logTextsb.ToString().Split('\n').Take(10000));
-
-        StateHasChanged();
-    }
-
-
-
-    // Called from javascript
-    [JSInvokable("TDAStreamerStatus")]
-    public void TDAStreamerStatus(string it)
-    {
-        switch (it)
-        {
-            case "0": status = "CONNECTING"; break;
-            case "1": status = "OPEN"; statusClass = "badge-success"; break;
-            case "2": status = "CLOSING"; statusClass = "badge-warning"; break;
-            case "3": status = "CLOSED"; statusClass = "badge-danger"; break;
-        }
-        LogText($"STATUS:{status}");
-        StateHasChanged();
-    }
-
-    List<string> lstJson = new List<string>();
-
-    [JSInvokable("TDAStreamerOnMessage")]
-    public void TDAStreamerOnMessage(string jsonResponse)
-    {
-
-
-        LogText("RECEIVED: " + jsonResponse);
-        var fieldedResponse = jsonResponse;
-        if (jsonResponse.Contains("\"data\":"))
-        {
-            var dataJsonSvcArray = JObject.Parse(jsonResponse)["data"];
-            foreach (var svcJsonObject in dataJsonSvcArray)
-            {
-                var svcName = svcJsonObject["service"].ToString();
-                var svcEpochTime = Convert.ToInt64(svcJsonObject["timestamp"]);
-                var svcDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddMilliseconds(svcEpochTime).ToLocalTime();
-
-                clock = svcDateTime.ToString("HH:mm:ss.fff");
-
-                var svcJson = svcJsonObject.ToString();
-                var svcFieldedJson = svcJson;
-                List<string> svcFields = TDAConstants.TDAResponseFields[svcName];
-                for (int i = 1; i < svcFields.Count; i++)
-                {
-                    string sIndex = $"\"{i}\":";
-                    svcFieldedJson = svcFieldedJson.Replace(sIndex, $" \"{svcFields[i]}\":");
-                }
-                LogText("DECODED: " + svcFieldedJson);
-                TDAStreamerData.captureTdaServiceData(svcFieldedJson);
-
-            }
-        }
-        else if (jsonResponse.Contains("\"notify\":"))
-        {
-            var it = JObject.Parse(jsonResponse)["notify"][0]["heartbeat"];
-            if (it != null)
-            {
-                var timeStamp = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddMilliseconds(Convert.ToDouble(((Newtonsoft.Json.Linq.JValue)it).Value)).ToLocalTime();
-                LogText("DECODED: " + jsonResponse + " " + timeStamp.TimeOfDay);
-            }
-
-        }
-        if (TDAStreamerData.isRealTime && feedFile != null && jsonResponse != null)
-            System.IO.File.AppendAllText(feedFile, jsonResponse.Replace("\r\n", "") + "\n");
-
-        //lstJson.Add(jsonResponse);
-        //if (lstJson.Count == 10)
+        // Page Event Handlers
+        //protected override async Task OnInitializedAsync()
         //{
-        //    System.IO.File.AppendAllText(feedFile, string.Join('\n',lstJson));
-        //    lstJson.Clear();
+        //    var oneMinuteAgo = (long)(DateTime.Now.ToUniversalTime().AddSeconds(-10) - new DateTime(1970, 1, 1)).TotalMilliseconds;
+
+        //    revenue2020[0].Revenue = TDAStreamerData.timeSales[symbol].Where(t => t.level == 1 && t.time >= oneMinuteAgo).Count();
+        //    revenue2020[1].Revenue = TDAStreamerData.timeSales[symbol].Where(t => t.level == 2 && t.time >= oneMinuteAgo).Count();
+        //    revenue2020[2].Revenue = TDAStreamerData.timeSales[symbol].Where(t => t.level == 3 && t.time >= oneMinuteAgo).Count();
+        //    revenue2020[3].Revenue = TDAStreamerData.timeSales[symbol].Where(t => t.level == 4 && t.time >= oneMinuteAgo).Count();
+        //    revenue2020[4].Revenue = TDAStreamerData.timeSales[symbol].Where(t => t.level == 5 && t.time >= oneMinuteAgo).Count();
+
+        //    Volume[0].Revenue = TDAStreamerData.timeSales[symbol].Where(t => t.level == 1).Sum(t => t.size);
+        //    Volume[1].Revenue = TDAStreamerData.timeSales[symbol].Where(t => t.level == 2).Sum(t => t.size);
+        //    Volume[2].Revenue = TDAStreamerData.timeSales[symbol].Where(t => t.level == 3).Sum(t => t.size);
+        //    Volume[3].Revenue = TDAStreamerData.timeSales[symbol].Where(t => t.level == 4).Sum(t => t.size);
+        //    Volume[4].Revenue = TDAStreamerData.timeSales[symbol].Where(t => t.level == 5).Sum(t => t.size);
+
+
+        //    StateHasChanged(); await Task.CompletedTask;
         //}
-
-        StateHasChanged();
-    }
-
-    //public string symbol { get; set; }
-
-}
-
-@code {
-
-    //public ObservableCollection<SparkData> DataSource { get; set; }
-
-
-    // Page Event Handlers
-    //protected override async Task OnInitializedAsync()
-    //{
-    //    var oneMinuteAgo = (long)(DateTime.Now.ToUniversalTime().AddSeconds(-10) - new DateTime(1970, 1, 1)).TotalMilliseconds;
-
-    //    revenue2020[0].Revenue = TDAStreamerData.timeSales[symbol].Where(t => t.level == 1 && t.time >= oneMinuteAgo).Count();
-    //    revenue2020[1].Revenue = TDAStreamerData.timeSales[symbol].Where(t => t.level == 2 && t.time >= oneMinuteAgo).Count();
-    //    revenue2020[2].Revenue = TDAStreamerData.timeSales[symbol].Where(t => t.level == 3 && t.time >= oneMinuteAgo).Count();
-    //    revenue2020[3].Revenue = TDAStreamerData.timeSales[symbol].Where(t => t.level == 4 && t.time >= oneMinuteAgo).Count();
-    //    revenue2020[4].Revenue = TDAStreamerData.timeSales[symbol].Where(t => t.level == 5 && t.time >= oneMinuteAgo).Count();
-
-    //    Volume[0].Revenue = TDAStreamerData.timeSales[symbol].Where(t => t.level == 1).Sum(t => t.size);
-    //    Volume[1].Revenue = TDAStreamerData.timeSales[symbol].Where(t => t.level == 2).Sum(t => t.size);
-    //    Volume[2].Revenue = TDAStreamerData.timeSales[symbol].Where(t => t.level == 3).Sum(t => t.size);
-    //    Volume[3].Revenue = TDAStreamerData.timeSales[symbol].Where(t => t.level == 4).Sum(t => t.size);
-    //    Volume[4].Revenue = TDAStreamerData.timeSales[symbol].Where(t => t.level == 5).Sum(t => t.size);
-
-
-    //    StateHasChanged(); await Task.CompletedTask;
-    //}
-}
+    }*@
 
 

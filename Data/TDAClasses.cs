@@ -9,6 +9,75 @@ using System.Threading.Tasks;
 /// </summary>
 namespace BlazorTrader.Data
 {
+
+    public class TDAmertradeApiEndpoints
+    {
+
+        public static readonly string _apiKey = "SMITH4035";
+
+        public static readonly string OptionsChainsUrl = $"https://api.tdameritrade.com/v1/marketdata/chains?apikey={_apiKey}&symbol={{0}}&contractType=ALL&strikeCount={{2}}&includeQuotes=TRUE&strategy=SINGLE&range=ALL&fromDate={{1}}&toDate={{1}}&optionType=S";
+        public static readonly string SpreadsUrl = $"https://api.tdameritrade.com/v1/marketdata/chains?apikey=SMITH4035&symbol=AMZN&contractType=CALL&strikeCount=15&includeQuotes=TRUE&strategy=VERTICAL&range=OTM&fromDate=2020-05-01&toDate=2020-05-01&optionType=S";
+        //public static readonly string AuthorizationUrl = $"https://auth.tdameritrade.com/auth?response_type=code&redirect_uri=http%3A%2F%2Flocalhost&client_id={_apiKey}%40AMER.OAUTHAP";
+        public static readonly string AuthorizationUrl = $"https://auth.tdameritrade.com/oauth?client_id={_apiKey}%40AMER.OAUTHAP&response_type=code&redirect_uri=http%3A%2F%2Flocalhost&lang=en-us";
+        public static readonly string AuthenticationUrl = $"https://developer.tdameritrade.com/authentication/apis/post/token-0";
+        public static readonly string ApiUrl = $"https://developer.tdameritrade.com/apis";
+        public static readonly string UserPrincipalsAuthorizationUrl = $"https://developer.tdameritrade.com/user-principal/apis/get/userprincipals-0";
+        public static readonly string Quotes = $"https://api.tdameritrade.com/v1/marketdata/{{sSymbol}}/quotes?apikey={TDAConstants._apiKey}";
+        public static readonly string PriceHistory = $"https://api.tdameritrade.com/v1/marketdata/{{sSymbol}}/pricehistory?apikey={TDAConstants._apiKey}&periodType=month&period=1&frequencyType=daily&frequency=1";
+        public static readonly string EchoWebsocketUrl = $"wss://echo.wss-websocket.net";
+        public static readonly string streamerSocketUrl = $"wss://streamer-ws.tdameritrade.com/ws";
+
+    }
+    public class TDAConstants
+    {
+        public static readonly DateTime _epoch = new DateTime(1970, 1, 1);
+        public static readonly string _apiKey = "SMITH4035";
+
+        public static readonly string _TDASinglesUrl = $"https://api.tdameritrade.com/v1/marketdata/chains?apikey={_apiKey}&symbol={{0}}&contractType=ALL&strikeCount={{2}}&includeQuotes=TRUE&strategy=SINGLE&range=ALL&fromDate={{1}}&toDate={{1}}&optionType=S";
+        public static readonly string _TDASpreadsUrl = $"https://api.tdameritrade.com/v1/marketdata/chains?apikey=SMITH4035&symbol=AMZN&contractType=CALL&strikeCount=15&includeQuotes=TRUE&strategy=VERTICAL&range=OTM&fromDate=2020-05-01&toDate=2020-05-01&optionType=S";
+        //public static readonly string _TDAAuthorizationUrl = $"https://auth.tdameritrade.com/auth?response_type=code&redirect_uri=http%3A%2F%2Flocalhost&client_id={_apiKey}%40AMER.OAUTHAP";
+        public static readonly string _TDAAuthorizationUrl = $"https://auth.tdameritrade.com/oauth?client_id={_apiKey}%40AMER.OAUTHAP&response_type=code&redirect_uri=http%3A%2F%2Flocalhost&lang=en-us";
+        public static readonly string _TDAAuthenticationUrl = $"https://developer.tdameritrade.com/authentication/apis/post/token-0";
+        public static readonly string _TDApiUrl = $"https://developer.tdameritrade.com/apis";
+
+        /// Notification color success values
+        public static readonly string Notify_Auth_Success = "OK";
+        public static readonly string Notify_Option_Success = "OK";
+        public static readonly string Notify_Quote_Success = "OK";
+
+        /// Notification color original state values
+        public static readonly string Notify_Auth_Original = "UNSET";
+        public static readonly string Notify_Option_Original = "NONE";
+        public static readonly string Notify_Quote_Original = "UNUSED";
+
+        public static List<string> TDAresponse_TimeSalesFields = new List<string>() { "symbol", "time", "price", "size", "sequence" };
+        public static List<string> TDAresponse_QuoteFields = new List<string>() { "symbol", "bidPrice", "askPrice", "lastPrice", "bidSize", "askSize", "askID", "bidID", "totalVolume", "lastSize", "tradeTime", "quoteTime", "highPrice", "", "", "lowPrice", "bidTick", "closePrice", "exchangeID", "", "", "", "", "", "", "", "marginable", "shortable", "islandBid", "islandAsk", "islandVolume", "quoteDay", "tradeDay", "volatility", "description", "", "lastID", "digits", "openPrice", "", "", "", "", "netChange", "", "", "52 WeekHigh", "52WeekLow", "pERatio", "dividendAmount", "dividendYield", "islandBidSize", "islandAskSize", "nAV", "fundPrice", "exchangeName", "dividendDate", "regularMarketQuote", "regularMarketTrade", "regularMarketLastPrice", "regularMarketLastSize", "regularMarketTradeTime", "regularMarketTradeDay", "regularMarketNetChange" };
+        //"1,2,3,4,5,6,7,8,9,19,11,12,15"
+        public static List<string> TDAresponse_ChartFields = new List<string>() { "symbol", "open", "high", "low", "close", "volume", "sequence", "time" };
+        public static List<string> TDAresponse_ListedBookFields = new List<string>() { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+        public static List<string> TDAresponse_OptionQuoteFields = new List<string>() { "Symbol", "Description", "BidPrice", "AskPrice", "LastPrice", "HighPrice", "LowPrice", "ClosePrice", "TotalVolume", "OpenInterest", "Volatility", "QuoteTime", "TradeTime", "MoneyIntrinsicValue", "QuoteDay", "TradeDay", "ExpirationYear", "Multiplier", "Digits", "OpenPrice", "BidSize", "AskSize", "LastSize", "NetChange", "StrikePrice", "ContractType", "Underlying", "ExpirationMonth", "Deliverables", "TimeValue", "ExpirationDay", "DaystoExpiration", "Delta", "Gamma", "Theta", "Vega", "Rho", "SecurityStatus", "TheoreticalOptionValue", "UnderlyingPrice", "UVExpirationType", "Mark" };
+        public static List<string> TDAresponse_ActivesFields = new List<string>() { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+
+        public static Dictionary<string, List<string>> TDAResponseFields = new Dictionary<string, List<string>>()
+        {
+            { "QUOTE", TDAresponse_QuoteFields },
+            { "OPTION", TDAresponse_OptionQuoteFields},
+            {"CHART_EQUITY",TDAresponse_ChartFields},
+            {"TIMESALE_EQUITY",TDAresponse_TimeSalesFields},
+            {"NASDAQ_BOOK", TDAresponse_ListedBookFields },
+            {"ACTIVES_NASDAQ", TDAresponse_ActivesFields },
+            {"ACTIVES_NYSE", TDAresponse_ActivesFields },
+            {"ACTIVES_OPTIONS", TDAresponse_ActivesFields }
+
+        };
+    }
+    public class TDATokens
+    {
+        public static string _TDADecodedAuthCode = "cP4qxZypboTiJ26YNpxKWDZIS1e6loGANH99GKpzTMNl37sCVRqNb6D7hBI7Yu0QGACpFlVhRM447UtASiyScqkGQtA+UqJh5t250/Onthz9L/tMS5hfbz+stIG/KNKXzUf9aYTNKWSbL7ncbq6pQbF2xk/zhQt+7OOOPFVmRANvUV7qb9jjEWkUEF0cQJVKCIYcD7ml2b4sS5DgDP/PPb9DVZNKHlBPbfTgSBwpdH+xbsG+Q3LKRoTFAwW3yrfhA+ucopreXVElKVyluv9o2S9Vmp24tsLYSygTC5VmfQU2vvaoSrFoCv96ymsZ1bJVvhgdhQGyMH44x2uwkEkokycpEvQBBtCybVOrKXZXu+MN3SPL+CWsJWTtaqzoUdlckpihR7Tikh4a1GnCupGK44zTbkrVWBKfmWTQyqxPnZzLg3erTBQT+8CaDiQ100MQuG4LYrgoVi/JHHvlvO2G/XQu905727a5q+I0VfKGKv53exyxgB3GlvvvH0sgPQVv7u9Yu87622AwdtcIkYmPgobovpA79r8zUQb3syHHvogTAPYlvHqbPY+Ip5jezF7YR5fdFHSFkvPZK8EQqTMxuO0Lclt8LqgvD85EYwPr0k7BZEKqNdHzuo9bRERyhgvb59EgnW8n2lNlVIJmpUd5BTVDSnIBEGY7COSJ8xpaiN/o8dyl29elsNQCKsxdrTqzZv1J4j3jfFZ+hB/o9lEYIqHXCn3+kicPY63NYPCkSS+xh0fLbrCzRSxBGuki3I34SiDTwNIOgOPxOSe1JJaayAqCKfnNBwmRnPG9Abkvdt4i5w2mh6F0QRFWzb9NCAATQW2jwPEJbJrO28fdHH/eKvCP62kFj5AKZs2NwT2gT9rWF0HrQ6HultpUniBTjBbqYdmEna5xgus=212FD3x19z9sWBHDJACbC00B75E";
+        public static string _TDAAuthCode = "cP4qxZypboTiJ26YNpxKWDZIS1e6loGANH99GKpzTMNl37sCVRqNb6D7hBI7Yu0QGACpFlVhRM447UtASiyScqkGQtA%2BUqJh5t250%2FOnthz9L%2FtMS5hfbz%2BstIG%2FKNKXzUf9aYTNKWSbL7ncbq6pQbF2xk%2FzhQt%2B7OOOPFVmRANvUV7qb9jjEWkUEF0cQJVKCIYcD7ml2b4sS5DgDP%2FPPb9DVZNKHlBPbfTgSBwpdH%2BxbsG%2BQ3LKRoTFAwW3yrfhA%2BucopreXVElKVyluv9o2S9Vmp24tsLYSygTC5VmfQU2vvaoSrFoCv96ymsZ1bJVvhgdhQGyMH44x2uwkEkokycpEvQBBtCybVOrKXZXu%2BMN3SPL%2BCWsJWTtaqzoUdlckpihR7Tikh4a1GnCupGK44zTbkrVWBKfmWTQyqxPnZzLg3erTBQT%2B8CaDiQ100MQuG4LYrgoVi%2FJHHvlvO2G%2FXQu905727a5q%2BI0VfKGKv53exyxgB3GlvvvH0sgPQVv7u9Yu87622AwdtcIkYmPgobovpA79r8zUQb3syHHvogTAPYlvHqbPY%2BIp5jezF7YR5fdFHSFkvPZK8EQqTMxuO0Lclt8LqgvD85EYwPr0k7BZEKqNdHzuo9bRERyhgvb59EgnW8n2lNlVIJmpUd5BTVDSnIBEGY7COSJ8xpaiN%2Fo8dyl29elsNQCKsxdrTqzZv1J4j3jfFZ%2BhB%2Fo9lEYIqHXCn3%2BkicPY63NYPCkSS%2Bxh0fLbrCzRSxBGuki3I34SiDTwNIOgOPxOSe1JJaayAqCKfnNBwmRnPG9Abkvdt4i5w2mh6F0QRFWzb9NCAATQW2jwPEJbJrO28fdHH%2FeKvCP62kFj5AKZs2NwT2gT9rWF0HrQ6HultpUniBTjBbqYdmEna5xgus%3D212FD3x19z9sWBHDJACbC00B75E";
+        public static string _TDAAccessToken = "g7RqVc3k1VMb68IIC7zXwqlfP1pXROUN806jsmNSolNYP7zSzNHy8fjYq00wW+Njp4IVA+r0J9xZCYR/bMQl9w7yn2Eica9+dzsEUx2iPVCXKjZfkKyvsa0Z6edqqd7sszN5QVxg8thT5Hs3FBGzpPoDbkkhpb9kzuhQ3BRXPKGJljivwrIn9DnoSlx0+W7OzYjkWmmwQknsQBMDdqauxcs8kj1HTukRxRcY+LFgzrSEnwkTvOjO8gtyAjxN/9K5xxMuyvr9S9V64HjnM6aP8br6QB4z0ZmGrzuw0BoGjQBAcKsy4JJFLcEDoRZR4D82Cf7H3vsnZrTrJbpeSaB9GNtfU9QbYRyA2se8NwsrzOtxRv15t4CDOWdU6WWBIUV97ElcGnIAwzBU6fgWhIgAYbhm50pINtB1NM5M+vKqjM71XjrT4CfbiGC0ZyimL30UUw/3O8Nqe0/0dyK+bvJNEYQmDVLiCS2yaby6PiNDwqXx7ls4repXwDlHfZULwBR4q/4UY20dxew2hV9F7ku2DSx2eoOuO5INBEs+y100MQuG4LYrgoVi/JHHvlUeJlPtKu+TnPY1RmBU/VpwuQuaZDIjl7MNjL10KPxnpBdD7JMVq5/PciQbwse7L1r6VaVe3UMX1cn+UMvFWBMuwOp7AbeMyPXYK2qLWi522uADRa3OFbHEHVj5ZxGKR9Ze89WaZ1dgUZiYetyHCar+/vbJUuF2JOt8E+NbQZHr4IfZP/ZrU5LBHMEovyziiifX6fsHuRYy8axnbg+6S+HD/yXJXsZ3NWkmeTWK0fdvIb7sEw+XhzakM/O9A5ZD6CrmmZ7zadtzqWTHwYYDQd5pPN2re0cTdkdzy2Mj+DxFrEODPdTILyFpKBvtzIhdkqwR8gkprI4/k92LGdkZUE/A825/yLa9U7yHzc1YFcT178Htn3OZjEnOvC4kz3yaX0ctKRoCZL0azXzq9AQKb+SYWqaM0LlKfE5UjglOVuNbMlOZLrhC/q6S+RsUJ1U0hMQrL2NGi+IXngaM/JowleTdNPcQ8V2fBa+YInsAYhFyCpUO6xNFzGlGChoOxes6adLXYNSyOr2Iyb+AWLN39VHXWdDgayjlrTXRhcFr212FD3x19z9sWBHDJACbC00B75E";
+        public static string _TDARefreshToken = "Z6wYMGGjVumAxDG66CtKQDqPhVucuj+rdEd9j/293WBQ38aD8gm6GTur+7Hayf1SfYUFC58+Qwnxe2tZwWEINLfmW13if46005f519XVVUmO+ZL2rfWBZg5klfcUdVhgcqyplJJzJrlsvIYSUHjTiJEg/tdj2U051jfptgzOpmuKRjVp0iM6ZLMcvV6gmI0Ex7yqmI2Nc5aSuBT7JI/1loT29AatrMvA/kRGVJrfA+fMOSmPqc4gzrDiGhQYbJgM2LRI2Y6puFj2h4fFAPUBQsqhYfirjrL/uULgeD8MEbtT7o+L5hEOSOv/ZzLP1cwC0ao5x7B/oTTrh1GXyoNySCzr9CPW9iDwOC0BuPFP0/tf8Oi+NpZ4o59wefbZsv2P4Pi7fCEITApBSdMlKzp0wH2Oz473n5FnwBibIVLNT/abN8Pd4pcZP3uM7Ht100MQuG4LYrgoVi/JHHvlfx98O2Sn+OBdl/i/78rdi7LR0Y0yumrhgy4RTZzCACAQlNKkvrod/ceMuTru/9b3xnW0ysKTMM1CncevwmG5r4KaK7vEUerAJKw/U61x0P8wOYQJ6FoNTEjYrAINbpym0ekUqA2egPVRkjIgKOgMlH9HF8Uwf2UZuQpc1I71dM0sYfKI3gZ92GbqStGrrRwosNSbfRfpVO/b7wjEe89BN2o4FUeI+nr6Ifs3TqcxYKSqmQKxkCUM22nDdMRFjQ2OXCpOyMUHv+lGO3mcObptWLPJXU9no9JMSV5FwUCQiDePVECmczrAzezXk2bew4LbXslYzIHKVDda890n7bNrMgknfe4/3zxic96h7a5ZAPGDe+Y4Sj7Mb8UhwA4ZOKoiSP1QrQfT/4+NErcjKIjOs+hlDwH+EheLUXkEkgcrI1SxkZy4n/bke8ASRSU=212FD3x19z9sWBHDJACbC00B75E";
+    }
     public class ComplexOptionChain
     {
         //}
@@ -213,65 +282,6 @@ namespace BlazorTrader.Data
         public Dictionary<string, Dictionary<string, TDAOptionQuote[]>> putExpDateMap { get; set; }
     }
 
-    public class TDAmertradeApiEndpoints
-    {
-
-        public static readonly string _apiKey = "SMITH4035";
-
-        public static readonly string OptionsChainsUrl = $"https://api.tdameritrade.com/v1/marketdata/chains?apikey={_apiKey}&symbol={{0}}&contractType=ALL&strikeCount={{2}}&includeQuotes=TRUE&strategy=SINGLE&range=ALL&fromDate={{1}}&toDate={{1}}&optionType=S";
-        public static readonly string SpreadsUrl = $"https://api.tdameritrade.com/v1/marketdata/chains?apikey=SMITH4035&symbol=AMZN&contractType=CALL&strikeCount=15&includeQuotes=TRUE&strategy=VERTICAL&range=OTM&fromDate=2020-05-01&toDate=2020-05-01&optionType=S";
-        //public static readonly string AuthorizationUrl = $"https://auth.tdameritrade.com/auth?response_type=code&redirect_uri=http%3A%2F%2Flocalhost&client_id={_apiKey}%40AMER.OAUTHAP";
-        public static readonly string AuthorizationUrl = $"https://auth.tdameritrade.com/oauth?client_id={_apiKey}%40AMER.OAUTHAP&response_type=code&redirect_uri=http%3A%2F%2Flocalhost&lang=en-us";
-        public static readonly string AuthenticationUrl = $"https://developer.tdameritrade.com/authentication/apis/post/token-0";
-        public static readonly string ApiUrl = $"https://developer.tdameritrade.com/apis";
-        public static readonly string UserPrincipalsAuthorizationUrl = $"https://developer.tdameritrade.com/user-principal/apis/get/userprincipals-0";
-        public static readonly string Quotes = $"https://api.tdameritrade.com/v1/marketdata/{{sSymbol}}/quotes?apikey={TDAConstants._apiKey}";
-        public static readonly string PriceHistory = $"https://api.tdameritrade.com/v1/marketdata/{{sSymbol}}/pricehistory?apikey={TDAConstants._apiKey}&periodType=month&period=1&frequencyType=daily&frequency=1";
-        public static readonly string EchoWebsocketUrl = $"wss://echo.wss-websocket.net";
-        public static readonly string streamerSocketUrl = $"wss://streamer-ws.tdameritrade.com/ws";
-
-    }
-    public class TDAConstants
-    {
-        public static readonly string _apiKey = "SMITH4035";
-
-        public static readonly string _TDASinglesUrl = $"https://api.tdameritrade.com/v1/marketdata/chains?apikey={_apiKey}&symbol={{0}}&contractType=ALL&strikeCount={{2}}&includeQuotes=TRUE&strategy=SINGLE&range=ALL&fromDate={{1}}&toDate={{1}}&optionType=S";
-        public static readonly string _TDASpreadsUrl = $"https://api.tdameritrade.com/v1/marketdata/chains?apikey=SMITH4035&symbol=AMZN&contractType=CALL&strikeCount=15&includeQuotes=TRUE&strategy=VERTICAL&range=OTM&fromDate=2020-05-01&toDate=2020-05-01&optionType=S";
-        //public static readonly string _TDAAuthorizationUrl = $"https://auth.tdameritrade.com/auth?response_type=code&redirect_uri=http%3A%2F%2Flocalhost&client_id={_apiKey}%40AMER.OAUTHAP";
-        public static readonly string _TDAAuthorizationUrl = $"https://auth.tdameritrade.com/oauth?client_id={_apiKey}%40AMER.OAUTHAP&response_type=code&redirect_uri=http%3A%2F%2Flocalhost&lang=en-us";
-        public static readonly string _TDAAuthenticationUrl = $"https://developer.tdameritrade.com/authentication/apis/post/token-0";
-        public static readonly string _TDApiUrl = $"https://developer.tdameritrade.com/apis";
-
-        /// Notification color success values
-        public static readonly string Notify_Auth_Success = "OK";
-        public static readonly string Notify_Option_Success = "OK";
-        public static readonly string Notify_Quote_Success = "OK";
-
-        /// Notification color original state values
-        public static readonly string Notify_Auth_Original = "UNSET";
-        public static readonly string Notify_Option_Original = "NONE";
-        public static readonly string Notify_Quote_Original = "UNUSED";
-
-        public static List<string> TDAresponse_TimeSalesFields = new List<string>() { "symbol", "time", "price", "size", "sequence" };
-        public static List<string> TDAresponse_QuoteFields = new List<string>() { "symbol", "bidPrice", "askPrice", "lastPrice", "bidSize", "askSize", "askID", "bidID", "totalVolume", "lastSize", "tradeTime", "quoteTime", "highPrice", "", "", "lowPrice", "bidTick", "closePrice", "exchangeID", "", "", "", "", "", "", "", "marginable", "shortable", "islandBid", "islandAsk", "islandVolume", "quoteDay", "tradeDay", "volatility", "description", "", "lastID", "digits", "openPrice", "", "", "", "", "netChange", "", "", "52 WeekHigh", "52WeekLow", "pERatio", "dividendAmount", "dividendYield", "islandBidSize", "islandAskSize", "nAV", "fundPrice", "exchangeName", "dividendDate", "regularMarketQuote", "regularMarketTrade", "regularMarketLastPrice", "regularMarketLastSize", "regularMarketTradeTime", "regularMarketTradeDay", "regularMarketNetChange" };
-        //"1,2,3,4,5,6,7,8,9,19,11,12,15"
-        public static List<string> TDAresponse_ChartFields = new List<string>() { "symbol", "open", "high", "low", "close", "volume", "sequence", "time" };
-        public static List<string> TDAresponse_ListedBookFields = new List<string>() { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
-        public static Dictionary<string, List<string>> TDAResponseFields = new Dictionary<string, List<string>>()
-        {
-            { "QUOTE", TDAresponse_QuoteFields },
-            {"CHART_EQUITY",TDAresponse_ChartFields},
-            {"TIMESALE_EQUITY",TDAresponse_TimeSalesFields},
-            {"LISTED_BOOK", TDAresponse_ListedBookFields }
-        };
-    }
-    public class TDATokens
-    {
-        public static string _TDADecodedAuthCode = "cP4qxZypboTiJ26YNpxKWDZIS1e6loGANH99GKpzTMNl37sCVRqNb6D7hBI7Yu0QGACpFlVhRM447UtASiyScqkGQtA+UqJh5t250/Onthz9L/tMS5hfbz+stIG/KNKXzUf9aYTNKWSbL7ncbq6pQbF2xk/zhQt+7OOOPFVmRANvUV7qb9jjEWkUEF0cQJVKCIYcD7ml2b4sS5DgDP/PPb9DVZNKHlBPbfTgSBwpdH+xbsG+Q3LKRoTFAwW3yrfhA+ucopreXVElKVyluv9o2S9Vmp24tsLYSygTC5VmfQU2vvaoSrFoCv96ymsZ1bJVvhgdhQGyMH44x2uwkEkokycpEvQBBtCybVOrKXZXu+MN3SPL+CWsJWTtaqzoUdlckpihR7Tikh4a1GnCupGK44zTbkrVWBKfmWTQyqxPnZzLg3erTBQT+8CaDiQ100MQuG4LYrgoVi/JHHvlvO2G/XQu905727a5q+I0VfKGKv53exyxgB3GlvvvH0sgPQVv7u9Yu87622AwdtcIkYmPgobovpA79r8zUQb3syHHvogTAPYlvHqbPY+Ip5jezF7YR5fdFHSFkvPZK8EQqTMxuO0Lclt8LqgvD85EYwPr0k7BZEKqNdHzuo9bRERyhgvb59EgnW8n2lNlVIJmpUd5BTVDSnIBEGY7COSJ8xpaiN/o8dyl29elsNQCKsxdrTqzZv1J4j3jfFZ+hB/o9lEYIqHXCn3+kicPY63NYPCkSS+xh0fLbrCzRSxBGuki3I34SiDTwNIOgOPxOSe1JJaayAqCKfnNBwmRnPG9Abkvdt4i5w2mh6F0QRFWzb9NCAATQW2jwPEJbJrO28fdHH/eKvCP62kFj5AKZs2NwT2gT9rWF0HrQ6HultpUniBTjBbqYdmEna5xgus=212FD3x19z9sWBHDJACbC00B75E";
-        public static string _TDAAuthCode = "cP4qxZypboTiJ26YNpxKWDZIS1e6loGANH99GKpzTMNl37sCVRqNb6D7hBI7Yu0QGACpFlVhRM447UtASiyScqkGQtA%2BUqJh5t250%2FOnthz9L%2FtMS5hfbz%2BstIG%2FKNKXzUf9aYTNKWSbL7ncbq6pQbF2xk%2FzhQt%2B7OOOPFVmRANvUV7qb9jjEWkUEF0cQJVKCIYcD7ml2b4sS5DgDP%2FPPb9DVZNKHlBPbfTgSBwpdH%2BxbsG%2BQ3LKRoTFAwW3yrfhA%2BucopreXVElKVyluv9o2S9Vmp24tsLYSygTC5VmfQU2vvaoSrFoCv96ymsZ1bJVvhgdhQGyMH44x2uwkEkokycpEvQBBtCybVOrKXZXu%2BMN3SPL%2BCWsJWTtaqzoUdlckpihR7Tikh4a1GnCupGK44zTbkrVWBKfmWTQyqxPnZzLg3erTBQT%2B8CaDiQ100MQuG4LYrgoVi%2FJHHvlvO2G%2FXQu905727a5q%2BI0VfKGKv53exyxgB3GlvvvH0sgPQVv7u9Yu87622AwdtcIkYmPgobovpA79r8zUQb3syHHvogTAPYlvHqbPY%2BIp5jezF7YR5fdFHSFkvPZK8EQqTMxuO0Lclt8LqgvD85EYwPr0k7BZEKqNdHzuo9bRERyhgvb59EgnW8n2lNlVIJmpUd5BTVDSnIBEGY7COSJ8xpaiN%2Fo8dyl29elsNQCKsxdrTqzZv1J4j3jfFZ%2BhB%2Fo9lEYIqHXCn3%2BkicPY63NYPCkSS%2Bxh0fLbrCzRSxBGuki3I34SiDTwNIOgOPxOSe1JJaayAqCKfnNBwmRnPG9Abkvdt4i5w2mh6F0QRFWzb9NCAATQW2jwPEJbJrO28fdHH%2FeKvCP62kFj5AKZs2NwT2gT9rWF0HrQ6HultpUniBTjBbqYdmEna5xgus%3D212FD3x19z9sWBHDJACbC00B75E";
-        public static string _TDAAccessToken = "g7RqVc3k1VMb68IIC7zXwqlfP1pXROUN806jsmNSolNYP7zSzNHy8fjYq00wW+Njp4IVA+r0J9xZCYR/bMQl9w7yn2Eica9+dzsEUx2iPVCXKjZfkKyvsa0Z6edqqd7sszN5QVxg8thT5Hs3FBGzpPoDbkkhpb9kzuhQ3BRXPKGJljivwrIn9DnoSlx0+W7OzYjkWmmwQknsQBMDdqauxcs8kj1HTukRxRcY+LFgzrSEnwkTvOjO8gtyAjxN/9K5xxMuyvr9S9V64HjnM6aP8br6QB4z0ZmGrzuw0BoGjQBAcKsy4JJFLcEDoRZR4D82Cf7H3vsnZrTrJbpeSaB9GNtfU9QbYRyA2se8NwsrzOtxRv15t4CDOWdU6WWBIUV97ElcGnIAwzBU6fgWhIgAYbhm50pINtB1NM5M+vKqjM71XjrT4CfbiGC0ZyimL30UUw/3O8Nqe0/0dyK+bvJNEYQmDVLiCS2yaby6PiNDwqXx7ls4repXwDlHfZULwBR4q/4UY20dxew2hV9F7ku2DSx2eoOuO5INBEs+y100MQuG4LYrgoVi/JHHvlUeJlPtKu+TnPY1RmBU/VpwuQuaZDIjl7MNjL10KPxnpBdD7JMVq5/PciQbwse7L1r6VaVe3UMX1cn+UMvFWBMuwOp7AbeMyPXYK2qLWi522uADRa3OFbHEHVj5ZxGKR9Ze89WaZ1dgUZiYetyHCar+/vbJUuF2JOt8E+NbQZHr4IfZP/ZrU5LBHMEovyziiifX6fsHuRYy8axnbg+6S+HD/yXJXsZ3NWkmeTWK0fdvIb7sEw+XhzakM/O9A5ZD6CrmmZ7zadtzqWTHwYYDQd5pPN2re0cTdkdzy2Mj+DxFrEODPdTILyFpKBvtzIhdkqwR8gkprI4/k92LGdkZUE/A825/yLa9U7yHzc1YFcT178Htn3OZjEnOvC4kz3yaX0ctKRoCZL0azXzq9AQKb+SYWqaM0LlKfE5UjglOVuNbMlOZLrhC/q6S+RsUJ1U0hMQrL2NGi+IXngaM/JowleTdNPcQ8V2fBa+YInsAYhFyCpUO6xNFzGlGChoOxes6adLXYNSyOr2Iyb+AWLN39VHXWdDgayjlrTXRhcFr212FD3x19z9sWBHDJACbC00B75E";
-        public static string _TDARefreshToken = "Z6wYMGGjVumAxDG66CtKQDqPhVucuj+rdEd9j/293WBQ38aD8gm6GTur+7Hayf1SfYUFC58+Qwnxe2tZwWEINLfmW13if46005f519XVVUmO+ZL2rfWBZg5klfcUdVhgcqyplJJzJrlsvIYSUHjTiJEg/tdj2U051jfptgzOpmuKRjVp0iM6ZLMcvV6gmI0Ex7yqmI2Nc5aSuBT7JI/1loT29AatrMvA/kRGVJrfA+fMOSmPqc4gzrDiGhQYbJgM2LRI2Y6puFj2h4fFAPUBQsqhYfirjrL/uULgeD8MEbtT7o+L5hEOSOv/ZzLP1cwC0ao5x7B/oTTrh1GXyoNySCzr9CPW9iDwOC0BuPFP0/tf8Oi+NpZ4o59wefbZsv2P4Pi7fCEITApBSdMlKzp0wH2Oz473n5FnwBibIVLNT/abN8Pd4pcZP3uM7Ht100MQuG4LYrgoVi/JHHvlfx98O2Sn+OBdl/i/78rdi7LR0Y0yumrhgy4RTZzCACAQlNKkvrod/ceMuTru/9b3xnW0ysKTMM1CncevwmG5r4KaK7vEUerAJKw/U61x0P8wOYQJ6FoNTEjYrAINbpym0ekUqA2egPVRkjIgKOgMlH9HF8Uwf2UZuQpc1I71dM0sYfKI3gZ92GbqStGrrRwosNSbfRfpVO/b7wjEe89BN2o4FUeI+nr6Ifs3TqcxYKSqmQKxkCUM22nDdMRFjQ2OXCpOyMUHv+lGO3mcObptWLPJXU9no9JMSV5FwUCQiDePVECmczrAzezXk2bew4LbXslYzIHKVDda890n7bNrMgknfe4/3zxic96h7a5ZAPGDe+Y4Sj7Mb8UhwA4ZOKoiSP1QrQfT/4+NErcjKIjOs+hlDwH+EheLUXkEkgcrI1SxkZy4n/bke8ASRSU=212FD3x19z9sWBHDJACbC00B75E";
-    }
     /// <summary>
     /// NOTODO: Implement MVVM in Blazor so channging these properties updates the UI
     /// </summary>
@@ -281,7 +291,7 @@ namespace BlazorTrader.Data
         public static string optionStatus { get; set; } = TDAConstants.Notify_Option_Original;
         public static string quoteStatus { get; set; } = TDAConstants.Notify_Quote_Original;
 
-        public static string errorMessage { get; set; } ="";
+        public static string errorMessage { get; set; } = "";
         private static DateTime currentDateTime = DateTime.Now;
         internal static TimeZoneInfo est = null;
 
@@ -343,7 +353,7 @@ namespace BlazorTrader.Data
         }
 
         public static bool inTheMoney { get; set; } = false;
-        public static string optionSymbol { get; set; } = "SPY";
+        public static string optionSymbol { get; set; } = "QQQ";
         public static int optionNumContracts { get; set; } = 50;
         public static DateTime? optionExpDate { get; set; } = DateTime.Today.AddDays(((int)DayOfWeek.Friday - (int)DateTime.Today.DayOfWeek + 7) % 7);
         public static int optionNumStrikes { get; set; } = 7;
@@ -389,8 +399,8 @@ namespace BlazorTrader.Data
         public static string webSocketUrl { get; set; } = TDAmertradeApiEndpoints.EchoWebsocketUrl;
         public static string webSocketName { get; set; } = "Echo Server";
         public static Dictionary<string, Quote_Content> staticQuote { get; set; } = new Dictionary<string, Quote_Content>();
-}
-public class TDA
+    }
+    public class TDA
     {
         public static TDASingleOptionQuotes quotes { get; set; }
         public static TDASingleOptionQuotes prevQuotes { get; set; }
@@ -532,6 +542,16 @@ public class TDA
         public float markPercentChangeInDouble { get; set; }
         public float regularMarketPercentChangeInDouble { get; set; }
         public bool delayed { get; set; }
+
+        public DateTime TradeDate
+        {
+            get { return TDAConstants._epoch.AddDays(0).AddMilliseconds(tradeTimeInLong); }
+        }
+
+        public DateTime QuoteDate
+        {
+            get { return TDAConstants._epoch.AddDays(0).AddSeconds(quoteTimeInLong); }
+        }
     }
 
 
@@ -700,6 +720,15 @@ public class TDA
         public Quote_Content[] content { get; set; }
     }
 
+    public class Quote_BidAskLast
+    {
+        public float bidPrice { get; set; }
+        public float askPrice { get; set; }
+        public float lastPrice { get; set; }
+        public int bidSize { get; set; }
+        public int askSize { get; set; }
+        public int lastSize { get; set; }
+    }
     public class Quote_Content
     {
         public float bidPrice { get; set; }
@@ -717,15 +746,25 @@ public class TDA
         public float lowPrice { get; set; }
         public string key { get; set; }
         public bool delayed { get; set; }
-       /// <summary>
-       /// To access properties by name
-       /// Because streamer only sends partial quote updates, 
-       /// we need to figure out which properties have changed and 
-       /// only update them in our static quote object
-       /// </summary>
-       /// <param name="propertyName"></param>
-       /// <returns></returns>
-       public object this[string propertyName]
+
+        public DateTime TradeDate
+        {
+            get { return DateTime.Now.Date.AddSeconds(tradeTime); }
+        }
+
+        public DateTime QuoteDate
+        {
+            get { return DateTime.Now.Date.AddSeconds(quoteTime); }
+        }
+        /// <summary>
+        /// To access properties by name
+        /// Because streamer only sends partial quote updates, 
+        /// we need to figure out which properties have changed and 
+        /// only update them in our static quote object
+        /// </summary>
+        /// <param name="propertyName"></param>
+        /// <returns></returns>
+        public object this[string propertyName]
         {
             get { return this.GetType().GetProperty(propertyName).GetValue(this, null); }
             set { this.GetType().GetProperty(propertyName).SetValue(this, value, null); }
@@ -735,6 +774,65 @@ public class TDA
     public class Chart_Response
     {
         public Chart_Datum[] data { get; set; }
+    }
+
+
+    public class OptionQuote_Response
+    {
+        public string key { get; set; }
+        public bool delayed { get; set; }
+        public string Description { get; set; }
+        public float BidPrice { get; set; }
+        public float AskPrice { get; set; }
+        public float LastPrice { get; set; }
+        public float HighPrice { get; set; }
+        public float LowPrice { get; set; }
+        public float ClosePrice { get; set; }
+        public int TotalVolume { get; set; }
+        public int OpenInterest { get; set; }
+        public float Volatility { get; set; }
+        public int QuoteTime { get; set; }
+        public int TradeTime { get; set; }
+        public float MoneyIntrinsicValue { get; set; }
+        public int QuoteDay { get; set; }
+        public int TradeDay { get; set; }
+        public int ExpirationYear { get; set; }
+        public int Multiplier { get; set; }
+        public int Digits { get; set; }
+        public float OpenPrice { get; set; }
+        public int BidSize { get; set; }
+        public int AskSize { get; set; }
+        public int LastSize { get; set; }
+        public float NetChange { get; set; }
+        public int StrikePrice { get; set; }
+        public string ContractType { get; set; }
+        public string Underlying { get; set; }
+        public int ExpirationMonth { get; set; }
+        public float TimeValue { get; set; }
+        public int ExpirationDay { get; set; }
+        public int DaystoExpiration { get; set; }
+        public float Delta { get; set; }
+        public float Gamma { get; set; }
+        public float Theta { get; set; }
+        public float Vega { get; set; }
+        public float Rho { get; set; }
+        public string SecurityStatus { get; set; }
+        public float TheoreticalOptionValue { get; set; }
+        public float UnderlyingPrice { get; set; }
+        public string UVExpirationType { get; set; }
+        public float Mark { get; set; }
+
+        public DateTime TradeDate
+        {
+            get { return TDAConstants._epoch.AddDays(TradeDay).AddSeconds(TradeTime); }
+        }
+
+        public DateTime QuoteDate
+        {
+            get { return TDAConstants._epoch.AddDays(QuoteDay).AddSeconds(QuoteTime); }
+        }
+
+
     }
 
     public class Chart_Datum
@@ -776,17 +874,17 @@ public class TDA
         public TimeSales_Content[] content { get; set; }
     }
 
-    public class  TimeSales_Content
+    public class TimeSales_Content
     {
         public int seq { get; set; }
-        public string key { get; set; }        
+        public string key { get; set; }
         public long time { get; set; }
         public float price { get; set; }
         public float size { get; set; }
         public int sequence { get; set; }
-        public float bid  { get; set; }
-        public float ask  { get; set; }
-        public float last  { get; set; }
+        public float bid { get; set; }
+        public float ask { get; set; }
+        public float last { get; set; }
         public int bidSize { get; set; }
         public int askSize { get; set; }
         public int lastSize { get; set; }
@@ -795,6 +893,20 @@ public class TDA
         public int level { get; set; }
         public float bidIncr { get; set; }
         public float askIncr { get; set; }
+
+        public DateTime TimeDate
+        {
+            get { return TDAConstants._epoch.AddDays(0).AddMilliseconds(time).AddHours(-4); }
+        }
+        public DateTime TradeDate
+        {
+            get { return TDAConstants._epoch.AddDays(0).AddMilliseconds(tradeTime); }
+        }
+
+        public DateTime QuoteDate
+        {
+            get { return TDAConstants._epoch.AddDays(0).AddMilliseconds(quoteTime); }
+        }
         public object this[string propertyName]
         {
             get { return this.GetType().GetProperty(propertyName).GetValue(this, null); }
@@ -802,6 +914,20 @@ public class TDA
         }
     }
 
+    public class anActive
+    {
+        public string symbol { get; set; }
+        public int volume { get; set; }
+        public decimal percent { get; set; }
+        public DateTime fromTime { get; set; }
+        public int counts { get; set; }
+    }
+
+    public class Actives
+    {
+        public List<anActive> activeTrades { get; set; }
+        public List<anActive> activeShares { get; set; }
+    }
     public class CustomerClass
     {
         public string Name { get; set; }

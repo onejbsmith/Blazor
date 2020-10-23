@@ -1,0 +1,35 @@
+﻿@*<h3>PrintLinesGauge___Copy</h3>*@
+
+
+@using Blazorise.Charts;
+
+<style>
+    .chart {
+        width: 100%;
+        display: block;
+        zoom: 0.5;
+        height: 100px;
+    }
+
+</style>
+
+<table class="chart">
+    <tr>
+        <td>
+            <LineChart OptionsJsonString="" @ref="lineChart" TItem="double"  />
+        </td>
+    </tr>
+</table>
+
+@code{
+
+    [Parameter]
+    public string symbol { get; set; }
+
+    [Parameter]
+    public float weight { get; set; } = 1.0f;
+
+}
+
+
+

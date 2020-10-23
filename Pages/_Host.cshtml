@@ -15,7 +15,9 @@
     <base href="~/" />
     <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
     <link rel="stylesheet" href="_content/Radzen.Blazor/css/default-base.css">
+    <link href="css/neomorphism.css" rel="stylesheet" />
     <link href="css/site.css" rel="stylesheet" />
+
     <link href="favicon.ico?v=5" rel="icon" type="image/x-icon" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
     <link href="~/styles.css" rel="stylesheet" /> @*This was key to getting Sparklines font to render*@
@@ -45,7 +47,7 @@
     <script src="_content/Blazorise.Bootstrap/blazorise.bootstrap.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
     <script src="_content/Blazorise.Charts/blazorise.charts.js"></script>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/moment@2.24.0/min/moment.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-streaming@1.8.0"></script>
 
@@ -65,5 +67,14 @@
 
     <script src="_framework/blazor.server.js"></script>
     <script src="_content/Radzen.Blazor/Radzen.Blazor.js"></script>
+    <!-- Reference the included moment.js javascript file. -->
+    <!--<script src="_content/ChartJs.Blazor/moment-with-locales.min.js" type="text/javascript" language="javascript"></script>-->
+    <!-- Reference the included ChartJs javascript file. -->
+    <!--<script src="_content/ChartJs.Blazor/Chart.min.js" type="text/javascript" language="javascript"></script>-->
+    <!-- This is the glue between the C# code and the ChartJs charts -->
+    <!--<script src="_content/ChartJs.Blazor/ChartJsBlazorInterop.js" type="text/javascript" language="javascript"></script>-->
+    <!-- Some styling -->
+    <!--<link rel="stylesheet" href="_content/ChartJs.Blazor/ChartJSBlazor.css" />-->
+
 </body>
 </html>

@@ -1,0 +1,110 @@
+﻿@*<h3>Actives</h3>*@
+
+@using BlazorTrader.Data
+@using System.Windows
+
+@foreach (var active in allActives.Where(t => t.Key.EndsWith("-" + type)).OrderBy(t => t.Key))
+{
+    <table>
+        <tr><td>@active.Key</td><td style="color:darkred">@optionSymbol</td> </tr>
+        <tr><td>Shares</td><td>Trades</td></tr>
+        <tr>
+            <td>
+                <RadzenGrid Data="@active.Value.activeShares" TItem="anActive" AllowPaging="true" PageSize="10" RowSelect="@(args => CopySymbol(args))">
+                    <Columns>
+                        <RadzenGridColumn TItem="anActive" Property="symbol" Title="Symbol" Width="180px">
+                            <Template Context="data">
+                                @if (active.Value.activeTrades.Where(t => t.symbol == data.symbol).Count() > 0)
+                                {
+                                    <span style='font-weight:bold'>@data.symbol</span>
+                                }
+                                else
+                                {
+                                    <span style='font-weight:normal'>@data.symbol</span>
+                                }
+                            </Template>
+                        </RadzenGridColumn>
+                        <RadzenGridColumn TItem="anActive" Property="volume" Title="Volume">
+                            <Template Context="data">
+                                @String.Format("{0:n0}", data.volume)
+                            </Template>
+                        </RadzenGridColumn>
+                        <RadzenGridColumn TItem="anActive" Property="percent" Title="%" />
+                        <RadzenGridColumn TItem="anActive" Property="fromTime" Title="From">
+                            <Template Context="data">
+                                @String.Format("{0:HH:mm:ss}", data.fromTime)
+                            </Template>
+                        </RadzenGridColumn>
+                        <RadzenGridColumn TItem="anActive" Property="counts" Title="#" />
+                    </Columns>
+                </RadzenGrid>
+            </td>
+            <td>
+                <RadzenGrid Data="@active.Value.activeTrades" TItem="anActive" AllowPaging="true" PageSize="10" RowSelect="@(args => CopySymbol(args))">
+                    <Columns>
+                        <RadzenGridColumn TItem="anActive" Property="symbol" Title="Symbol" Width="180px">
+                            <Template Context="data">
+                                @if (active.Value.activeShares.Where(t => t.symbol == data.symbol).Count() > 0)
+                                {
+                                    <span style='font-weight:bold'>@data.symbol</span>
+                                }
+                                else
+                                {
+                                    <span style='font-weight:normal'>@data.symbol</span>
+                                }
+                            </Template>
+                        </RadzenGridColumn>
+                        <RadzenGridColumn TItem="anActive" Property="volume" Title="Volume">
+                            <Template Context="data">
+                                @String.Format("{0:n0}", data.volume)
+                            </Template>
+                        </RadzenGridColumn>
+                        <RadzenGridColumn TItem="anActive" Property="percent" Title="%" />
+                        <RadzenGridColumn TItem="anActive" Property="fromTime" Title="From">
+                            <Template Context="data">
+                                @String.Format("{0:HH:mm:ss}", data.fromTime)
+                            </Template>
+                        </RadzenGridColumn>
+
+                        <RadzenGridColumn TItem="anActive" Property="counts" Title="#" />
+                    </Columns>
+                </RadzenGrid>
+            </td>
+        </tr>
+    </table>
+}
+
+@code {
+    [Parameter]
+    public string type { get; set; }
+    public string optionSymbol { get; set; }
+
+
+    object row;
+
+    Dictionary<string, BlazorTrader.Data.Actives> allActives = new Dictionary<string, BlazorTrader.Data.Actives>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        /// To make this method become async
+        await Task.CompletedTask;
+        TDAStreamerData.OnActiveStatusChanged += getActivesData;
+    }
+
+    private void getActivesData()
+    {
+        allActives = TDAStreamerData.dictActives;
+        StateHasChanged();
+    }
+
+    public void CopySymbol(anActive row)
+    {
+        if(row.symbol.Contains("_"))
+        {
+            string under = row.symbol.Split("_")[0];
+            var rest = row.symbol.Split("_")[1];
+            rest = rest.Substring( 4,2) + rest.Substring(0,4) + rest.Substring(6);
+            optionSymbol = $".{under}{rest}";
+        }
+    }
+}

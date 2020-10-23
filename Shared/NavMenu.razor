@@ -1,12 +1,12 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href=""><i style="color:#009bec">tape</i>Stream</a>
+﻿<div class="top-row pl-2 navbar navbar-dark" >
     <img src="favicon.ico" style="width:16px;" />
+    <a class="navbar-brand" href=""><i style="color:#009bec">tape</i>Stream</a>
     <button class="navbar-toggler" @onclick="ToggleNavMenu">
         <span class="navbar-toggler-icon"></span>
     </button>
 </div>
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+<div class="@NavMenuCssClass" style="top:30px" @onclick="ToggleNavMenu">
     <ul class="nav flex-column">
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
@@ -14,7 +14,11 @@
             </NavLink>
         </li>
 
-
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="settings">
+                <span class="oi" aria-hidden="true"><RadzenIcon Icon="settings" /></span> &nbsp;Streaming
+            </NavLink>
+        </li>
         @*<li class="nav-item px-3">
             <NavLink class="nav-link" href="spreads">
                 <span class="oi oi-list-rich" aria-hidden="true"></span> Spreads
@@ -45,11 +49,7 @@
                 <span class="oi" aria-hidden="true"><RadzenIcon Icon="security" /></span> &nbsp;Authorization
             </NavLink>
         </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="settings">
-                <span class="oi" aria-hidden="true"><RadzenIcon Icon="settings" /></span> &nbsp;Settings
-            </NavLink>
-        </li>
+
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="counter">
                 <span class="oi oi-plus" aria-hidden="true"></span> Experimental

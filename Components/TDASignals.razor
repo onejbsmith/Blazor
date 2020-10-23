@@ -1,12 +1,53 @@
-﻿<h3>TDASignals</h3>
-<BookColumnsChart isPrintsSize="false" seconds="5" symbol="SPY" />
-<div class="flex-container">
-    <BookPieChart seconds="60" symbol="SPY" />
-    <BookPieChart seconds="30" symbol="SPY" />
-    <BookPieChart seconds="10" symbol="SPY" />
-    <BookPieChart seconds="2" symbol="SPY" />
-    <BookGaugeChart seconds="10" symbol="SPY" />
-</div>
-@code {
+﻿@code {
+
+    string symbol = "QQQ";
 
 }
+
+<div class="grid-container">
+    <div class="flex-container">
+        <PrintArcGaugeChart symbol="@symbol" />
+        <PrintArcGaugeChart symbol="@symbol" weight="1.5f"/>
+        <PrintArcGaugeChart symbol="@symbol" weight="2.5f" />
+        <PrintArcGaugeChart symbol="@symbol" weight="3.5f" />
+    </div>
+    <div class="flex-container">
+        <PrintPieGauge isPrintsSize="true" seconds="600" symbol="@symbol" />
+        <PrintPieGauge isPrintsSize="true" seconds="240" symbol="@symbol" />
+        <PrintPieGauge isPrintsSize="true" seconds="120" symbol="@symbol" />
+        <PrintPieGauge isPrintsSize="true" seconds="60" symbol="@symbol" />
+
+        <PrintPieGauge isPrintsSize="true" seconds="30" symbol="@symbol" />
+        <PrintPieGauge isPrintsSize="true" seconds="10" symbol="@symbol" />
+        <PrintPieGauge isPrintsSize="true" seconds="5" symbol="@symbol" />
+    </div>
+
+    <!--<div class="grid-item">
+        <BookColumnsChart isPrintsSize="false" seconds="5" symbol="@symbol" />
+    </div>-->
+    @*<div class="grid-item">
+            <SyncfusionStackedColumnChart seconds="15" symbol="@symbol" />
+        </div>*@
+    <!--<div>
+    </div>-->
+    @*<div class="flex-container" style="height:200px">
+            <BookPieChart seconds="240" symbol="@symbol" />
+            <BookPieChart seconds="120" symbol="@symbol" />
+            <BookPieChart seconds="60" symbol="@symbol" />
+
+            <BookPieChart seconds="30" symbol="@symbol" />
+            <BookPieChart seconds="10" symbol="@symbol" />
+            <BookPieChart seconds="2" symbol="@symbol" />
+
+            <BookGaugeChart seconds="10" symbol="@symbol" />
+        </div>*@
+
+</div>
+<style>
+    .grid-container {
+        display: grid;
+        grid-template-rows: auto auto;
+        /*        grid-template-rows: 75% 25%;
+        */
+    }
+</style>

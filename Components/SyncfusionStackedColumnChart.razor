@@ -1,0 +1,47 @@
+﻿@*<h3>SyncfusionStackedColumnChart</h3>*@
+@using Syncfusion.Blazor.Charts
+@inject NavigationManager NavigationManager
+
+<div class="control-section" style="padding-bottom:150px">
+    <SfChart Title="" Palettes="@palettes" EnableAnimation="false" EnableAutoIntervalOnBothAxis="false">
+        <ChartEvents Load="ChartLoad" />
+        <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
+        <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category" Interval="1" LabelIntersectAction="LabelIntersectAction.Rotate45">
+            <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
+            <ChartAxisMinorGridLines Width="0"></ChartAxisMinorGridLines>
+            <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
+            <ChartAxisMinorTickLines Width="0"></ChartAxisMinorTickLines>
+            <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
+        </ChartPrimaryXAxis>
+        <ChartPrimaryYAxis Title="Sales" Minimum="0" Maximum="@maxY" Interval="@intervalY" LabelFormat="{value}">
+            <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
+            <ChartAxisMajorGridLines Width="1"></ChartAxisMajorGridLines>
+            <ChartAxisMinorGridLines Width="1"></ChartAxisMinorGridLines>
+            <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
+            <ChartAxisMinorTickLines Width="0"></ChartAxisMinorTickLines>
+        </ChartPrimaryYAxis>
+        <ChartSeriesCollection>
+            <ChartSeries EnableTooltip="false" DataSource="@DataSource" XName="x" YName="y" Width="5" Name="Below" Type="ChartSeriesType.StackingColumn">
+            </ChartSeries>
+            <ChartSeries EnableTooltip="false" DataSource="@DataSource" XName="x" YName="y1" Width="5" Name="At Bid" Type="ChartSeriesType.StackingColumn">
+            </ChartSeries>
+            <ChartSeries EnableTooltip="false" DataSource="@DataSource" XName="x" YName="y2" Width="5" Name="Between" Type="ChartSeriesType.StackingColumn">
+            </ChartSeries>
+            <ChartSeries EnableTooltip="false" DataSource="@DataSource" XName="x" YName="y3" Width="5" Name="At Ask" Type="ChartSeriesType.StackingColumn">
+            </ChartSeries>
+            <ChartSeries EnableTooltip="false" DataSource="@DataSource" XName="x" YName="y4" Width="5" Name="Above" Type="ChartSeriesType.StackingColumn">
+            </ChartSeries>
+        </ChartSeriesCollection>
+        <ChartTooltipSettings Enable="false"></ChartTooltipSettings>
+    </SfChart>
+    <Radzen.Blazor.RadzenLabel Text="Seconds:"/>
+    <RadzenNumeric Min="2" Max="600" Step="1" Value="@seconds" />
+</div>
+
+@code{
+    [Parameter]
+    public string symbol { get; set; }
+
+    [Parameter]
+    public int seconds { get; set; }
+}

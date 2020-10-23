@@ -29,7 +29,7 @@ namespace BlazorTrader
     /// DONE: Create API for Ameritrade to get Level 3 quote info
     /// Get Option Chains and History
     ///     - for a given series of symbols, 
-    ///         e.g. SPY, AMZN from a user settings store
+    ///         e.g. QQQ, AMZN from a user settings store
     ///     - around the money, 20 deep on each side?
     ///     - so can figure out (plot?) spreads
     ///     

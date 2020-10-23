@@ -1,13 +1,32 @@
 ﻿@*<h3>PrintPieGauge</h3>*@
 @using BlazorTrader.Data;
+<div style="border: 1px outset">
+    <table>
 
-<RadzenChart Style="width:100px; height:70px;position:relative;left:20px;">
-    <RadzenPieSeries Data="@printsData" CategoryProperty="Quarter" Radius="30"
-                     Fills="@(new List<string>() { "red", "darkred" , "blue" , "green" , "lime" })"
-                     ValueProperty="Revenue" />
-    <RadzenTooltipOptions Visible="false" />
-    <RadzenLegend Visible="false" />
-</RadzenChart>
+        <tr>
+            <td style="text-align:center;zoom:.8">
+                <b class="@badgeClass" style="width:100%">@total</b>
+            </td>
+        </tr>
+        <tr>
+            <td class="btn">
+                <RadzenChart Style="width:100px; height:70px;position:relative;left:10px;">
+                    <RadzenPieSeries Data="@printsData" CategoryProperty="Quarter" Radius="30"
+                                     Fills="@(new List<string>() { "darkred" , "red", "gainsboro" , "green" , "lime" })"
+                                     ValueProperty="Revenue" />
+                    <RadzenChartTooltipOptions Visible="false" />
+                    <RadzenLegend Visible="false" />
+                </RadzenChart>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align:center;zoom:.8">
+                <b class="btn btn-circle btn-primary" style="width:100%">@(seconds.ToString())</b>
+            </td>
+        </tr>
+    </table>
+</div>
+
 @code {
 
     [Parameter]
@@ -19,26 +38,5 @@
     [Parameter]
     public bool isPrintsSize { get; set; }
 
-
-    DataItem[] printsData = new DataItem[] {
-         new DataItem { Quarter = "Sell < Bid", Revenue = 100 },
-         new DataItem { Quarter = "Sell = Bid", Revenue = 200 },
-         new DataItem { Quarter = "Between Bid & Ask", Revenue = 300 },
-         new DataItem { Quarter = "Buy = Ask", Revenue = 400 },
-         new DataItem { Quarter = "Buy > Ask", Revenue = 501 } };
-
-
-    protected override async Task OnInitializedAsync()
-    {
-        TDAStreamerData.OnStatusesChanged += getPrintsData;
-        StateHasChanged();
-        await Task.CompletedTask;
-    }
-
-    public void getPrintsData()
-    {
-        TDAStreamerData.getPrintsData(ref printsData, seconds, isPrintsSize, symbol);
-        StateHasChanged();
-   }
 
 }

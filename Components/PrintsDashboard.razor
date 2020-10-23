@@ -44,6 +44,17 @@ Bid: @TDAStreamerData.bidPrice Ask: @TDAStreamerData.askPrice Lag: @TDAStreamerD
     </thead>
     <tbody>
         <tr>
+            <th>Volume</th>
+            <td><PrintPieGauge isPrintsSize="true" seconds="5" symbol="@symbol" /></td>
+            <td><PrintPieGauge isPrintsSize="true" seconds="15" symbol="@symbol" /></td>
+            <td><PrintPieGauge isPrintsSize="true" seconds="45" symbol="@symbol" /></td>
+            <td><PrintPieGauge isPrintsSize="true" seconds="135" symbol="@symbol" /></td>
+            <td><PrintPieGauge isPrintsSize="true" seconds="405" symbol="@symbol" /></td>
+            <td><PrintPieGauge isPrintsSize="true" seconds="1215" symbol="@symbol" /></td>
+            <td><PrintPieGauge isPrintsSize="true" seconds="3645" symbol="@symbol" /></td>
+            <td><PrintPieGauge isPrintsSize="true" seconds="0" symbol="@symbol" /></td>
+        </tr>
+        <tr>
             <th>Prints</th>
             <td><PrintPieGauge isPrintsSize="false" seconds="5" symbol="@symbol" /></td>
             <td><PrintPieGauge isPrintsSize="false" seconds="15" symbol="@symbol" /></td>
@@ -86,17 +97,7 @@ Bid: @TDAStreamerData.bidPrice Ask: @TDAStreamerData.askPrice Lag: @TDAStreamerD
                 <td class="line"><PrintLinesGauge isPrintsSize="false" seconds="0" symbol="@symbol" /></td>
             </tr>
         }
-        <tr>
-            <th>Volume</th>
-            <td><PrintPieGauge isPrintsSize="true" seconds="5" symbol="@symbol" /></td>
-            <td><PrintPieGauge isPrintsSize="true" seconds="15" symbol="@symbol" /></td>
-            <td><PrintPieGauge isPrintsSize="true" seconds="45" symbol="@symbol" /></td>
-            <td><PrintPieGauge isPrintsSize="true" seconds="135" symbol="@symbol" /></td>
-            <td><PrintPieGauge isPrintsSize="true" seconds="405" symbol="@symbol" /></td>
-            <td><PrintPieGauge isPrintsSize="true" seconds="1215" symbol="@symbol" /></td>
-            <td><PrintPieGauge isPrintsSize="true" seconds="3645" symbol="@symbol" /></td>
-            <td><PrintPieGauge isPrintsSize="true" seconds="0" symbol="@symbol" /></td>
-        </tr>
+
         @if (showCounts)
         {
             <tr>

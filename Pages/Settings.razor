@@ -6,25 +6,78 @@
 
 @*@inject TDAOptionsTableManager mgr*@
 
-<RadzenTabs>
+<RadzenTabs >
     <Tabs>
 
         @*<RadzenTabsItem Text="Dashboard">
-            <PrintsDashboard symbol="SPY" />
-        </RadzenTabsItem>*@
+                <PrintsDashboard symbol="QQQ" />
+            </RadzenTabsItem>*@
         <RadzenTabsItem Text="Streaming">
-            <TDAStreamer symbol="SPY" />
+            <TDAStreamer symbol="QQQ" />
         </RadzenTabsItem>
-        <RadzenTabsItem Text="Signals">
-            <TDASignals />
+        <RadzenTabsItem Text="Signals" >
+            <div style="height:500px">
+                <TDASignals />
+            </div>
         </RadzenTabsItem>
-        <RadzenTabsItem Text="Options">
-            Keep up with current P&ugrave;t and C&Aacute;ll option price
+        <RadzenTabsItem Text="Quotes">
+
+            <RadzenGrid Data="@TDAStreamerData.quote" TItem="Quote_Content" AllowPaging="true" PageSize="10">
+                <Columns>
+                    <RadzenGridColumn TItem="Quote_Content" Width="10%" Property="key" Title="description" />
+
+                    <RadzenGridColumn TItem="Quote_Content" Property="bidPrice" Title="bid" />
+                    <RadzenGridColumn TItem="Quote_Content" Property="lastPrice" Title="last" />
+                    <RadzenGridColumn TItem="Quote_Content" Property="askPrice" Title="ask" />
+                    <RadzenGridColumn TItem="Quote_Content" Property="bidSize" Title="bid Size" />
+                    <RadzenGridColumn TItem="Quote_Content" Property="lastSize" Title="last Size" />
+                    <RadzenGridColumn TItem="Quote_Content" Property="askSize" Title="ask Size" />
+                    <RadzenGridColumn TItem="Quote_Content" Property="totalVolume" Title="volume" />
+                    <RadzenGridColumn TItem="Quote_Content" Property="TradeDate" Title="trade date" />
+
+                </Columns>
+            </RadzenGrid>
+
+            <RadzenGrid Data="@TDAStreamerData.lstOptions" TItem="OptionQuote_Response" AllowPaging="true" PageSize="10">
+                <Columns>
+                    <RadzenGridColumn TItem="OptionQuote_Response" Width="25%" Property="key" Title="description" />
+                    <RadzenGridColumn TItem="OptionQuote_Response" Property="BidPrice" Title="bid" />
+                    <RadzenGridColumn TItem="OptionQuote_Response" Property="LastPrice" Title="last" />
+                    <RadzenGridColumn TItem="OptionQuote_Response" Property="AskPrice" Title="ask" />
+                    <RadzenGridColumn TItem="OptionQuote_Response" Property="BidSize" Title="bid Size" />
+                    <RadzenGridColumn TItem="OptionQuote_Response" Property="LastSize" Title="last Size" />
+                    <RadzenGridColumn TItem="OptionQuote_Response" Property="AskSize" Title="ask Size" />
+                    <RadzenGridColumn TItem="OptionQuote_Response" Property="TotalVolume" Title="volume" />
+                    <RadzenGridColumn TItem="OptionQuote_Response" Property="QuoteDate" Title="quote date" />
+                    <RadzenGridColumn TItem="OptionQuote_Response" Property="Delta" Title="delta" />
+                </Columns>
+            </RadzenGrid>
+            Keep up with current P&ugrave;t and C&aacute;ll option price
             Add strategy choices
             Add Trades grid
         </RadzenTabsItem>
-        <RadzenTabsItem Text="Echo">
-            <EchoServer />
+
+        <RadzenTabsItem Text="Actives">
+            <RadzenTabs>
+
+                <RadzenTabsItem Text="1">
+                    <Actives type="60" />
+                </RadzenTabsItem>
+                <RadzenTabsItem Text="10">
+                    <Actives type="600" />
+                </RadzenTabsItem>
+                <RadzenTabsItem Text="30">
+                    <Actives type="1800" />
+                </RadzenTabsItem>
+                <RadzenTabsItem Text="60">
+                    <Actives type="3600" />
+                </RadzenTabsItem>
+                <RadzenTabsItem Text="Day">
+                    <Actives type="ALL" />
+                </RadzenTabsItem>            <RadzenTabsItem Text="Echo">
+                    <EchoServer />
+                </RadzenTabsItem>
+            </RadzenTabs>
         </RadzenTabsItem>
         <RadzenTabsItem Text="Settings" Icon="settings_applications">
             This will hold stuff like the settings and speed settings and TDA Streaming QOS info on tabs?
@@ -35,23 +88,7 @@
                 <Tabs>
                     <RadzenTabsItem Text="Calls" Icon="format_quote">
 
-                        <RadzenGrid Data="@lstCallOptions" TItem="TDAOptionQuote" AllowPaging="true" PageSize="10">
-                            <Columns>
-                                <RadzenGridColumn TItem="TDAOptionQuote" Width="20%" Property="description" Title="description" />
-                                <RadzenGridColumn TItem="TDAOptionQuote" Property="index" Title="index" />
-                                <RadzenGridColumn TItem="TDAOptionQuote" Property="strikePrice" Title="strike Price" />
-                                <RadzenGridColumn TItem="TDAOptionQuote" Property="prem" Title="prem" />
-                                <RadzenGridColumn TItem="TDAOptionQuote" Property="prem2" Title="prem2" />
-                                <RadzenGridColumn TItem="TDAOptionQuote" Property="credit" Title="credit" />
-                                <RadzenGridColumn TItem="TDAOptionQuote" Property="collateral" Title="collateral" />
-                                <RadzenGridColumn TItem="TDAOptionQuote" Property="totalVolume" Title="total Volume" />
-                                <RadzenGridColumn TItem="TDAOptionQuote" Property="bid" Title="bid" />
-                                <RadzenGridColumn TItem="TDAOptionQuote" Property="bidSize" Title="bid Size" />
-                                <RadzenGridColumn TItem="TDAOptionQuote" Property="askSize" Title="ask Size" />
-                                <RadzenGridColumn TItem="TDAOptionQuote" Property="ask" Title="ask" />
-                                <RadzenGridColumn TItem="TDAOptionQuote" Property="delta" Title="delta" />
-                            </Columns>
-                        </RadzenGrid>
+
                     </RadzenTabsItem>
                 </Tabs>
             </RadzenTabs>
@@ -78,5 +115,6 @@
 </style>
 
 @code {
+
 
 }

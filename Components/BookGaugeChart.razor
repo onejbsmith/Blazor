@@ -2,33 +2,34 @@
 @using BlazorTrader.Data
 @using Radzen
 
-<BSBadge IsPill="true" class="alert-dark article"><RadzenLabel Text='@bids' Style="padding-top:7px" /></BSBadge>
+<h3><RadzenLabel Text='@bids' class="@badgeClass" /></h3>
 
+   <RadzenChart Style="
+        width: 75px; height: 75px;
+        position: relative; right: 55px; top: 40px">
+    <RadzenPieSeries 
+        Data="@bookData" CategoryProperty="Price" Radius="30"
+        Title="@(seconds.ToString())"
+        Fills="@(new List<string>() {  "green","red"})"
+        ValueProperty="Size" />
 
-
-
-
-    <RadzenChart Style="width:200px; height:150px;">
-        <RadzenPieSeries Data="@bookData" CategoryProperty="Price" Radius="55"
-                         Title="@(seconds.ToString())"
-                         Fills="@(new List<string>() {  "red","green" })"
-                         ValueProperty="Size" />
-        <RadzenTooltipOptions Visible="false" />
-        <RadzenLegend Visible="false" />
-    </RadzenChart>
+    <RadzenChartTooltipOptions Visible="false" />
+    <RadzenLegend Visible="false" />
+</RadzenChart>
 @*<RadzenLabel Text="@(bookData[0].Size.ToString())"></RadzenLabel>
     <RadzenLabel Text="@(bookData[1].Size.ToString())"></RadzenLabel>*@
 <style>
 
     .article {
         flex: 1 0 auto;
-        border: solid 1px green;
+        border: solid 2px green;
         max-height: 40px;
     }
 </style>
 
 @code {
 
+    string badgeClass = "btn";
     string bids;
     string asks;
 
@@ -57,9 +58,21 @@
 
     public void getBookData()
     {
-        TDAStreamerData.getBookPieData(ref bookData, seconds, isPrintsSize, symbol);
+        TDAStreamerData.getBookCompositePieData(ref bookData, seconds, isPrintsSize, symbol);
+
+        if (bookData == null || bookData[0]==null || bookData.Length == 0) return;
         bids = (100 * (bookData[1].Size / bookData[0].Size - 1)).ToString("n0");
+        int nBids = Convert.ToInt16(bids);
+
+        //if (nBids < -20)
+        //    badgeClass = "alert-danger article";
+        //else if (nBids > 20)
+        //    badgeClass = "alert-success article";
+        //else
+        //    badgeClass = "alert-warning article";
+
         StateHasChanged();
+
     }
 
 }

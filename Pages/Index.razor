@@ -1,13 +1,23 @@
 ﻿@using BlazorTrader.Data;
 @using BlazorTrader.Components;
+@inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
 
 
 @page "/"
 
-@*<BookPieChart isPrintsSize="false" seconds="5" symbol="SPY" />*@
+@code
+{
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+
+        navigationManager.NavigateTo("settings");
+    }
+}
+
+@*<BookPieChart isPrintsSize="false" seconds="5" symbol="QQQ" />*@
 
 
-@*<PrintsDashboard symbol="SPY" />*@
+@*<PrintsDashboard symbol="QQQ" />*@
 
 @*<h1>Welcome to BT</h1>
 

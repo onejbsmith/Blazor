@@ -1,28 +1,35 @@
 ﻿@*<h3>BookPieChart</h3>*@
 @using BlazorTrader.Data;
-<BSBadge IsPill="true" class="alert-dark article"><RadzenLabel Text='@bids' Style="padding-top:7px" /></BSBadge>
-
-<RadzenChart Style="width:200px; height:150px;">
-    <RadzenPieSeries Data="@bookData" CategoryProperty="Price" Radius="55"
-                     Title="@(seconds.ToString())"
-                     Fills="@(new List<string>() {  "tomato","lightgreen" })"
-                     ValueProperty="Size" />
-    <RadzenTooltipOptions Visible="false" />
-    <RadzenLegend Visible="false" />
-</RadzenChart>
+<h3><RadzenLabel Text='@bids' class="@badgeClass" /></h3>
+<div>
+    <RadzenChart Style="        
+        width: 75px; height: 75px;
+        position: relative; right: 55px; top: 40px">
+        <RadzenPieSeries 
+            Data="@bookData" CategoryProperty="Price" Radius="30"
+            Title="@(seconds.ToString())"
+            Fills="@(new List<string>() {  "lightgreen","tomato"})"
+            ValueProperty="Size" />
+        <RadzenChartTooltipOptions Visible="false" />
+        <RadzenLegend Visible="false" />
+    </RadzenChart>
+</div>
 @*<RadzenLabel Text="@(bookData[0].Size.ToString())"></RadzenLabel>
     <RadzenLabel Text="@(bookData[1].Size.ToString())"></RadzenLabel>*@
 <style>
 
     .article {
-        flex: 1 0 auto;
-        border: solid 1px green;
-        max-height:40px;
+        flex: auto 1 0;
+ 
+        width: 20px;
+        max-height: 50px;
+        padding-top: 7px;
     }
 </style>
 
 @code {
 
+    string badgeClass = "btn";
     string bids;
     string asks;
 
@@ -52,7 +59,21 @@
     public void getBookData()
     {
         TDAStreamerData.getBookPieData(ref bookData, seconds, isPrintsSize, symbol);
-        bids = (100*(bookData[1].Size/bookData[0].Size-1)).ToString("n0");
+        if (bookData[0] != null)
+            bids = (100 * (bookData[1].Size / bookData[0].Size - 1)).ToString("n0");
+
+        if (bookData==null || bookData.Length == 0 || bookData[0]==null ||  bookData[0].Size ==0) return;
+
+        bids = (100 * (bookData[1].Size / bookData[0].Size - 1)).ToString("n0");
+        int nBids = Convert.ToInt16(bids);
+
+        //if (nBids < -20)
+        //    badgeClass = "alert-danger article";
+        //else if (nBids > 20)
+        //    badgeClass = "alert-success article";
+        //else
+        //    badgeClass = "alert-warning article";
+
         StateHasChanged();
     }
 

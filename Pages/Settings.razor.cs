@@ -15,10 +15,12 @@ namespace BlazorTrader.Pages
         /// Page Local Variablee
         /// For the Data Tab
         List<TDAOptionQuote> lstCallOptions = new List<TDAOptionQuote>();
-        
+
         /// Page Local Variablee
         string dataToSend, socketLog, errorMessage = "", dataReceived;
         WebsocketService wsClient = new WebsocketService(TDAParameters.webSocketUrl);
+
+        DateTime optionExpDate = DateTime.Now.AddDays(1);
 
         void OnThemeColorChanged(string value)
         {
@@ -36,12 +38,12 @@ namespace BlazorTrader.Pages
         /// Page Init
         protected override async Task OnInitializedAsync()
         {
-            if (mgr.lstOptions != null)
-                foreach (TDAOptionQuote[] qtArray in mgr.lstOptions)
-                {
-                    var qt = qtArray[0];
-                    lstCallOptions.Add(qt);
-                }
+            //if (mgr.lstOptions != null)
+            //    foreach (TDAOptionQuote[] qtArray in mgr.lstOptions)
+            //    {
+            //        var qt = qtArray[0];
+            //        lstCallOptions.Add(qt);
+            //    }
 
             StateHasChanged();
 
@@ -52,7 +54,24 @@ namespace BlazorTrader.Pages
 
             /// To make this method become async
             await Task.CompletedTask;
+            TDAStreamerData.OnStatusesChanged += getQuoteData;
+
+
+
+
+            List<DayOfWeek> optionDaysOfWeek = new List<DayOfWeek>(new DayOfWeek[] { DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Friday });
+            while (!optionDaysOfWeek.Contains(optionExpDate.DayOfWeek))
+            {
+                optionExpDate = optionExpDate.AddDays(1);
+            }
+
         }
+
+        private void getQuoteData()
+        {
+            StateHasChanged();
+        }
+
         #region Page Event Handlers
         protected async void Connect()
         {
