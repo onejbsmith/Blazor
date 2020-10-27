@@ -2,7 +2,7 @@
 using System;
 using System.Timers;
 
-namespace BlazorTrader.Data
+namespace tdaStreamHub.Data
 {
     public class BlazorTimer
     {

@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace BlazorTrader.Data
+namespace tdaStreamHub.Data
 {
     public class TDAApiService
     {

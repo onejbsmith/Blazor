@@ -1,10 +1,10 @@
-﻿using BlazorTrader.Data;
+﻿using tdaStreamHub.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BlazorTrader.Components
+namespace tdaStreamHub.Components
 {
     public partial class PrintPieGauge
     {

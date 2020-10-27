@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using BlazorTrader.Data;
+using tdaStreamHub.Data;
 
-namespace BlazorTrader.Components
+namespace tdaStreamHub.Components
 {
     public partial class PrintArcGaugeChart
     {
@@ -41,11 +41,9 @@ namespace BlazorTrader.Components
                         : greens > reds ? 1
                         : 0;
             }
-            if (!TDAStreamerData.values.ContainsKey(weight))
-                TDAStreamerData.values.Add(weight, new Dictionary<DateTime,double>());
 
-            TDAStreamerData.values[weight].Add(DateTime.Now, value);
-            TDAStreamerData.values[weight].RemoveAll((key, val) => key < DateTime.Now.AddSeconds(printSeconds.Max()));
+            TDAStreamerData.gaugeValues.Add(DateTime.Now, value);
+            TDAStreamerData.gaugeValues.RemoveAll((key, val) => key < DateTime.Now.AddSeconds(-printSeconds.Max()));
             GetElapsedTime();
 
             StateHasChanged();

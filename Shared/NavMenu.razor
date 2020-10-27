@@ -1,9 +1,14 @@
-﻿<div class="top-row pl-2 navbar navbar-dark" >
-    <img src="favicon.ico" style="width:16px;" />
+﻿@using tdaStreamHub.Data;
+<div class="top-row pl-2 navbar navbar-dark">
+    <img src="./favicon.ico" style="width:16px;margin-right:5px" />
     <a class="navbar-brand" href=""><i style="color:#009bec">tape</i>Stream</a>
+    <img src="@hubStatus" style="width:16px;" title="tapeStream Hub Connection Status" />
+    <span>&nbsp;&nbsp;</span>
     <button class="navbar-toggler" @onclick="ToggleNavMenu">
         <span class="navbar-toggler-icon"></span>
     </button>
+    @*<img src="./favicon.ico" style="width:16px;" />*@
+
 </div>
 
 <div class="@NavMenuCssClass" style="top:30px" @onclick="ToggleNavMenu">
@@ -15,53 +20,45 @@
         </li>
 
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="settings">
-                <span class="oi" aria-hidden="true"><RadzenIcon Icon="settings" /></span> &nbsp;Streaming
+            <NavLink class="nav-link" href="streamer">
+                <span class="oi" aria-hidden="true"><RadzenIcon Icon="waves" /></span> &nbsp;Streaming
             </NavLink>
         </li>
-        @*<li class="nav-item px-3">
-            <NavLink class="nav-link" href="spreads">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Spreads
-            </NavLink>
-        </li>*@
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="optionQuotes">
-                <span class="oi" aria-hidden="true"><RadzenIcon Icon="fingerprint" /></span> &nbsp;Spreads
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi" aria-hidden="true"><RadzenIcon Icon="waves" /></span> &nbsp;Analysis
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="accounts">
-                <span class="oi" aria-hidden="true"><RadzenIcon Icon="supervisor_account" /></span> &nbsp;Accounts
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="orders">
-                <span class="oi" aria-hidden="true"><RadzenIcon Icon="shopping_cart" /></span> &nbsp;Orders
-            </NavLink>
-        </li>
+
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="tdaAuth">
                 <span class="oi" aria-hidden="true"><RadzenIcon Icon="security" /></span> &nbsp;Authorization
             </NavLink>
         </li>
 
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="oi oi-plus" aria-hidden="true"></span> Experimental
-            </NavLink>
-        </li>
     </ul>
 </div>
 
 @code {
     private bool collapseNavMenu = true;
 
+    string hubStatus = "";
+
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        hubStatus = TDAStreamerData.hubStatus;
+
+        TDAStreamerData.OnHubStatusChanged += HubStatusChanged;
+        await Task.CompletedTask;
+    }
+
+    public void HubStatusChanged()
+    {
+        hubStatus = TDAStreamerData.hubStatus;
+        StateChangedAsync().Wait();
+    }
+
+    private async Task StateChangedAsync()
+    {
+        await InvokeAsync(() => StateHasChanged());
+    }
 
     private void ToggleNavMenu()
     {
@@ -69,8 +66,7 @@
     }
 }
 <style>
-    html, body, body *
-    {
-        background-color:transparent;
+    html, body, body * {
+        background-color: transparent;
     }
 </style>

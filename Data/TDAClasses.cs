@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 /// <summary>
 /// TODO: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Get Source Control functioning
 /// </summary>
-namespace BlazorTrader.Data
+namespace tdaStreamHub.Data
 {
 
     public class TDAmertradeApiEndpoints

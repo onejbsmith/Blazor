@@ -1,6 +1,6 @@
 using System;
 
-namespace BlazorTrader.Data
+namespace tdaStreamHub.Data
 {
     public class WeatherForecast
     {

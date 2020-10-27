@@ -1,139 +1,166 @@
 ﻿using Blazorise.Charts;
-using BlazorTrader.Data;
+using tdaStreamHub.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
-namespace BlazorTrader.Components
+namespace tdaStreamHub.Components
 {
     public partial class PrintLinesGauge___Copy
     {
-
-        LineChart<double> lineChart;
-
-        LineChartDataset<double> buysChartDatasetData = new LineChartDataset<double>();
-        //LineChartDataset<double> sellsChartDatasetData = new LineChartDataset<double>();
-
-        //List<double> sellsData = new List<double>();
-        List<double> buysData = new List<double>();
-
-        static LineChartOptions lineOptions = new LineChartOptions();
-
-        protected string chartOptions = System.Text.Json.JsonSerializer.Serialize<LineChartOptions>(lineOptions,
-
-                            new System.Text.Json.JsonSerializerOptions() { WriteIndented = true });
-
+        DataItem[] rawGaugesCombined = new DataItem[] {
+        new DataItem
+        {
+            Date = DateTime.Parse("2019-01-01"),
+            Revenue = -7
+        },
+        new DataItem
+        {
+            Date = DateTime.Parse("2019-02-01"),
+            Revenue = 3
+        },
+        new DataItem
+        {
+            Date = DateTime.Parse("2019-03-01"),
+            Revenue = 4
+        },
+        new DataItem
+        {
+            Date = DateTime.Parse("2019-04-01"),
+            Revenue = 7
+        },
+        new DataItem
+        {
+            Date = DateTime.Parse("2019-05-01"),
+            Revenue = 5
+        },
+        new DataItem
+        {
+            Date = DateTime.Parse("2019-06-01"),
+            Revenue = 2
+        },
+        new DataItem
+        {
+            Date = DateTime.Parse("2019-07-01"),
+            Revenue = 274000
+        },
+        new DataItem
+        {
+            Date = DateTime.Parse("2019-08-01"),
+            Revenue = -3
+        },
+        new DataItem
+        {
+            Date = DateTime.Parse("2019-09-01"),
+            Revenue = 2
+        },
+        new DataItem
+        {
+            Date = DateTime.Parse("2019-10-01"),
+            Revenue = 7
+        },
+        new DataItem
+        {
+            Date = DateTime.Parse("2019-11-01"),
+            Revenue = 7
+        },
+        new DataItem
+        {
+            Date = DateTime.Parse("2019-12-01"),
+            Revenue = 6
+        }
+    };
+        DataItem[] average10min, movingAverage5min, movingAverage30sec,
+            staticValue7, staticValue0, staticValueMinus7
+            = new DataItem[]
+        {
+            new DataItem
+            {
+                Date = DateTime.Parse("2019-01-01"),
+                Revenue = 0
+            }
+        };
         protected override async Task OnInitializedAsync()
         {
-            TDAStreamerData.OnTimeSalesStatusChanged+= getPrintsData;
-            StateHasChanged();
-            buysChartDatasetData = GetBuyLineChartDataset(buysData);
-            //sellsChartDatasetData = GetSellLineChartDataset(sellsData);
+            TDAStreamerData.OnTimeSalesStatusChanged += getPrintsData;
+
+
+
             await Task.CompletedTask;
-            lineOptions.Tooltips = new Tooltips() { Enabled = false };
-            lineOptions.Legend = new Legend() { Display = false };
-            lineOptions.Scales = new Scales()
-            { 
-                YAxes = new List<Axis>(){ new Axis(){Display = false} },
-                XAxes = new List<Axis>() { new Axis(){Display = false} }
-            };
         }
 
         public void getPrintsData()
         {
-            //if (isMovement)
-            //    TDAStreamerData.getPrintsMovementBuysSellsData(ref sellsData, ref buysData, seconds, symbol);
+            if (TDAStreamerData.gaugeValues.Count() == 0) return;
 
-            //else
-            //    TDAStreamerData.getPrintsBuysSellsData(ref sellsData, ref buysData, seconds, isPrintsSize, symbol);
-            if (!TDAStreamerData.values.ContainsKey(weight)) return;
-             var buysData = TDAStreamerData.values[weight].Values.Select(val => new { value = val });
+            rawGaugesCombined = TDAStreamerData.gaugeValues.Select(dict =>
+            new DataItem()
+            {
+                Date = dict.Key,
+                Revenue = dict.Value
+            }
+            ).ToArray();
 
-            HandleRedraw();
+            staticValue0 = staticValue(0);
+            staticValue7 = staticValue(7);
+            staticValueMinus7 = staticValue(-7);
+
+            movingAverage5min = movingAverage(300);
+
+            average10min = staticAverage(600);
+
+            movingAverage30sec = movingAverage(30);
+
             StateHasChanged();
         }
 
-        protected override async Task OnAfterRenderAsync(bool firstRender)
+        private DataItem[] staticAverage(int secs)
         {
-            if (firstRender)
+            var maxDate = TDAStreamerData.gaugeValues.Keys.Max();
+            var avg5min = TDAStreamerData.gaugeValues
+                .Where(d => d.Key >= maxDate.AddSeconds(-secs))
+                .Average(d => d.Value);
+
+            return TDAStreamerData.gaugeValues.Select(dict =>
+            new DataItem()
             {
-                HandleRedraw();
+                Date = dict.Key,
+                Revenue = avg5min
             }
+            ).ToArray();
         }
-
-        void HandleRedraw()
+        private DataItem[] staticValue(double val)
         {
-            buysChartDatasetData = GetBuyLineChartDataset(buysData);
-            //sellsChartDatasetData = GetSellLineChartDataset(sellsData);
-            lineChart.Clear();
-
-            // lineChart.AddLabel(Labels);
-
-            lineChart.AddDataSet(buysChartDatasetData);
-            //lineChart.AddDataSet(sellsChartDatasetData);
-            // lineChart.AddDataSet(GetTweenLineChartDataset(RandomizeData()));
-
-            //lineChart.Options = new LineChartOptions() { Scales= new Scales() {  YAxes = new List<Axe>() {  } } };
-
-            lineChart.Update();
-        }
-
-        LineChartDataset<double> GetBuyLineChartDataset(List<double> data)
-        {
-            return new LineChartDataset<double>
+            return TDAStreamerData.gaugeValues.Select(dict =>
+            new DataItem()
             {
-                Data = data,
-                BackgroundColor = buyBackgroundColors,
-                BorderColor = buyBorderColors,
-                Fill = true,
-                PointRadius = 2,
-                BorderDash = new List<int> { }
-            };
+                Date = dict.Key,
+                Revenue = val
+            }
+            ).ToArray();
         }
 
-        //LineChartDataset<double> GetSellLineChartDataset(List<double> data)
-        //{
-        //    return new LineChartDataset<double>
-        //    {
-        //        Data = data,
-        //        BackgroundColor = sellBackgroundColors,
-        //        BorderColor = sellBorderColors,
-        //        Fill = true,
-        //        PointRadius = 2,
-        //        BorderDash = new List<int> { }
-        //    };
-        //}
-
-        //LineChartDataset<double> GetTweenLineChartDataset(List<double> data)
-        //{
-        //    return new LineChartDataset<double>
-        //    {
-        //        Data = data,
-        //        BackgroundColor = tweenBackgroundColors,
-        //        BorderColor = tweenBorderColors,
-        //        Fill = true,
-        //        PointRadius = 2,
-        //        BorderDash = new List<int> { }
-        //    };
-        //}
-
-        string[] Labels = { "Red", "Blue", "Yellow", "Green", "Purple", "Orange" };
-        //List<string> sellBackgroundColors = new List<string> { ChartColor.FromRgba(255, 99, 132, 0.0f), ChartColor.FromRgba(54, 162, 235, 0.2f), ChartColor.FromRgba(255, 206, 86, 0.2f), ChartColor.FromRgba(75, 192, 192, 0.2f), ChartColor.FromRgba(153, 102, 255, 0.2f), ChartColor.FromRgba(255, 159, 64, 0.2f) };
-        //List<string> sellBorderColors = new List<string> { ChartColor.FromRgba(255, 99, 132, 1f), ChartColor.FromRgba(54, 162, 235, 1f), ChartColor.FromRgba(255, 206, 86, 1f), ChartColor.FromRgba(75, 192, 192, 1f), ChartColor.FromRgba(153, 102, 255, 1f), ChartColor.FromRgba(255, 159, 64, 1f) };
-
-        List<string> buyBackgroundColors = new List<string> { ChartColor.FromRgba(99, 255, 132, 0.0f), ChartColor.FromRgba(54, 162, 235, 0.2f), ChartColor.FromRgba(255, 206, 86, 0.2f), ChartColor.FromRgba(75, 192, 192, 0.2f), ChartColor.FromRgba(153, 102, 255, 0.2f), ChartColor.FromRgba(255, 159, 64, 0.2f) };
-        List<string> buyBorderColors = new List<string> { ChartColor.FromRgba(99, 255, 132, 1f), ChartColor.FromRgba(54, 162, 235, 1f), ChartColor.FromRgba(255, 206, 86, 1f), ChartColor.FromRgba(75, 192, 192, 1f), ChartColor.FromRgba(153, 102, 255, 1f), ChartColor.FromRgba(255, 159, 64, 1f) };
-
-        //List<string> tweenBackgroundColors = new List<string> { ChartColor.FromRgba(99, 132, 255, 0.0f), ChartColor.FromRgba(54, 162, 235, 0.2f), ChartColor.FromRgba(255, 206, 86, 0.2f), ChartColor.FromRgba(75, 192, 192, 0.2f), ChartColor.FromRgba(153, 102, 255, 0.2f), ChartColor.FromRgba(255, 159, 64, 0.2f) };
-        //List<string> tweenBorderColors = new List<string> { ChartColor.FromRgba(99, 132, 255, 1f), ChartColor.FromRgba(54, 162, 235, 1f), ChartColor.FromRgba(255, 206, 86, 1f), ChartColor.FromRgba(75, 192, 192, 1f), ChartColor.FromRgba(153, 102, 255, 1f), ChartColor.FromRgba(255, 159, 64, 1f) };
-
-        List<double> RandomizeData()
+        private DataItem[] movingAverage(int secs)
         {
-            var r = new Random(DateTime.Now.Millisecond);
-
-            return new List<double> { r.Next(3, 50) * r.NextDouble(), r.Next(3, 50) * r.NextDouble(), r.Next(3, 50) * r.NextDouble(), r.Next(3, 50) * r.NextDouble(), r.Next(3, 50) * r.NextDouble(), r.Next(3, 50) * r.NextDouble() };
+            return TDAStreamerData.gaugeValues.Select(dict =>
+                 new DataItem()
+                 {
+                     Date = dict.Key,
+                     Revenue = TDAStreamerData.gaugeValues
+                     .Where(d => d.Key <= dict.Key && d.Key >= dict.Key.AddSeconds(-secs))
+                     .Select(d => d.Value).Average()
+                 }
+            ).ToArray();
         }
 
+        class DataItem
+        {
+            public DateTime Date { get; set; }
+            public double Revenue { get; set; }
+        }
     }
+
+
 }

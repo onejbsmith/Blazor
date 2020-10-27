@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Text;
 
-namespace BlazorTrader.Data
+namespace tdaStreamHub.Data
 {
     public static class SampleUtils
     {

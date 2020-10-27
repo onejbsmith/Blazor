@@ -3,13 +3,24 @@
     string symbol = "QQQ";
 
 }
-
+<style>
+    .grid-container {
+        display: grid;
+        grid-template-rows: auto auto;
+        grid-row-gap: 50px;
+        grid-column-gap: 50px;
+        /*        grid-template-columns: auto auto ;
+    */
+    }
+</style>
 <div class="grid-container">
+
+   
     <div class="flex-container">
-        <PrintArcGaugeChart symbol="@symbol" />
-        <PrintArcGaugeChart symbol="@symbol" weight="1.5f"/>
-        <PrintArcGaugeChart symbol="@symbol" weight="2.5f" />
-        <PrintArcGaugeChart symbol="@symbol" weight="3.5f" />
+        <div>
+            <PrintLinesGauge___Copy symbol="@symbol" weight="1"  />
+        </div>
+        <PrintArcGaugeChart symbol="@symbol" weight="1" />
     </div>
     <div class="flex-container">
         <PrintPieGauge isPrintsSize="true" seconds="600" symbol="@symbol" />
@@ -21,6 +32,8 @@
         <PrintPieGauge isPrintsSize="true" seconds="10" symbol="@symbol" />
         <PrintPieGauge isPrintsSize="true" seconds="5" symbol="@symbol" />
     </div>
+
+
 
     <!--<div class="grid-item">
         <BookColumnsChart isPrintsSize="false" seconds="5" symbol="@symbol" />
@@ -43,11 +56,4 @@
         </div>*@
 
 </div>
-<style>
-    .grid-container {
-        display: grid;
-        grid-template-rows: auto auto;
-        /*        grid-template-rows: 75% 25%;
-        */
-    }
-</style>
+

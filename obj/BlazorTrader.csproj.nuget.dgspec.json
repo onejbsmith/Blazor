@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Source\\Repos\\Blazor\\BlazorTrader\\BlazorTrader.csproj": {}
+    "D:\\Source\\Repos\\Blazor\\Server Projects\\BlazorTrader\\BlazorTrader.csproj": {}
   },
   "projects": {
-    "D:\\Source\\Repos\\Blazor\\BlazorTrader\\BlazorTrader.csproj": {
+    "D:\\Source\\Repos\\Blazor\\Server Projects\\BlazorTrader\\BlazorTrader.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Source\\Repos\\Blazor\\BlazorTrader\\BlazorTrader.csproj",
+        "projectUniqueName": "D:\\Source\\Repos\\Blazor\\Server Projects\\BlazorTrader\\BlazorTrader.csproj",
         "projectName": "BlazorTrader",
-        "projectPath": "D:\\Source\\Repos\\Blazor\\BlazorTrader\\BlazorTrader.csproj",
+        "projectPath": "D:\\Source\\Repos\\Blazor\\Server Projects\\BlazorTrader\\BlazorTrader.csproj",
         "packagesPath": "C:\\Users\\onejb\\.nuget\\packages\\",
-        "outputPath": "D:\\Source\\Repos\\Blazor\\BlazorTrader\\obj\\",
+        "outputPath": "D:\\Source\\Repos\\Blazor\\Server Projects\\BlazorTrader\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\"

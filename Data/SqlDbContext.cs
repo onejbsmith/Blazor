@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace BlazorTrader.Data
+namespace tdaStreamHub.Data
 {
     public class SqlDbContext : DbContext
     {

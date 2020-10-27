@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace BlazorTrader.Data
+namespace tdaStreamHub.Data
 {
 
     /// <summary>

@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BlazorTrader.Data
+namespace tdaStreamHub.Data
 {
     public class WeatherForecastService
     {

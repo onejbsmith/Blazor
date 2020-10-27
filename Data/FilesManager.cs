@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Reflection;
 using System.ComponentModel.Design;
 using System.IO;
-namespace BlazorTrader.Data
+namespace tdaStreamHub.Data
 {
     /// <summary>
     /// Creates, appends and reads CSV files into new List<class>()

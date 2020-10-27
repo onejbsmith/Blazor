@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace BlazorTrader.Data
+namespace tdaStreamHub.Data
 {
     public class ViewDataService : INotifyPropertyChanged
     {

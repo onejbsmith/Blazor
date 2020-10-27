@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30011.22
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "tdaStreamHub", "tdaStreamHub.csproj", "{CAAEA8CA-95B9-486C-A08C-A0B4F0BF7C3E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CAAEA8CA-95B9-486C-A08C-A0B4F0BF7C3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAAEA8CA-95B9-486C-A08C-A0B4F0BF7C3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAAEA8CA-95B9-486C-A08C-A0B4F0BF7C3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAAEA8CA-95B9-486C-A08C-A0B4F0BF7C3E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D788C0CE-337D-4B1D-BAE1-F6B1E667101B}
+	EndGlobalSection
+EndGlobal

@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 
-namespace BlazorTrader.Data
+namespace tdaStreamHub.Data
 {
     public class TDAOptionsTableManager
     {

@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BlazorTrader.Data;
+using tdaStreamHub.Data;
 
-namespace BlazorTrader.Components
+namespace tdaStreamHub.Components
 {
     public partial class SyncfusionStackedColumnChart
     {

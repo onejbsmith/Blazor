@@ -1,5 +1,5 @@
-﻿@using BlazorTrader.Data;
-@using BlazorTrader.Components;
+﻿@using tdaStreamHub.Data;
+@using tdaStreamHub.Components;
 @inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
 
 
@@ -10,7 +10,7 @@
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
 
-        navigationManager.NavigateTo("settings");
+        navigationManager.NavigateTo("streamer");
     }
 }
 
@@ -23,7 +23,7 @@
 
     <div id="chartDiv" style="width: 100%; height: 400px;"></div>
 
-    BlazorTrader, BT, is designed to let you place several credit spread orders with a single click.
+    tdaStreamHub, BT, is designed to let you place several credit spread orders with a single click.
     <br />
     You pick
     <ul>

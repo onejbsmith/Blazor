@@ -1,6 +1,6 @@
 ﻿@*<h3>Actives</h3>*@
 
-@using BlazorTrader.Data
+@using tdaStreamHub.Data
 @using System.Windows
 
 @foreach (var active in allActives.Where(t => t.Key.EndsWith("-" + type)).OrderBy(t => t.Key))
@@ -82,7 +82,7 @@
 
     object row;
 
-    Dictionary<string, BlazorTrader.Data.Actives> allActives = new Dictionary<string, BlazorTrader.Data.Actives>();
+    Dictionary<string, tdaStreamHub.Data.Actives> allActives = new Dictionary<string, tdaStreamHub.Data.Actives>();
 
     protected override async Task OnInitializedAsync()
     {

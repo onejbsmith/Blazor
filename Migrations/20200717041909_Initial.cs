@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace BlazorTrader.Migrations
+namespace tdaStreamHub.Migrations
 {
     public partial class Initial : Migration
     {

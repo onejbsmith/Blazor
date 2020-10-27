@@ -12,22 +12,37 @@ using System.Security.Policy;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace BlazorTrader.Data
+namespace tdaStreamHub.Data
 {
     /// <summary>
     /// To hold realtime arrays of streamed data 
     /// </summary>
     public class TDAStreamerData
     {
-        static public Components.PrintsDashboard Dashboard = null;
+
+        //static public Components.PrintsDashboard Dashboard = null;
         public static bool isRealTime = false;
 
         static public event Action OnStatusesChanged;
         static public event Action OnActiveStatusChanged;
         static public event Action OnTimeSalesStatusChanged;
+        static public event Action OnHubStatusChanged;
         private static void StatusChanged() => OnStatusesChanged?.Invoke();
         private static void ActiveStatusChanged() => OnActiveStatusChanged?.Invoke();
         private static void TimeSalesStatusChanged() => OnTimeSalesStatusChanged?.Invoke();
+        private static void HubStatusChanged() => OnHubStatusChanged?.Invoke();
+        static private string _hubStatus = "./images/yellow.gif";
+
+        static public string hubStatus
+        {
+            get { return _hubStatus; }
+            set
+            {
+                _hubStatus = value;
+                HubStatusChanged();
+            }
+        }
+
         /// <summary>
         /// These can be seeeded form the database in case of resume or backtesting
         /// </summary>
@@ -63,7 +78,8 @@ namespace BlazorTrader.Data
         public static string bidPrice { get; set; }
         public static string askPrice { get; set; }
         public static long quoteLatency { get; set; }
-        public static Dictionary<float, Dictionary<DateTime, double>> values { get;  set; } = new Dictionary<float, Dictionary<DateTime,double>>();
+
+        public static Dictionary<DateTime, double> gaugeValues { get; set; } = new Dictionary<DateTime, double>();
 
         public static int printLevelCount(string symbol, int level)
         {
@@ -940,6 +956,7 @@ namespace BlazorTrader.Data
 
             /// Get current time and sales from streamer content
             var timeAndSales = JsonSerializer.Deserialize<TimeSales_Content>(content);
+
             var prevTimeAndSales = timeAndSales;
             if (TDAStreamerData.timeSales[symbol].Count > 0)
                 prevTimeAndSales = TDAStreamerData.timeSales[symbol].Last();

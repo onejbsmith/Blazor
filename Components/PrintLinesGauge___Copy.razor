@@ -1,22 +1,89 @@
 ﻿@*<h3>PrintLinesGauge___Copy</h3>*@
 
 
-@using Blazorise.Charts;
+@*//@using Blazorise.Charts;*@
 
 <style>
     .chart {
-        width: 100%;
         display: block;
         zoom: 0.5;
-        height: 100px;
+        margin-right: 30px;
     }
-
 </style>
 
 <table class="chart">
     <tr>
         <td>
-            <LineChart OptionsJsonString="" @ref="lineChart" TItem="double"  />
+            @*<LineChart OptionsJsonString="" @ref="lineChart" TItem="double"  />*@
+            <RadzenChart Style="width:1400px">
+
+                <RadzenLineSeries Smooth="true"
+                                  Data="@rawGaugesCombined"
+                                  CategoryProperty="Date" Title=""
+                                  LineType="Radzen.Blazor.LineType.Solid"
+                                  StrokeWidth="4"
+                                  ValueProperty="Revenue">
+                </RadzenLineSeries>
+
+                <RadzenLineSeries Smooth="true"
+                                  Data="@average10min"
+                                  CategoryProperty="Date" Title=""
+                                  LineType="Radzen.Blazor.LineType.Dotted"
+                                  StrokeWidth="8"
+                                  ValueProperty="Revenue">
+
+                    <TooltipTemplate Context="data">
+                        <span>@data.Date</span>
+                    </TooltipTemplate>
+                </RadzenLineSeries>
+
+                <RadzenLineSeries Smooth="true"
+                                  Data="@movingAverage30sec"
+                                  CategoryProperty="Date" Title=""
+                                  LineType="Radzen.Blazor.LineType.Solid"
+                                  StrokeWidth="4"
+                                  ValueProperty="Revenue">
+                </RadzenLineSeries>
+
+                <RadzenLineSeries Smooth="true"
+                                  Data="@movingAverage5min"
+                                  CategoryProperty="Date" Title=""
+                                  LineType="Radzen.Blazor.LineType.Solid"
+                                  StrokeWidth="4"
+                                  ValueProperty="Revenue">
+                </RadzenLineSeries>
+
+                <RadzenLineSeries Smooth="true"
+                                  Data="@staticValue0"
+                                  CategoryProperty="Date" Title=""
+                                  LineType="Radzen.Blazor.LineType.Solid"
+                                  StrokeWidth="2"
+                                  ValueProperty="Revenue">
+                </RadzenLineSeries>
+
+                <RadzenLineSeries Smooth="true"
+                                  Data="@staticValue7"
+                                  CategoryProperty="Date" Title=""
+                                  LineType="Radzen.Blazor.LineType.Solid"
+                                  StrokeWidth="2"
+                                  ValueProperty="Revenue">
+                </RadzenLineSeries>
+
+                <RadzenLineSeries Smooth="true"
+                                  Data="@staticValueMinus7"
+                                  CategoryProperty="Date" Title=""
+                                  LineType="Radzen.Blazor.LineType.Solid"
+                                  StrokeWidth="2"
+                                  ValueProperty="Revenue">
+                </RadzenLineSeries>
+
+                <RadzenCategoryAxis Visible="false" />
+                <RadzenLegend Visible="false" />
+                <RadzenValueAxis Min="-7" Max="7">
+                    <RadzenGridLines Visible="false" />
+                    <RadzenAxisTitle Text="" />
+                </RadzenValueAxis>
+            </RadzenChart>
         </td>
     </tr>
 </table>

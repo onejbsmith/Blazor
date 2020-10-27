@@ -8,6 +8,7 @@ var tdaStreamerWebSocket = {};
 
 window.Initialize = function (dotNetObj) {
     this.dotNetObject = dotNetObj;
+
 };
 
 window.Echo = function (jsonText) {
@@ -16,7 +17,9 @@ window.Echo = function (jsonText) {
 
 window.Connect = function () {
     tdaStreamerWebSocket = new WebSocket("wss://streamer-ws.tdameritrade.com/ws");
-        dotNetObject.invokeMethodAsync('TDAStreamerStatus', tdaStreamerWebSocket.readyState.toString());
+    dotNetObject.invokeMethodAsync('TDAStreamerStatus', tdaStreamerWebSocket.readyState.toString());
+    window.resizeTo(800, 800);
+
     tdaStreamerWebSocket.onopen = function () {
         /// Call a .Net method passing the status to it
         //if (requestLoginJson.length > 0)

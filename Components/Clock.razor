@@ -1,0 +1,8 @@
+﻿@*<h3>Clock</h3>*@
+@( dateTimeNow.ToString(dateTimeFormat) )
+
+@code {
+[Parameter]
+public string dateTimeFormat { get; set; } = "HH:mm:ss.fff dddd MMM d, yyyy";
+
+}

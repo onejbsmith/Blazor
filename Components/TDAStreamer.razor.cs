@@ -1,4 +1,5 @@
-﻿using BlazorTrader.Data;
+﻿using tdaStreamHub.Data;
+
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Newtonsoft.Json.Linq;
@@ -8,46 +9,106 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.SignalR.Client;
+using System.Timers;
 
-namespace BlazorTrader.Components
+namespace tdaStreamHub.Components
 {
     public partial class TDAStreamer
     {
+        [Inject]
+        BrowserService Service { get; set; }
+        [Inject]
+        BlazorTimer Timer { get; set; }
 
         [Inject]
         IJSRuntime TDAStreamerJs { get; set; }
 
+        #region Variables
         [Parameter]
         public string symbol { get; set; }
 
         //public ObservableCollection<SparkData> DataSource { get; set; }
-
-        string clock = DateTime.Now.ToString("HH:mm:ss.fff");
+        DateTime svcDateTime = DateTime.Now;
+        private string admCode = "-1";
+        private string admStatus = "Not started";
+        static string clockFormat = "h:mm:ss MMM d, yyyy";
+        static string timerFormat = "h'h 'm'm 's's'";
+        static string dateFormat = "h:mm:ss tt dddd MMM d, yyyy";
+        string clock = DateTime.Now.ToString(clockFormat);
         string serviceRequestText = "";
         string serviceSelection = "Service Request";
         string logText = "";
+        string logTopics = "";
 
         static string status = "None";
-        string statusClass = "badge-primary";
+        string statusClass = "primary";
 
         StringBuilder logTextsb = new StringBuilder();  /// Called from Javascript
-        string feedFile, chartFile, quoteFile = "";
+        StringBuilder logTopicsb = new StringBuilder();  /// Called from Javascript
+        //string feedFile, chartFile, quoteFile = "";
 
         double strike = 0;
 
-        IEnumerable<int> values = new int[] { 1 ,2,4,5};
-        readonly string[] valuesName = new string[] {"ALL" ,"NASDAQ_BOOK" ,"TIMESALE_EQUITY" ,"CHART_EQUITY" , "OPTION" ,"QUOTE" };
+        IEnumerable<int> values = new int[] { 1, 2, 4, 5 };
+        readonly string[] valuesName = new string[] { "ALL", "NASDAQ_BOOK", "TIMESALE_EQUITY", "CHART_EQUITY", "OPTION", "QUOTE", "ACTIVES_NYSE", "ACTIVES_NASDAQ", "ACTIVES_OPTIONS" };
+        int[] valuesCounts = new int[] { 999, 0, 0, 0, 0, 0, 0 };
 
+        Dictionary<string, int> dictTopicCounts = new Dictionary<string, int>
+        {
+            { "NASDAQ_BOOK", 0 },
+            { "TIMESALE_EQUITY", 0 },
+            { "CHART_EQUITY", 0 },
 
+            { "OPTION", 0 },
+            { "QUOTE", 0 },
+            { "ACTIVES_NYSE", 0 },
+            { "ACTIVES_NASDAQ", 0 },
+            { "ACTIVES_OPTIONS", 0 }
+        };
         DateTime optionExpDate = DateTime.Now.AddDays(1);
 
-        void Change(IEnumerable<int> value, string name)
-        {
-            //var str = string.Join(", ", value);
-            //events.Add(DateTime.Now, $"{name} value changed to {str}");
-        }
+        private HubConnection hubConnection;
 
-        // Page Event Handlers
+
+        #endregion
+
+        private string dateTimeNow = DateTime.Now.ToString(dateFormat);
+
+        bool? logStreamer = false;
+        bool? logHub = false;
+        string sinceLastData = "0";
+        string elapsed = "0";
+        DateTime startedTime = DateTime.Now;
+        Timer timer = new Timer(1000);
+
+        public int Height { get; set; }
+        public int Width { get; set; }
+
+        async Task GetDimensions()
+        {
+            var dimension = await Service.GetDimensions();
+            Height = dimension.Height;
+            Width = dimension.Width;
+        }
+        void logStreamerChange(bool? arg, string comment)
+        {
+            if (arg == false)
+            {
+                logText = "";
+                StateHasChanged();
+            }
+        }
+        void logHubChange(bool? arg, string comment)
+        {
+            if (arg == false)
+            {
+                logTopics = "";
+                StateHasChanged();
+            }
+        }
+        #region Page Event Handlers        
+
         protected override async Task OnInitializedAsync()
         {
 
@@ -55,9 +116,9 @@ namespace BlazorTrader.Components
             var dotNetReference = DotNetObjectReference.Create(this);
             var dud = await TDAStreamerJs.InvokeAsync<string>("Initialize", dotNetReference);
             var dud2 = await TDAStreamerJs.InvokeAsync<string>("Connect");
-            feedFile = FilesManager.GetFileNameForToday("FEED");
-            quoteFile = FilesManager.GetFileNameForToday(@$"{symbol} QUOTES");
-            chartFile = FilesManager.GetFileNameForToday(@$"{symbol} CANDLES");
+            //feedFile = FilesManager.GetFileNameForToday("FEED");
+            //quoteFile = FilesManager.GetFileNameForToday(@$"{symbol} QUOTES");
+            //chartFile = FilesManager.GetFileNameForToday(@$"{symbol} CANDLES");
             await TDAApiService.GetAuthenticationAsync();
 
 
@@ -72,10 +133,28 @@ namespace BlazorTrader.Components
             }
             TDAStreamerData.expiryDate = optionExpDate;
 
-    
+            timer.Elapsed += async (sender, e) => await Timer_ElapsedAsync();
+            timer.Start();
+
+            await Init();
+
+
         }
 
-        protected async void Login()
+        private async Task Timer_ElapsedAsync()
+        {
+            dateTimeNow = DateTime.Now.ToString(dateFormat);
+            sinceLastData = DateTime.Now.Subtract(svcDateTime.AddMilliseconds(-1600)).ToString(timerFormat);
+            elapsed = DateTime.Now.Subtract(startedTime).ToString(timerFormat);
+            await StateChangedAsync();
+        }
+
+        private async Task StateChangedAsync()
+        {
+            await InvokeAsync(() => StateHasChanged());
+        }
+
+        protected async Task Login()
         {
             string request = TDAStreamerData.getLoginRequest();
 
@@ -84,7 +163,7 @@ namespace BlazorTrader.Components
             StateHasChanged();
         }
 
-        protected async Task Send()
+        protected async Task Sends()
         {
 
 
@@ -107,6 +186,14 @@ namespace BlazorTrader.Components
             StateHasChanged();
         }
 
+        protected async Task Requested()
+        {
+            await Logout();
+            await Login();
+            await Login();
+            await Sends();
+        }
+
         protected void serviceRequestChanged(RadzenSplitButtonItem item)
         {
             if (item == null) return;
@@ -116,42 +203,37 @@ namespace BlazorTrader.Components
             serviceRequestText = TDAStreamerData.getServiceRequestOld(serviceSelection);
             //LogText(serviceRequestText);
         }
-
-        protected async Task startFeed()
-        { /// get json from the FEED file and call the same procs as if from javascript
-
-          /// loop thru the file and pause one sec between reads, unless it's not data
-            int counter = 0;
-            string line;
-            TDAStreamerData.isRealTime = false;
-            // Read the file and display it line by line.
-            System.IO.StreamReader file =
-                new System.IO.StreamReader(feedFile.Replace(".json", "copy.json"));
-            while ((line = file.ReadLine()) != null)
-            {
-                if (line.Contains("data"))
-                {
-                    /// Send the line to js and have it send it back to TDAStreamerOnMessage(line);
-                    var dud = await TDAStreamerJs.InvokeAsync<string>("Echo", line);
-
-                    System.Threading.Thread.Sleep(750);
-                }
-                counter++;
-            }
-
-
+        void Change(IEnumerable<int> value, string name)
+        {
+            //var str = string.Join(", ", value);
+            //events.Add(DateTime.Now, $"{name} value changed to {str}");
         }
-        /// Utility
+        #endregion
+
+        #region Utility
         void LogText(string text)
         {
+            if (logStreamer == false) return;
+
             logTextsb.Insert(0, "\n" + text);
-            logText = string.Join('\n', logTextsb.ToString().Split('\n').Take(100));
+            logText = string.Join('\n', logTextsb.ToString().Split('\n').Take(10));
 
             StateHasChanged();
         }
 
+        void LogTopic(string topic, string content)
+        {
+            // Show the topic text (last 1000 lines)
+            logTopicsb.Insert(0, "\n" + topic + ":" + content.Replace("\r", "").Replace("\n", ""));
+            logTopics = string.Join('\n', logTopicsb.ToString().Split('\n').Take(10));
 
+            // Update topic's Stats count
+            dictTopicCounts[topic] += 1;
+            StateHasChanged();
+        }
+        #endregion
 
+        #region WebSocket Responses
         // Called from javascript
         [JSInvokable("TDAStreamerStatus")]
         public void TDAStreamerStatus(string it)
@@ -168,11 +250,13 @@ namespace BlazorTrader.Components
         }
 
         List<string> lstJson = new List<string>();
+        private string loginStatus;
+        private string adminMsg;
 
         [JSInvokable("TDAStreamerOnMessage")]
-        public void TDAStreamerOnMessage(string jsonResponse)
+        public async Task TDAStreamerOnMessage(string jsonResponse)
         {
-
+            await Task.Yield();
 
             LogText("RECEIVED: " + jsonResponse);
             var fieldedResponse = jsonResponse;
@@ -182,48 +266,136 @@ namespace BlazorTrader.Components
                 foreach (var svcJsonObject in dataJsonSvcArray)
                 {
                     var svcName = svcJsonObject["service"].ToString();
-                    var svcEpochTime = Convert.ToInt64(svcJsonObject["timestamp"]);
-                    var svcDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddMilliseconds(svcEpochTime).ToLocalTime();
-
-                    clock = svcDateTime.ToString("HH:mm:ss.fff");
+                    svcDateTime = GetServiceTime(svcJsonObject);
 
                     var svcJson = svcJsonObject.ToString();
                     var svcFieldedJson = svcJson;
+
+                    /// Decode
+                    /// Get field names corresponding to field numbers 
                     List<string> svcFields = TDAConstants.TDAResponseFields[svcName];
+                    /// Replace field numbers with field names  
                     for (int i = 1; i < svcFields.Count; i++)
                     {
                         string sIndex = $"\"{i}\":";
                         svcFieldedJson = svcFieldedJson.Replace(sIndex, $" \"{svcFields[i]}\":");
                     }
+
                     LogText("DECODED: " + svcFieldedJson);
-                    TDAStreamerData.captureTdaServiceData(svcFieldedJson).Wait();
+
+                    var svcJsonObjectDecoded = JObject.Parse(svcFieldedJson);
+                    var contents = svcJsonObjectDecoded["content"];
+
+                    /// Send to connected hub
+                    await Send(svcName, svcFieldedJson);
 
                 }
             }
             else if (jsonResponse.Contains("\"notify\":"))
             {
-                var it = JObject.Parse(jsonResponse)["notify"][0]["heartbeat"];
-                if (it != null)
+                var dataJsonSvcArray = JObject.Parse(jsonResponse)["notify"];
+                var svcJsonObject = dataJsonSvcArray[0];
+                if (svcJsonObject["heartbeat"] != null)
                 {
-                    var timeStamp = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddMilliseconds(Convert.ToDouble(((Newtonsoft.Json.Linq.JValue)it).Value)).ToLocalTime();
-                    LogText("DECODED: " + jsonResponse + " " + timeStamp.TimeOfDay);
+                    svcDateTime = GetServiceTime(svcJsonObject,"heartbeat");
+                    LogText("DECODED: " + jsonResponse + " " + svcDateTime.TimeOfDay);
                 }
-
             }
-            if (TDAStreamerData.isRealTime && feedFile != null && jsonResponse != null)
-                System.IO.File.AppendAllText(feedFile, jsonResponse.Replace("\r\n", "") + "\n");
+            else
+            {
+                var dataJsonSvcArray = JObject.Parse(jsonResponse)["response"];
+                var svcJsonObject = dataJsonSvcArray[0];
+                if (svcJsonObject["service"] != null)
+                {
+                    var svcName = ((Newtonsoft.Json.Linq.JValue)svcJsonObject["service"]).Value;
+                    if (svcName.ToString() == "ADMIN")
+                    {
+                        svcDateTime = GetServiceTime(svcJsonObject);
+                        var content = (Newtonsoft.Json.Linq.JObject)svcJsonObject["content"];
+                        var code= ((Newtonsoft.Json.Linq.JValue)content["code"]).Value.ToString();
+                        var cmd = ((Newtonsoft.Json.Linq.JValue)svcJsonObject["command"]).Value.ToString();
+                        admCode = ((Newtonsoft.Json.Linq.JValue)content["msg"]).Value.ToString();
+                        admStatus = $"{cmd} at {svcDateTime} : Code {code}";
+                        LogText("DECODED: " + jsonResponse + " " + svcDateTime.TimeOfDay);
+                    }
+                }
+            }
 
-            //lstJson.Add(jsonResponse);
-            //if (lstJson.Count == 10)
-            //{
-            //    System.IO.File.AppendAllText(feedFile, string.Join('\n',lstJson));
-            //    lstJson.Clear();
-            //}
+
 
             StateHasChanged();
         }
 
-        //public string symbol { get; set; }
+        private DateTime GetServiceTime(JToken svcJsonObject, string timeField="timestamp")
+        {
+            var svcEpochTime = Convert.ToInt64(svcJsonObject[timeField]);
+            var svcDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0)
+                .AddMilliseconds(svcEpochTime).ToLocalTime();
+            clock = svcDateTime.ToString(clockFormat);
+            return svcDateTime;
+        }
+        #endregion
 
+        #region SignalR Client
+
+        private async Task Init()
+        {
+            hubConnection = new HubConnectionBuilder().WithUrl("https://localhost:44367/tdahub").Build();
+
+            hubConnection.On("ReceiveMessage", (Action<string, string>)((user, message) =>
+            {
+                Receive(user, message);
+            }));
+
+            hubConnection.On("NASDAQ_BOOK", (Action<string, string>)((topic, message) => { Receive(topic, message); }));
+            hubConnection.On("TIMESALE_EQUITY", (Action<string, string>)((topic, message) => { Receive(topic, message); }));
+            hubConnection.On("CHART_EQUITY", (Action<string, string>)((topic, message) => { Receive(topic, message); }));
+            hubConnection.On("OPTION", (Action<string, string>)((topic, message) => { Receive(topic, message); }));
+            hubConnection.On("QUOTE", (Action<string, string>)((topic, message) => { Receive(topic, message); }));
+            hubConnection.On("ACTIVES_NYSE", (Action<string, string>)((topic, message) => { Receive(topic, message); }));
+            hubConnection.On("ACTIVES_NASDAQ", (Action<string, string>)((topic, message) => { Receive(topic, message); }));
+            hubConnection.On("ACTIVES_OPTIONS", (Action<string, string>)((topic, message) => { Receive(topic, message); }));
+
+
+            /// Start a Connection to the hub
+            /// 
+            await hubConnection.StartAsync();
+
+
+            var color = IsConnected ? "green" : "red";
+            TDAStreamerData.hubStatus = $"./images/{color}.gif";
+            StateHasChanged();
+
+        }
+        private void Receive(string user, string message)
+        {
+            LogTopic(user, message);
+            StateHasChanged();
+        }
+
+        /// <summary>
+        /// Method for this client to Send a message to the hub
+        /// </summary>
+        /// <returns></returns>
+        /// 
+        Task Send(string userInput, string messageInput) =>
+            hubConnection.SendAsync("SendTopic", userInput, messageInput);
+
+        /// <summary>
+        /// Method to test if hub connection is alive
+        /// </summary>
+        /// 
+        public bool IsConnected => hubConnection != null && hubConnection.State == HubConnectionState.Connected;
+
+        /// <summary>
+        /// Method that will shut down hub if this page is closed
+        /// </summary>
+        /// 
+        public void Dispose()
+        {
+            _ = hubConnection.DisposeAsync();
+        }
+
+        #endregion
     }
 }
