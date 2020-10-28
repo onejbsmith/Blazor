@@ -52,7 +52,7 @@
     public void HubStatusChanged()
     {
         hubStatus = TDAStreamerData.hubStatus;
-        StateChangedAsync().Wait();
+        StateChangedAsync();
     }
 
     private async Task StateChangedAsync()

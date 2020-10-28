@@ -2708,6 +2708,20 @@
         "runtime": {
           "lib/netstandard1.3/System.Xml.XmlSerializer.dll": {}
         }
+      },
+      "tapeStream.Shared/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.1",
+        "dependencies": {
+          "Microsoft.AspNetCore.SignalR.Client": "3.1.9",
+          "Newtonsoft.Json": "12.0.3"
+        },
+        "compile": {
+          "bin/placeholder/tapeStream.Shared.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/tapeStream.Shared.dll": {}
+        }
       }
     }
   },
@@ -8835,6 +8849,11 @@
         "system.xml.xmlserializer.4.3.0.nupkg.sha512",
         "system.xml.xmlserializer.nuspec"
       ]
+    },
+    "tapeStream.Shared/1.0.0": {
+      "type": "project",
+      "path": "../../WASM Projects/tapeStream/tapeStream/Shared/tapeStream.Shared.csproj",
+      "msbuildProject": "../../WASM Projects/tapeStream/tapeStream/Shared/tapeStream.Shared.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -8855,7 +8874,8 @@
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 3.1.4",
       "Newtonsoft.Json >= 12.0.3",
       "Radzen.Blazor >= 2.15.14",
-      "Syncfusion.Blazor >= 18.3.0.41"
+      "Syncfusion.Blazor >= 18.3.0.41",
+      "tapeStream.Shared >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -8888,7 +8908,11 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
-          "projectReferences": {}
+          "projectReferences": {
+            "D:\\Source\\Repos\\Blazor\\WASM Projects\\tapeStream\\tapeStream\\Shared\\tapeStream.Shared.csproj": {
+              "projectPath": "D:\\Source\\Repos\\Blazor\\WASM Projects\\tapeStream\\tapeStream\\Shared\\tapeStream.Shared.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

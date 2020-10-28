@@ -162,5 +162,9 @@
     <Folder Include="Files\Prints\" />
   </ItemGroup>
     
+  <ItemGroup>
+    <ProjectReference Include="..\..\WASM Projects\tapeStream\tapeStream\Shared\tapeStream.Shared.csproj" />
+  </ItemGroup>
+    
   <ProjectExtensions><VisualStudio><UserProperties properties_4launchsettings_1json__JsonSchema="https://json.schemastore.org/mtaext" /></VisualStudio></ProjectExtensions>
 </Project>

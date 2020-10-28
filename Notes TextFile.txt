@@ -1,0 +1,10 @@
+﻿
+Client chart components and the data that they display
+
+BookColumnsChart			
+
+
+Plan is to generate that data on the server (possibly in BackgroundService Workers)
+and send it to the client using SignalR
+
+

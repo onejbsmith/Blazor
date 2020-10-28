@@ -11,6 +11,8 @@ using System.Reflection;
 using System.Security.Policy;
 using System.Text.Json;
 using System.Threading.Tasks;
+using tapeStream.Shared;
+using static tapeStream.Shared.CONSTANTS;
 
 namespace tdaStreamHub.Data
 {
@@ -49,6 +51,8 @@ namespace tdaStreamHub.Data
         /// 
         public static Dictionary<DateTime, Quote_BidAskLast> dictQuotes { get; set; } = new Dictionary<DateTime, Quote_BidAskLast>();
         public static Dictionary<string, List<Quote_Content>> quotes { get; set; } = new Dictionary<string, List<Quote_Content>>() { { "QQQ", new List<Quote_Content>() } };
+        public static TimeSales_Content timeAndSales;
+        public static DateTime timeOfTimeAndSales;
         public static Dictionary<string, List<TimeSales_Content>> timeSales { get; set; } = new Dictionary<string, List<TimeSales_Content>>() { { "QQQ", new List<TimeSales_Content>() } };
         public static Dictionary<string, Dictionary<int, Chart_Content>> chart { get; set; } = new Dictionary<string, Dictionary<int, Chart_Content>>() { { "QQQ", new Dictionary<int, Chart_Content>() } };
 
@@ -955,7 +959,7 @@ namespace tdaStreamHub.Data
                 TDAStreamerData.timeSales.Add(symbol, new List<TimeSales_Content>());
 
             /// Get current time and sales from streamer content
-            var timeAndSales = JsonSerializer.Deserialize<TimeSales_Content>(content);
+            timeAndSales = JsonSerializer.Deserialize<TimeSales_Content>(content);
 
             var prevTimeAndSales = timeAndSales;
             if (TDAStreamerData.timeSales[symbol].Count > 0)
@@ -968,7 +972,7 @@ namespace tdaStreamHub.Data
 
             /// t.Key is Quote date and time, we want last quote before t&s time
             /// 
-            DateTime timeOfTimeAndSales = timeAndSales.TimeDate;
+            timeOfTimeAndSales = timeAndSales.TimeDate;
             Quote_BidAskLast qt = dictQuotes.Where(t => t.Key < timeOfTimeAndSales).Last().Value;
 
             // Debug.Print($"Time in phase? {staticQuote.quoteTime}<{timeAndSales.time} = {staticQuote.quoteTime < timeAndSales.time}");
@@ -1005,25 +1009,27 @@ namespace tdaStreamHub.Data
             //: 0;
 
             /// Add current time & sales to list for symbol
+
             TDAStreamerData.timeSales[symbol].Add(timeAndSales);
+
             //TDAStreamerData.timeSales[symbol].RemoveAll(t => t.TimeDate < DateTime.Now.AddSeconds(-300));
             /// save to csv
-            var lstValues = new List<string>();
-            foreach (string name in timeAndSalesFields)
-            {
-                lstValues.Add($"{timeAndSales[name]}");
-            }
-            string record = string.Join(',', lstValues) + "\n";
-            if (isRealTime)
-            {
-                string fileName = $"{svcName} {symbol} {DateTime.Now.ToString("MMM dd yyyy")}.csv";
-                if (!System.IO.File.Exists(fileName))
-                {
-                    System.IO.File.AppendAllText(fileName, string.Join(",", timeAndSalesFields) + "\n");
+            //var lstValues = new List<string>();
+            //foreach (string name in timeAndSalesFields)
+            //{
+            //    lstValues.Add($"{timeAndSales[name]}");
+            //}
+            //string record = string.Join(',', lstValues) + "\n";
+            //if (isRealTime)
+            //{
+            //    string fileName = $"{svcName} {symbol} {DateTime.Now.ToString("MMM dd yyyy")}.csv";
+            //    if (!System.IO.File.Exists(fileName))
+            //    {
+            //        System.IO.File.AppendAllText(fileName, string.Join(",", timeAndSalesFields) + "\n");
 
-                }
-                System.IO.File.AppendAllText(fileName, record);
-            }
+            //    }
+            //    System.IO.File.AppendAllText(fileName, record);
+            //}
 
             TimeSalesStatusChanged();
 
@@ -1232,11 +1238,6 @@ namespace tdaStreamHub.Data
             //Console.WriteLine("Sells=" + sSells);
         }
 
-    }
-    public class DataItem
-    {
-        public string Quarter { get; set; }
-        public double Revenue { get; set; }
     }
 
     public class BookDataItem

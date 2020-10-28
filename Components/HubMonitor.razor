@@ -1,51 +1,25 @@
 ﻿@*<h3>HubMonitor</h3>*@
 
-@using tdaStreamHub.Data;
 @using System.Timers;
 
-<RadzenCheckBox @bind-Value="@logHub" TValue="bool?" Change="@(args => logHubChange(args, ""))" />
+<RadzenCheckBox @bind-Value="@logHub" TValue="bool" Change="@(args => logHubChange(args, ""))" />
 <RadzenLabel Text="tapeStream Hub" Style="margin-left: 5px;" Component="CheckBox4" />
-<BSBadge IsPill="true" class="alert-dark" title="Time of last data received">@clock</BSBadge>
-<BSBadge class="alert-primary"><RadzenLabel Text='@dictTopicCounts[valuesName[1]].ToString("n0")' title="@valuesName[1]" /></BSBadge>
-<BSBadge class="alert-primary"><RadzenLabel Text='@dictTopicCounts[valuesName[2]].ToString("n0")' title="@valuesName[2]" /></BSBadge>
-<BSBadge class="alert-primary"><RadzenLabel Text='@dictTopicCounts[valuesName[3]].ToString("n0")' title="@valuesName[3]" /></BSBadge>
-<BSBadge class="alert-primary"><RadzenLabel Text='@dictTopicCounts[valuesName[4]].ToString("n0")' title="@valuesName[4]" /></BSBadge>
-<BSBadge class="alert-primary"><RadzenLabel Text='@dictTopicCounts[valuesName[5]].ToString("n0")' title="@valuesName[5]" /></BSBadge>
-<BSBadge class="alert-primary"><RadzenLabel Text='@dictTopicCounts[valuesName[6]].ToString("n0")' title="@valuesName[6]" /></BSBadge>
-<BSBadge class="alert-primary"><RadzenLabel Text='@dictTopicCounts[valuesName[7]].ToString("n0")' title="@valuesName[7]" /></BSBadge>
-<BSBadge class="alert-primary"><RadzenLabel Text='@dictTopicCounts[valuesName[8]].ToString("n0")' title="@valuesName[8]" /></BSBadge>
+<Badge IsPill="true" class="alert-dark" title="Time of last data received">@clock</Badge>
+@foreach (var name in valuesName.Skip(1))
+{
+    <Badge class="alert-primary"><RadzenLabel Text='@dictTopicCounts[name].ToString("n0")' title="@name" /></Badge>
+}
 <RadzenTextArea Visible="@((bool)logHub)" Style="width:100%;height:100px;margin-top:10px;font:bold 8pt calibri" Value="@logTopics" />
 
 @code {
-    readonly string[] valuesName = new string[] { "ALL", "NASDAQ_BOOK", "TIMESALE_EQUITY", "CHART_EQUITY", "OPTION", "QUOTE", "ACTIVES_NYSE", "ACTIVES_NASDAQ", "ACTIVES_OPTIONS" };
-
     [Parameter]
-    public bool? logHub { get; set; }
+    public bool logHub { get; set; }
     [Parameter]
     public string clock { get; set; }
     [Parameter]
-    public Dictionary<string, int> dictTopicCounts { get; set; } = new Dictionary<string, int>
-        {
-            { "NASDAQ_BOOK", 0 },
-            { "TIMESALE_EQUITY", 0 },
-            { "CHART_EQUITY", 0 },
+    public Dictionary<string, int> dictTopicCounts { get; set; } = new Dictionary<string, int>();
 
-            { "OPTION", 0 },
-            { "QUOTE", 0 },
-            { "ACTIVES_NYSE", 0 },
-            { "ACTIVES_NASDAQ", 0 },
-            { "ACTIVES_OPTIONS", 0 }
-        };
     [Parameter]
     public string logTopics { get; set; } = "";
-
-    void logHubChange(bool? arg, string comment)
-    {
-        if (arg == false)
-        {
-            logTopics = "";
-            StateHasChanged();
-        }
-    }
 
 }

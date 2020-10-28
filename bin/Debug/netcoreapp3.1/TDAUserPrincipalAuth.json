@@ -1,18 +1,17 @@
 {
-  "authToken": "euAlCtmZC80KRSdnHTX73WIm353KRpK5JDa/3D6nQmY6Rb3FEBXigZleW9CG1PTFXJYFiLrKd1hAJd1118QCeyIJd6fk4jP0Ts2mY7YUjunnJtdHPOLFmfgq4mHUqCj1udifAHmGRbdS8etB791ehqRFl1Ru+d5pi6XSDlnfefQT89cO3QmR35S+/1dBRKztWFBgh4t4xkYcqjv7nYR/uMfR4gYMdMFFKuWhOxa0l7pznMRd9Q2gY+mzlPWxPkZdNShTKbsWeOsFw3zpM4NWpAKlADux89cUeogs8nSLyjXGRrTzgOJlY24RAlBX6q2Oz70z/tBENw+Yo8gBwNFUmJGWRmrOvPWPxXj+xn1Sd1V8H1HRpOUubsdReKNdgizNQQEStl644u9SV2PUitx7h0zAlB4tqxcvMwsY91w6wud2PzGNS5Kq4N3GW1dY3FCiOMBwKb/VmmuwJSFmsUC+fZX/C5VJoyS2gKlqpWw/Pb7heDaV2n+b6tWEAqNlbqh6oWd15EKyDCb6TMPwEUcHW/yzcHXDrnTNwMEgPQxgJHLZuh+77100MQuG4LYrgoVi/JHHvlXooAyJULWGYVmpNuwPdU9qFwu+1qgRQ5XE/3U3cxlrmOnlSi+5w70wphNZOQrIKoy1ZY+rXv+xYY/PJ1AZWBS49W15RECNFy/yWvaxcG/QseasQETMVZcwm4Imm0a7tZ6UrniU1juiDoEyx86Uxr/yPrIfNyJsspzwsB8LAYcrk/U0UmvglEWpOoj4prDEZ9CWYZxYnEKuMZtqRrqsNu52v3+x/eiBCb+JtBuK5CBgiQAtTlYyep1TIbWIW4CL8luuHQPtJZjET2jfwvxEO3Je1cLmVrpXYTqbqI8Agd/uMNKIqGn7rneuH0Mkng0RUWhwBJSZQlKSFPF5RwwjgUf3M5M7wX5/lPFu3tFAq14rpSiZL3XFV2/NFKHYTwh3qv/gWvh6WtGTzdyla6zNqo2pd0KMGVlQt0J2XPPxfqcuURZUiPIFdFDKPdRGIpY9I+wFTNG5PhG33vYfxxY/XgsqmLtq4WZj6CSpj0rLbtczoaKL3m9NqdQDG/993Q15N8rZcdqpwDPBmq0oIyg4hMVgCBP7lHf1ub/vlXEFfEKx2EHc4Q==212FD3x19z9sWBHDJACbC00B75E",
   "userId": "smith4035",
   "userCdDomainId": "A000000007860194",
   "primaryAccountId": "870018425",
-  "lastLoginTime": "2020-10-26T03:04:31+0000",
-  "tokenExpirationTime": "2020-10-26T03:34:31+0000",
-  "loginTime": "2020-10-26T03:04:31+0000",
+  "lastLoginTime": "2020-10-27T13:39:07+0000",
+  "tokenExpirationTime": "2020-10-27T14:09:07+0000",
+  "loginTime": "2020-10-27T13:39:07+0000",
   "accessLevel": "CUS",
   "stalePassword": false,
   "streamerInfo": {
     "streamerBinaryUrl": "streamer-bin.tdameritrade.com",
     "streamerSocketUrl": "streamer-ws.tdameritrade.com",
-    "token": "0c19d03dfe69dec761866046f2c3815cdbb2ec3b",
-    "tokenTimestamp": "2020-10-26T03:04:36+0000",
+    "token": "3bc11786dbc1131c9939658f483fe40138d82e0a",
+    "tokenTimestamp": "2020-10-27T13:39:10+0000",
     "userGroup": "ACCT",
     "accessLevel": "ACCT",
     "acl": "AQBHBPC1DRDTESF7FUFXG1G3G5G7GKGLGRH1H3H5IPM1MAOSPNQSRFSDSVTBTETFTOTTUAWSXBXNXOD2D4D6D8E2E4E6E8F2F4F6H7I1",
@@ -31,9 +30,14 @@
   "streamerSubscriptionKeys": {
     "keys": [
       {
-        "key": "af0924dd6cf7e638a59877913f64546dcf9a6a7c1d7eded8faacb4df03ebdc518"
+        "key": "bd5274ec499b613faf5ea6a4c5bfb4ab967e5f4e524390aa226de3ea5ebf3c006"
       }
     ]
+  },
+  "exchangeAgreements": {
+    "NYSE_EXCHANGE_AGREEMENT": "ACCEPTED",
+    "NASDAQ_EXCHANGE_AGREEMENT": "ACCEPTED",
+    "OPRA_EXCHANGE_AGREEMENT": "ACCEPTED"
   },
   "accounts": [
     {
